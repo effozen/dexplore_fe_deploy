@@ -1,0 +1,76 @@
+@import '../../style/styleGuide';
+@import '../../style/general';
+
+.form-input {
+  &-button {
+    padding-left: 3vw;
+    width: 77vw;
+    height: 50px;
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: $color-primary 1px solid;
+    border-radius: 15px;
+    background-color: $color-secondary;
+    cursor:pointer;
+    margin-bottom:15px;
+    text-decoration: none;
+
+    @extend .font-size-midLarge;
+    @extend .font-color-black;
+
+    &-location {
+      width:80vw;
+
+      @extend .form-input-button;
+    }
+  }
+
+  &-text{
+    @extend .font-size-midLarge;
+    padding-left: 3vw;
+    width: 77vw;
+    height: 50px;
+    border: $color-primary 1px solid;
+    border-radius: 15px;
+    cursor:pointer;
+    margin-bottom:15px;
+    text-decoration: none;
+
+    &-box{
+      @extend .font-size-midLarge;
+      padding-top: 2vw;
+      padding-bottom: 2vw;
+      padding-left: 3vw;
+      padding-right: 3vw;
+      width: 74vw;
+      height: 300px;
+      border: $color-primary 1px solid;
+      border-radius: 15px;
+      cursor:pointer;
+      margin-bottom:15px;
+      text-decoration: none;
+      overflow: scroll;
+    }
+  }
+
+  &-submit {
+    @extend .font-size-midLarge;
+    @extend .font-weight-strong;
+    width: 100px;
+    height: 50px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border: $color-primary 1px solid;
+    border-radius: 15px;
+    background-color: $color-secondary;
+    cursor:pointer;
+    margin-bottom:15px;
+    text-decoration: none;
+  }
+}
+
+#image-file {
+  display:none;
+}

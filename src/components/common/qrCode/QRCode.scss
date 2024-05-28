@@ -1,0 +1,10 @@
+@import '../../../style/styleGuide.scss';
+
+.qr {
+  &-button {
+    width:80vw;
+    height:80vw;
+    border-radius: 15px;
+    background-color: $color-btn1;
+  }
+}

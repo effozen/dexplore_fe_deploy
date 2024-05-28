@@ -1,0 +1,66 @@
+@import '../../style/styleGuide.scss';
+
+.fixedButton {
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  &-margin {
+    margin-top:8px;
+  }
+
+  &-layout {
+    z-index: 1000; /* 다른 요소들보다 위에 표시되도록 높은 값 설정 */
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
+    bottom: 20px;
+    right: 10px;
+  }
+
+  &-button {
+    width:50px;
+    height:50px;
+    border-radius: 4vw;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    &.exit {
+      background-color: $color-btn4;
+      opacity: 0.6;
+    }
+
+    &.reload {
+      background-color: $color-btn1;
+      opacity: 0.6;
+    }
+
+    &.list {
+      background-color: $color-btn2;
+      opacity: 0.6;
+    }
+
+    &.qr {
+      background-color: $color-btn3;
+      opacity: 0.6;
+    }
+
+    &.logout {
+      background-color: $color-primary;
+      opacity: 0.6;
+    }
+
+    &.museum {
+      background-color: $color-gray;
+      opacity: 0.6;
+    }
+  }
+}
