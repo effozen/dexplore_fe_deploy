@@ -4,7 +4,7 @@ import { Pagination } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import styled from 'styled-components';
-import background from '../../assets/images/museum_BW1.jpg';
+import background from '../../../assets/images/museum_BW1.jpg';
 
 const FullScreenWrapper = styled.div`
   width: 100vw;
@@ -12,26 +12,38 @@ const FullScreenWrapper = styled.div`
   background-image: url('${background}');
   background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
+  text-align: center;
 `;
 
+const DexploreTitle = styled.h1`
+  font-family: Pretendard-ExtraBold;
+  font-size: 38px;
+  color: #FFFFFF;
+  text-align: center;
+  padding:5vh;
+`
+
+const EmptyContainer = styled.div`
+  height: 50vh;
+  width: 100%;
+`
+
 const StyledSlide = styled(SwiperSlide)`
-  background-color: rgba(0,0,0,100);
-  height: 14vh;
-  border-radius: 10px;
+  background-color: transparent;
+  height: 18vh;
   text-align: center;
   align-content: center;
-  padding: 0px 0px 10px 0px;
   color: #FFFFFF;
   h3 {
     font-size: 18px;
     font-family: Pretendard-Bold;
+    margin: 0px;
   }
   p {
     font-size: 15px;
     font-family: Pretendard-Light;
+    margin:15px;
   }
 `;
 
@@ -39,10 +51,25 @@ const StyledSwiper = styled(Swiper)`
   .swiper-pagination-bullet {
     background-color: #FFFFFF;  //bullet 색상 화이트로 커스텀
     opacity: 33%;
+    scale: 80%;
   }
   .swiper-pagination-bullet-active {
     opacity: 100%;
   }
+`;
+
+
+// 버튼 스타일 정의 및 애니메이션 적용
+const StyledStartBtn = styled.button`
+  margin: 3vh;
+  background-color: #000000;
+  background-size: contain;
+  border: solid 0.1px #FFFFFF;
+  padding: 8px 15px;
+  border-radius: 9999px;
+  color: #FFFFFF;
+  font-family: Pretendard-Regular;
+  font-size: 20px;
 `;
 
 const WelcomePage = () => {
@@ -56,6 +83,10 @@ const WelcomePage = () => {
 
     return (
         <FullScreenWrapper>
+            <DexploreTitle>
+                Dexplore
+            </DexploreTitle>
+            <EmptyContainer/>
             <StyledSwiper
                 modules={[Pagination]}
                 spaceBetween={5}
@@ -69,6 +100,7 @@ const WelcomePage = () => {
                     </StyledSlide>
                 ))}
             </StyledSwiper>
+            <StyledStartBtn>Get started</StyledStartBtn>
         </FullScreenWrapper>
     );
 };
