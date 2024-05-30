@@ -14,11 +14,11 @@ const FullScreenWrapper = styled.div`
 `;
 
 const DexploreTitle = styled.h1`
-  font-family: Pretendard-ExtraBold;
   font-size: 38px;
   color: #FFFFFF;
   text-align: center;
   padding:45px;
+  font-weight: 900;
 `
 
 const InputWrapper = styled.div`
@@ -44,7 +44,6 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 const Label = styled.label`
   font-size: 14px;
   color: #FFFFFF;
-  font-family: Pretendard-Regular;
 `;
 const StyledButton = styled.button`
   background-color: #000000;
@@ -53,6 +52,7 @@ const StyledButton = styled.button`
   height: 43px;
   margin: auto;
   font-size: 15px;
+  font-weight: 500;
   &:hover {
     background-color: #252525;
   }
