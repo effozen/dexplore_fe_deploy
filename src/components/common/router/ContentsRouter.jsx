@@ -1,5 +1,6 @@
 import {BrowserRouter, Routes, Route, Form} from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import WelcomePage from "@/components/minseok/WelcomePage/WelcomePage";
 
 // import SignUp from "../login/views/Authentication/SignUp/index";
 // import SignIn from "../login/views/Authentication/SignIn/index";
@@ -25,6 +26,7 @@ function ContentsRouter() {
     <div>
       <BrowserRouter>
         <Routes>
+            <Route path={'/'} element={<WelcomePage/>}/>
           {/* <Route path='/' element={!!cookies.accessToken ? <MuseumInfo /> : <Main />} exact></Route> */}
           {/* <Route path="auth"> */}
           {/*   <Route path='sign-up' element={<SignUp />} /> */}
