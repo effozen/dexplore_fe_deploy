@@ -2,6 +2,8 @@ import {BrowserRouter, Routes, Route, Form} from "react-router-dom";
 import { useCookies } from 'react-cookie';
 import WelcomePage from "@/components/minseok/WelcomePage/WelcomePage";
 
+import AdminManagement from "@components/admin/management/AdminManagement";
+
 // import SignUp from "../login/views/Authentication/SignUp/index";
 // import SignIn from "../login/views/Authentication/SignIn/index";
 // import OAuth from "../login/views/Authentication/OAuth/index";
@@ -57,6 +59,10 @@ function ContentsRouter() {
           {/*   <Route path="map" element={<AdminMap />}></Route> */}
           {/*   <Route path="kakomap" element={<KakaoMap />}></Route> */}
           {/* </Route> */}
+
+          <Route path='test' element={<AdminManagement />}>
+
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
