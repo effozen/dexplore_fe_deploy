@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from "swiper/modules";
 import 'swiper/css';
@@ -21,17 +21,17 @@ const DexploreTitle = styled.h1`
   font-size: 38px;
   color: #FFFFFF;
   text-align: center;
-  padding:5vh;
+  padding:45px;
 `
 
 const EmptyContainer = styled.div`
-  height: 50vh;
+  height: 400px;
   width: 100%;
 `
 
 const StyledSlide = styled(SwiperSlide)`
   background-color: transparent;
-  height: 18vh;
+  height: 130px;
   text-align: center;
   align-content: center;
   color: #FFFFFF;
@@ -61,7 +61,7 @@ const StyledSwiper = styled(Swiper)`
 
 // 버튼 스타일 정의 및 애니메이션 적용
 const StyledStartBtn = styled.button`
-  margin: 3vh;
+  margin: 23px;
   background-color: #000000;
   background-size: contain;
   border: solid 0.1px #FFFFFF;
