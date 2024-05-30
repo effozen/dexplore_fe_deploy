@@ -17,11 +17,11 @@ const FullScreenWrapper = styled.div`
 `;
 
 const DexploreTitle = styled.h1`
-  font-family: Pretendard-ExtraBold;
   font-size: 38px;
   color: #FFFFFF;
   text-align: center;
   padding:45px;
+  font-weight: 900;
 `
 
 const EmptyContainer = styled.div`
@@ -37,13 +37,13 @@ const StyledSlide = styled(SwiperSlide)`
   color: #FFFFFF;
   h3 {
     font-size: 18px;
-    font-family: Pretendard-Bold;
     margin: 0px;
+    font-weight: 600;
   }
   p {
     font-size: 15px;
-    font-family: Pretendard-Light;
     margin:15px;
+    font-weight: 300;
   }
 `;
 
@@ -68,7 +68,6 @@ const StyledStartBtn = styled.button`
   padding: 8px 15px;
   border-radius: 9999px;
   color: #FFFFFF;
-  font-family: Pretendard-Regular;
   font-size: 20px;
 `;
 

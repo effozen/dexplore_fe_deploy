@@ -4,12 +4,12 @@ const InputBoxWrapper = styled.div`
   width: 300px;
   text-align: left;
   margin: auto;
-  font-family: Pretendard-Regular;
 `;
 
 const InputTitle = styled.div`
   color: #FFFFFF;
   font-size: 15px;
+  font-weight: 500;
 `;
 
 const InputContainer = styled.div`
@@ -21,6 +21,7 @@ const StyledInput = styled.input`
   height: 100%;
   padding: 12px;
   font-size: 14px;
+  font-weight: 300;
   border: solid #909090 1px;
   &:focus {
     outline: none;
@@ -33,6 +34,7 @@ const StyledButton = styled.button`
   width: 90px;
   margin-left: 5px;
   font-size: 15px;
+  font-weight: 500;
   display: ${({ hasButton }) => (hasButton ? 'block' : 'none')}; /* 버튼이 없을 때 숨기기 */
   &:hover {
     background-color: #252525;
