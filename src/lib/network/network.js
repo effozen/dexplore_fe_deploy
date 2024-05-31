@@ -25,7 +25,7 @@ const checkToken = () => {
   return headers;
 }
 
-const requestGet = (url, params) => {
+const requestGet = (url, params = null) => {
   const headers = checkToken();
 
   let result;
@@ -39,7 +39,7 @@ const requestGet = (url, params) => {
   return result;
 };
 
-const requestPost = (url, bodyData) => {
+const requestPost = (url, bodyData = null) => {
   const headers = checkToken();
 
   let result;
