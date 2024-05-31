@@ -25,10 +25,6 @@ const DexploreTitle = styled.h1`
   font-weight: 900;
 `
 
-const EmptyContainer = styled.div`
-  height: 350px;
-  width: 100%;
-`
 
 const StyledSlide = styled(SwiperSlide)`
   background-color: transparent;
@@ -47,6 +43,13 @@ const StyledSlide = styled(SwiperSlide)`
     font-weight: 300;
   }
 `;
+
+const BottomWrapper = styled.div`
+  position: absolute;
+  bottom: 10vh;
+  width:100vw;
+`
+
 
 const StyledSwiper = styled(Swiper)`
   width:320px;
@@ -93,21 +96,22 @@ const WelcomePage = () => {
             <DexploreTitle>
                 Dexplore
             </DexploreTitle>
-            <EmptyContainer/>
-            <StyledSwiper
-                modules={[Pagination]}
-                spaceBetween={5}
-                slidesPerView={1}
-                pagination={{ clickable: true }}
-            >
-                {inner.map((item, index) => (
-                    <StyledSlide key={index}>
-                        <h3>{item.title}</h3>
-                        <p>{item.description}</p>
-                    </StyledSlide>
-                ))}
-            </StyledSwiper>
-            <StyledStartBtn onClick={getStartedHandler}>Get started</StyledStartBtn>
+            <BottomWrapper>
+                <StyledSwiper
+                    modules={[Pagination]}
+                    spaceBetween={5}
+                    slidesPerView={1}
+                    pagination={{ clickable: true }}
+                >
+                    {inner.map((item, index) => (
+                        <StyledSlide key={index}>
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
+                        </StyledSlide>
+                    ))}
+                </StyledSwiper>
+                <StyledStartBtn onClick={getStartedHandler}>Get started</StyledStartBtn>
+            </BottomWrapper>
         </FullScreenWrapper>
     );
 };
