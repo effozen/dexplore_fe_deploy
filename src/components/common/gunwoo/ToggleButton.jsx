@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import Modal from 'react-modal';
 import { Scanner } from '@yudiel/react-qr-scanner';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 // 이미지 파일 임포트
 import menuIcon from '@assets/images/Togglebtn/menu.png';
@@ -41,11 +44,8 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-    width: 50px;
-    height: 50px;
     background-color: transparent;
     border: none;
-    border-radius: 50%;
     margin: 10px 0;
     cursor: pointer;
 `;
@@ -59,12 +59,13 @@ const ExpandedMenu = styled.div`
     animation: ${fadeInUp} 0.3s ease-out forwards;
 `;
 
-//rootElement 추가
-Modal.setAppElement('#root');
+Modal.setAppElement('#root'); // Ensure this is your root element
 
-const ToggleButton = () => {
+const ToggleButton = ({ museumId }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cookies] = useCookies(['accessToken']);
+    const navigate = useNavigate();
 
     const handleToggle = () => {
         setIsExpanded(!isExpanded);
@@ -81,7 +82,31 @@ const ToggleButton = () => {
     const handleScan = (result) => {
         if (result) {
             console.log('QR Code Data:', result);
+            getArtId(result);
             handleCloseModal();
+        }
+    };
+
+    const getArtId = async (qrcodeHashkey) => {
+        const token = cookies.accessToken;
+
+        if (!token) {
+            console.error('Access token is not available.');
+            return;
+        }
+
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+
+        const params = { qrcodeHashKey: qrcodeHashkey };
+
+        try {
+            const result = await axios.get('https://dexplore.info/api/v1/user/get-art-by-hash', { headers, params });
+            const artId = result.data.art.artId;
+            navigate('/user/art/info', { state: { museumId, artId } });
+        } catch (error) {
+            console.error('Error fetching art ID:', error);
         }
     };
 
@@ -95,22 +120,18 @@ const ToggleButton = () => {
                             <img src={ideaIcon} alt="idea" />
                         </Button>
                         <Button onClick={handleToggle}>
-                            <img src={logoutIcon} alt="exit"  />
+                            <img src={logoutIcon} alt="logout" />
                         </Button>
                         <Button onClick={handleOpenModal}>
-                            <img src={QRCodebtn} alt="close"/>
-                        </Button>
-                        <Button onClick={handleToggle}>
-                            <img src={cancelIcon} alt="close"  />
+                            <img src={QRCodebtn} alt="qr code scan" />
                         </Button>
                     </ExpandedMenu>
                 )}
                 <Button onClick={handleToggle}>
-                    <img src={menuIcon} alt="menu" />
+                    <img src={isExpanded ? cancelIcon : menuIcon} alt="menu" />
                 </Button>
             </Container>
 
-            {/*Modal화면 프레임*/}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={handleCloseModal}
@@ -127,7 +148,13 @@ const ToggleButton = () => {
                     },
                 }}
             >
-                <Scanner onScan={handleScan} />
+                <Scanner
+                    onResult={(text, result) => {
+                        console.log(text, result);
+                        getArtId(text);
+                    }}
+                    onError={(error) => console.log(error?.message)}
+                />
             </Modal>
         </>
     );
