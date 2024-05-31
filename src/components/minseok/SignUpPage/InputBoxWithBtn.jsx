@@ -13,11 +13,11 @@ const InputTitle = styled.div`
 `;
 
 const InputContainer = styled.div`
-  display: flex;
+  display: flex; 
 `;
 
 const StyledInput = styled.input`
-  width: 300px;
+  width: 210px;
   height: 100%;
   padding: 12px;
   font-size: 14px;
@@ -28,6 +28,18 @@ const StyledInput = styled.input`
   }
 `;
 
+const StyledButton = styled.button`
+  background-color: #000000;
+  color: #FFFFFF;
+  width: 90px;
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 500;
+  display: block;
+  &:hover {
+    background-color: #252525;
+  }
+`;
 
 const StyledMessage = styled.div`
   color: ${props => (props.$warn ? 'rgba(255, 86, 64, 1)' : 'rgba(58, 87, 248, 1)')};
@@ -42,8 +54,10 @@ const StyledMessage = styled.div`
  value: 인풋에 들어가는 값
  message: 메세지에 들어갈 문자열
  changeHandler: 인풋 변화시 불러오는 핸들러
+ buttonName: 버튼 이름
+ buttonFunc: 버튼 눌렀을때 실행할 함수
  */
-const InputBox = ({ title, placeholder, warn, value, type, message, changeHandler }) => {
+const InputBox = ({ title, placeholder, warn, value, type, message, changeHandler, buttonName, buttonFunc }) => {
 
 
     return (
@@ -51,6 +65,7 @@ const InputBox = ({ title, placeholder, warn, value, type, message, changeHandle
             <InputTitle>{title}</InputTitle>
             <InputContainer>
                 <StyledInput type={type} placeholder={placeholder} value={value} onChange={changeHandler}/>
+                <StyledButton onClick={buttonFunc} >{buttonName}</StyledButton>
             </InputContainer>
             <StyledMessage $warn={warn}>{message}</StyledMessage>
         </InputBoxWrapper>

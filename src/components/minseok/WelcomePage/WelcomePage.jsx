@@ -4,7 +4,8 @@ import { Pagination } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/pagination';
 import styled from 'styled-components';
-import background from '../../../assets/images/museum_BW1.jpg';
+import background from '@assets/images/museum_BW1.jpg';
+import {useNavigate} from "react-router-dom";
 
 const FullScreenWrapper = styled.div`
   width: 100vw;
@@ -80,6 +81,12 @@ const WelcomePage = () => {
         {title:"오디오 큐레이팅", description: "작품에 대한 설명과 함께 작품에 몰입하세요."}
     ]
 
+    const navigate = useNavigate();
+
+    const getStartedHandler = () => {
+        navigate("/auth/sign-in");
+    }
+
     return (
         <FullScreenWrapper>
             <DexploreTitle>
@@ -99,7 +106,7 @@ const WelcomePage = () => {
                     </StyledSlide>
                 ))}
             </StyledSwiper>
-            <StyledStartBtn>Get started</StyledStartBtn>
+            <StyledStartBtn onClick={getStartedHandler}>Get started</StyledStartBtn>
         </FullScreenWrapper>
     );
 };
