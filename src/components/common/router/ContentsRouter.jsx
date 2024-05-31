@@ -5,6 +5,7 @@ import WelcomePage from "@components/minseok/Pages/WelcomePage/WelcomePage";
 import SignUpPage from "@components/minseok/Pages/SignUpPage/SignUpPage";
 import SignInPage from "@components/minseok/Pages/SignInPage/SignInPage";
 import OAuth from "@components/minseok/Pages/OAuth/OAuth";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 // import SignUp from "../login/views/Authentication/SignUp/index";
 // import SignIn from "../login/views/Authentication/SignIn/index";
@@ -64,8 +65,9 @@ function ContentsRouter() {
           {/*   <Route path="map" element={<AdminMap />}></Route> */}
           {/*   <Route path="kakomap" element={<KakaoMap />}></Route> */}
           {/* </Route> */}
+            <Route path={'/test/toggle'} element={<ToggleButton/>}/>
 
-          <Route path='test' element={<AdminManagement />}>
+            <Route path='test' element={<AdminManagement />}>
 
           </Route>
         </Routes>
