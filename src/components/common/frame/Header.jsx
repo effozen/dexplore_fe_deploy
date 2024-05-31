@@ -41,7 +41,7 @@ const formatDate = (date) => {
 
 const Header = ({ height, name }) => {
 
-  const date = new Date('2024-05-26');
+  const date = new Date();
   const formattedDate = formatDate(date);
 
   return (
