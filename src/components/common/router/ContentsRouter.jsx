@@ -1,5 +1,5 @@
 import {BrowserRouter, Routes, Route, Form} from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import {useCookies} from 'react-cookie';
 import AdminManagement from "@components/admin/management/AdminManagement";
 import WelcomePage from "@components/minseok/Pages/WelcomePage/WelcomePage";
 import SignUpPage from "@components/minseok/Pages/SignUpPage/SignUpPage";
@@ -7,9 +7,6 @@ import SignInPage from "@components/minseok/Pages/SignInPage/SignInPage";
 import OAuth from "@components/minseok/Pages/OAuth/OAuth";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
-// import SignUp from "../login/views/Authentication/SignUp/index";
-// import SignIn from "../login/views/Authentication/SignIn/index";
-// import OAuth from "../login/views/Authentication/OAuth/index";
 // import Main from "../main/Main";
 // import MuseumInfo from "../user/museumInfo/MuseumInfo";
 // import Art from "../user/art/Art";
@@ -31,16 +28,14 @@ function ContentsRouter() {
     <div>
       <BrowserRouter>
         <Routes>
-            <Route path={'/'} element={<WelcomePage/>}/>
-            <Route path={'/auth/sign-up'} element={<SignUpPage/>}/>
-            <Route path={'/auth/sign-in'} element={<SignInPage/>}/>
-            <Route path={'/auth/oauth-response/:token/:expirationTime'} element={<OAuth />}/>
-          {/* <Route path='/' element={!!cookies.accessToken ? <MuseumInfo /> : <Main />} exact></Route> */}
-          {/* <Route path="auth"> */}
-          {/*   <Route path='sign-up' element={<SignUp />} /> */}
-          {/*   <Route path='sign-in' element={<SignIn />} /> */}
-          {/*   <Route path='oauth-response/:token/:expirationTime' element={<OAuth />}/> */}
-          {/* </Route> */}
+          <Route path="/">
+            <Route path="" element={<WelcomePage/>}/>
+          </Route>
+          <Route path="auth">
+            <Route path="sign-up" element={<SignUpPage/>}/>
+            <Route path="sign-in" element={<SignInPage/>}/>
+            <Route path="oauth-response/:token/:expirationTime" element={<OAuth/>}/>
+          </Route>
           {/* <Route path='user'> */}
           {/*   <Route path='' element={<MuseumInfo />}></Route> */}
           {/*   <Route path='art'> */}
@@ -65,10 +60,10 @@ function ContentsRouter() {
           {/*   <Route path="map" element={<AdminMap />}></Route> */}
           {/*   <Route path="kakomap" element={<KakaoMap />}></Route> */}
           {/* </Route> */}
-            <Route path={'/test/toggle'} element={<ToggleButton/>}/>
 
-            <Route path='test' element={<AdminManagement />}>
-
+          <Route path="test">
+            <Route path="" element={<AdminManagement/>}></Route>
+            <Route path="toggle" element={<ToggleButton/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
