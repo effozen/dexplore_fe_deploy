@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import background from "@assets/images/museum_BW2.jpg";
 import InputBox from "@components/minseok/components/InputBox";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import kakaoImg from "@assets/images/kakao-sign-in.png";
 import naverImg from "@assets/images/naver-sign-in.png";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {useCookies} from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 
 const FullScreenWrapper = styled.div`
   width: 100vw;
@@ -79,14 +80,35 @@ const OAuth2ImageBtn = styled.div`
 
 const SignInPage = () => {
 
-    const [cookie, setCookie] = useCookies();
-
+    const [cookie, setCookie, removeCookie] = useCookies();
     const [id, setId] = useState('');
-
     const [password, setPassword] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = cookie.accessToken;
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            console.log(decodedToken);
+            const now = Date.now() / 1000;
+            if (decodedToken.exp < now) {
+                // 토큰이 만료된 경우
+                removeCookie('accessToken', { path: '/' }); // 만료된 토큰 삭제
+                navigate("/auth/sign-in");
+            } else {
+                // 토큰이 유효한 경우
+                const userRole = decodedToken.role;
+                if(userRole && userRole === "ROLE_ADMIN") {
+                    navigate("/admin/management");
+                } else if (userRole && userRole === "ROLE_USER") {
+                    navigate("/user/main");
+                } else {
+                    alert("wrong role");
+                }
+            }
+        }
+    }, [cookie]);
 
     const idChangeHandler = (event) => {
         const {value} = event.target;
@@ -111,7 +133,6 @@ const SignInPage = () => {
             const expires = new Date(now + Number(expirationTime));
 
             setCookie('accessToken', token, {expires, path: '/'});
-            navigate('/');
         }).catch(error => {
             alert("예기치 못한 오류가 발생했습니다. 다시 시도하세요.");
         })
