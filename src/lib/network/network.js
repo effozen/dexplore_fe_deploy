@@ -6,7 +6,7 @@ const getCookie = (name) => {
   for (let i = 0; i < cookieArr.length; i++) {
     let cookiePair = cookieArr[i].split("=");
 
-    if (name == cookiePair[0].trim()) {
+    if (name === cookiePair[0].trim()) {
       return decodeURIComponent(cookiePair[1]);
     }
   }
@@ -19,38 +19,36 @@ const checkToken = () => {
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,
-    'Content-Type': 'multipart/form-data'
+    // 'Content-Type': 'multipart/form-data'
   };
+
+  console.log(headers);
 
   return headers;
 }
 
-const requestGet = (url, params = null) => {
+const requestGet = async (url, params = null) => {
   const headers = checkToken();
 
-  let result;
-  axios.get(url, {headers, params})
-    .then((data) => {
-      result = new Promise((resolve, reject) => {
-      resolve(data);
-    })}
-    );
-
-  return result;
+  try {
+    const response = await axios.get(url, { headers, params });
+    return response.data;
+  } catch (error) {
+    console.error('Error during GET request:', error);
+    throw error;
+  }
 };
 
-const requestPost = (url, bodyData = null) => {
+const requestPost = async (url, bodyData = null) => {
   const headers = checkToken();
 
-  let result;
-  axios.post(url, bodyData, {headers})
-    .then((data) => {
-      result = new Promise((resolve, reject) => {
-        resolve(data);
-      })}
-    );
-
-  return result;
+  try {
+    const response = await axios.post(url, bodyData, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error during POST request:', error);
+    throw error;
+  }
 };
 
-export {requestGet, requestPost};
+export { requestGet, requestPost };
