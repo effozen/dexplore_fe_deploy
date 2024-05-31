@@ -4,6 +4,7 @@ import AdminManagement from "@components/admin/management/AdminManagement";
 import WelcomePage from "@components/minseok/Pages/WelcomePage/WelcomePage";
 import SignUpPage from "@components/minseok/Pages/SignUpPage/SignUpPage";
 import SignInPage from "@components/minseok/Pages/SignInPage/SignInPage";
+import OAuth from "@components/minseok/Pages/OAuth/OAuth";
 
 // import SignUp from "../login/views/Authentication/SignUp/index";
 // import SignIn from "../login/views/Authentication/SignIn/index";
@@ -32,6 +33,7 @@ function ContentsRouter() {
             <Route path={'/'} element={<WelcomePage/>}/>
             <Route path={'/auth/sign-up'} element={<SignUpPage/>}/>
             <Route path={'/auth/sign-in'} element={<SignInPage/>}/>
+            <Route path='oauth-response/:token/:expirationTime' element={<OAuth />}/>
           {/* <Route path='/' element={!!cookies.accessToken ? <MuseumInfo /> : <Main />} exact></Route> */}
           {/* <Route path="auth"> */}
           {/*   <Route path='sign-up' element={<SignUp />} /> */}
