@@ -33,7 +33,7 @@ function ContentsRouter() {
             <Route path={'/'} element={<WelcomePage/>}/>
             <Route path={'/auth/sign-up'} element={<SignUpPage/>}/>
             <Route path={'/auth/sign-in'} element={<SignInPage/>}/>
-            <Route path='oauth-response/:token/:expirationTime' element={<OAuth />}/>
+            <Route path={'/auth/oauth-response/:token/:expirationTime'} element={<OAuth />}/>
           {/* <Route path='/' element={!!cookies.accessToken ? <MuseumInfo /> : <Main />} exact></Route> */}
           {/* <Route path="auth"> */}
           {/*   <Route path='sign-up' element={<SignUp />} /> */}
