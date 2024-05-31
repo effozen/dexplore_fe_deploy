@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from "@components/common/frame/Header";
 import ContentCarousel from "@components/common/frame/ContentCarousel";
 
@@ -11,7 +10,7 @@ const AdminManagement = () => {
     <div className='flex flex-col'>
       <Header name={name} height="130px" />
       <ContentCarousel name={title1}/>
-      <ContentCarousel name={title1}/>
+      <ContentCarousel name={title2}/>
     </div>
   );
 }
