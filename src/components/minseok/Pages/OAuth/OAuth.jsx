@@ -14,7 +14,7 @@ const OAuth = () => {
         const expires = new Date(now + Number(expirationTime));
 
         setCookie('accessToken', token, {expires, path: '/'});
-        navigate('/');
+        navigate('/auth/sign-in');
     }, [token]);
 
     return (
