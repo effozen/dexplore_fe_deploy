@@ -27,7 +27,7 @@ const DexploreTitle = styled.h1`
   font-size: 38px;
   color: #FFFFFF;
   text-align: center;
-  padding:155px 45px 45px 45px;
+  padding:15vh 45px 5vh 45px;
   font-weight: 900;
 `
 
