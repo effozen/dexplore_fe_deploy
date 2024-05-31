@@ -27,7 +27,7 @@ const AdminManagement = () => {
     description:'박물관 설명',
   }]);
 
-  const name = '홍길동'; // 나중에 지울 것
+  const name = '홍길동님, 환영합니다.'; // 나중에 지울 것
 
   useEffect( () => {
      requestGet(dataList.museumList).then(v => {

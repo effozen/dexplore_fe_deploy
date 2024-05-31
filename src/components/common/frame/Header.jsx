@@ -47,7 +47,7 @@ const Header = ({ height, name }) => {
   return (
     <StyledHeader height={height}>
       <StyledWelcomeMessage>
-        {name}님, 환영합니다.
+        {name}
       </StyledWelcomeMessage>
       <StyledDate>
         {formattedDate}
