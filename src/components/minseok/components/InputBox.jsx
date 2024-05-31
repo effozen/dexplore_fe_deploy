@@ -32,7 +32,7 @@ const StyledInput = styled.input`
 const StyledMessage = styled.div`
   color: ${props => (props.$warn ? 'rgba(255, 86, 64, 1)' : 'rgba(58, 87, 248, 1)')};
   font-size: 13px;
-  height: 20px;
+  height: 19px;
 `;
 
 /**

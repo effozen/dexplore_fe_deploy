@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import background from "@assets/images/museum_BW6.jpg";
-import InputBox from "@components/minseok/SignUpPage/InputBox";
+import InputBox from "@components/minseok/components/InputBox";
 import {useEffect, useState} from "react";
-import InputBoxWithBtn from "@components/minseok/SignUpPage/InputBoxWithBtn";
+import InputBoxWithBtn from "@components/minseok/components/InputBoxWithBtn";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
