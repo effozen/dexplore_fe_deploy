@@ -49,6 +49,7 @@ const StyledSlide = styled(SwiperSlide)`
 `;
 
 const StyledSwiper = styled(Swiper)`
+  width:320px;
   .swiper-pagination-bullet {
     background-color: #FFFFFF;  //bullet 색상 화이트로 커스텀
     opacity: 33%;
@@ -76,7 +77,7 @@ const WelcomePage = () => {
 
     const inner = [
         {title:"편리한 관리 시스템", description: "박물관과 작품 정보를 간편하게 관리하세요."},
-        {title:"위치 기반 박물관 탐색", description: "가까운 박물관과 전시품 리스트를 쉽게 확인하고 선택하세요."},
+        {title:"위치 기반 박물관 탐색", description: "가까운 박물관과 작품 리스트를 쉽게 확인하세요."},
         {title:"작품 QR코드 자동 생성 및 제공", description: "간편하게 작품 정보를 스캔하여 감상하세요."},
         {title:"오디오 큐레이팅", description: "작품에 대한 설명과 함께 작품에 몰입하세요."}
     ]
