@@ -26,7 +26,7 @@ const DexploreTitle = styled.h1`
 `
 
 const EmptyContainer = styled.div`
-  height: 400px;
+  height: 350px;
   width: 100%;
 `
 
