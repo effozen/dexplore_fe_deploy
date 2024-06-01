@@ -39,7 +39,7 @@ const formatDate = (date) => {
   return `${formattedDate} (${dayOfWeek})`;
 };
 
-const Header = ({ height, name }) => {
+const Header = ({ height, name, isDate=true }) => {
 
   const date = new Date();
   const formattedDate = formatDate(date);
@@ -49,9 +49,9 @@ const Header = ({ height, name }) => {
       <StyledWelcomeMessage>
         {name}
       </StyledWelcomeMessage>
-      <StyledDate>
+      {isDate && <StyledDate>
         {formattedDate}
-      </StyledDate>
+      </StyledDate>}
     </StyledHeader>
   );
 }
