@@ -6,7 +6,7 @@ const MuseumUpdate = () => {
 
   return (
     <>
-      <Header name='새로운 박물관을 등록하세요' height='100px' isDate={false}></Header>
+      <Header name='박물관 정보 업데이트' height='100px' isDate={false}></Header>
       <MuseumForm2></MuseumForm2>
     </>
   );
