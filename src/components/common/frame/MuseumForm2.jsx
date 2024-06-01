@@ -138,9 +138,9 @@ const MuseumForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-around pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
-          <Button type="button" className="w-[84px] h-[40px] rounded-none bg-gray-500">취소</Button>
-          <Button type="submit" className="w-[84px] h-[40px] rounded-none">저장</Button>
+        <div className="flex flex-col justify-between items-center h-[100px] w-[350px] pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
+          <Button type="submit" className="w-[258px] h-[40px] rounded-none">저장하고 QR코드 발급받기</Button>
+          <Button type="button" className="w-[258px] h-[40px] rounded-none bg-gray-500">취소</Button>
         </div>
       </form>
     </ShadcnForm>
