@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
@@ -43,9 +43,11 @@ const formSchema = z.object({
   description: z.string().min(1, {message: '값을 채워주세요'}),
 });
 
-
 const MuseumForm = () => {
   const navigate = useNavigate();
+  const [loc, setLoc] = useState({});
+  const [imageName, setImageName] = useState(''); // 이미지 파일명을 저장할 상태 추가
+  const [drawerOpen, setDrawerOpen] = useState(false); // Drawer 상태 추가
 
   useEffect(() => {
     loadKakaoMap();
@@ -64,6 +66,13 @@ const MuseumForm = () => {
       phone: "",
       entPrice: "",
       description: "",
+      latitude: "",
+      longitude: "",
+      edgeLatitude1: "",
+      edgeLongitude1: "",
+      edgeLatitude2: "",
+      edgeLongitude2: "",
+      level:"",
     },
   });
 
@@ -79,9 +88,17 @@ const MuseumForm = () => {
     formData.append('phone', values.phone);
     formData.append('entPrice', values.entPrice);
     formData.append('description', values.description);
+    formData.append('latitude', loc.latitude);
+    formData.append('longitude', loc.longitude);
+    formData.append('edgeLatitude1', loc.edgeLatitude1);
+    formData.append('edgeLongitude1', loc.edgeLongitude1);
+    formData.append('edgeLatitude2', loc.edgeLatitude2);
+    formData.append('edgeLongitude2', loc.edgeLongitude2);
+    formData.append('level', loc.level);
 
     requestPost('https://dexplore.info/api/v1/admin/save-museum', formData).then(v => {
       console.log(v);
+      navigate('/admin/management')
     });
   };
 
@@ -103,8 +120,24 @@ const MuseumForm = () => {
     />
   );
 
-  const handleLocClick = () => {
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageName(file.name);
+      form.setValue("museumImg", file);
+    }
+  };
 
+  const handleConfirm = () => {
+    form.setValue("museumLoc", loc.roadAddress);
+    form.setValue("latitude", loc.latitude);
+    form.setValue("longitude", loc.longitude);
+    form.setValue("level", loc.level);
+    form.setValue("edgeLatitude1", loc.edgeLatitude1);
+    form.setValue("edgeLongitude1", loc.edgeLongitude1);
+    form.setValue("edgeLatitude2", loc.edgeLatitude2);
+    form.setValue("edgeLongitude2", loc.edgeLongitude2);
+    setDrawerOpen(false);
   };
 
   return (
@@ -126,10 +159,10 @@ const MuseumForm = () => {
                 <label htmlFor="image-file">
                   <div
                     className="border-[1px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                    <div>클릭해서 이미지를 첨부하세요</div>
+                    <div>{imageName || '클릭해서 이미지를 첨부하세요'}</div>
                     <div><AiOutlinePaperClip/></div>
                   </div>
-                  <input type="file" name="imageFile" id="image-file" className="hidden"/>
+                  <input type="file" name="imageFile" id="image-file" className="hidden" onChange={handleImageChange} />
                 </label>
               </FormControl>
               <FormDescription/>
@@ -144,11 +177,11 @@ const MuseumForm = () => {
           render={({field}) => (
             <FormItem className="space-y-0 mb-[8px]">
               <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">박물관 위치 등록</FormLabel>
-              <Drawer>
+              <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <FormControl>
                   <DrawerTrigger
                     className="border-[1px] w-[350px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                    <div>클릭해서 박물관 위치를 등록하세요</div>
+                    <div>{loc.roadAddress || '클릭해서 박물관 위치를 등록하세요'}</div>
                     <div><AiFillEnvironment/></div>
                   </DrawerTrigger>
                 </FormControl>
@@ -157,11 +190,11 @@ const MuseumForm = () => {
                     <DrawerTitle>박물관 위치 찾기</DrawerTitle>
                     <DrawerDescription>지도에서 박물관 위치를 클릭해주세요</DrawerDescription>
                   </DrawerHeader>
-                  <KakaoMap />
+                  <KakaoMap setLoc={setLoc}/>
                   <DrawerFooter>
-                    <Button>확인</Button>
-                    <DrawerClose>
-                      <Button variant="outline" className='w-full'>취소</Button>
+                    <Button className='w-full' onClick={handleConfirm}>확인</Button>
+                    <DrawerClose className='w-full'>
+                      <Button variant="outline" className='w-full' onClick={() => setLoc({})}>취소</Button>
                     </DrawerClose>
                   </DrawerFooter>
                 </DrawerContent>
