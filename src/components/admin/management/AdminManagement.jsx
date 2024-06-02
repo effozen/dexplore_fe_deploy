@@ -31,16 +31,17 @@ const AdminManagement = () => {
 
   useEffect( () => {
      requestGet(dataList.museumList).then(v => {
-      setMuseumList(v.data.museumList);
-      setChosenMuseum(v.data.museumList[0]);
+       console.log(v);
+      setMuseumList(v.museumList);
+      setChosenMuseum(v.museumList[0]);
     });
   }, []);
 
-  useEffect(() => {
-    requestGet(dataList.artList, {museumId: chosenMuseum.museumId}).then(v => {
-      setArtList(v.data.arts);
-    });
-  }, [chosenMuseum]);
+  // useEffect(() => {
+  //   requestGet(dataList.artList, {museumId: chosenMuseum.museumId}).then(v => {
+  //     setArtList(v.data.arts);
+  //   });
+  // }, [chosenMuseum]);
 
   return (
     <div className='flex flex-col'>

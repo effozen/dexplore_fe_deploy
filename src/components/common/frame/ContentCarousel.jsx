@@ -108,16 +108,14 @@ const AddNewItemComponent = ({isMuseum}) => {
   const navigate = useNavigate();
   let message = isMuseum ? '박물관' : '작품';
 
-  // const handleClick = (e) => {
-  //   const path = isMuseum ? '/admin/museum/create' : '/admin/art/create';
-  //
-  //   isMuseum = navigate('/admin/museum/create')
-  //
-  //   navigate();
-  // }
+  const handleClick = (e) => {
+    const path = isMuseum ? '/admin/museum/create' : '/admin/art/create';
+
+    navigate(path);
+  }
 
   return (
-    <CarouselItem className="basis-[34%] pl-[3px]">
+    <CarouselItem className="basis-[34%] pl-[3px]" onClick={handleClick}>
       <div className="p-1">
         <Card className="h-full w-full border-2 border-dashed border-gray-500">
           <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">
