@@ -21,7 +21,7 @@ const loadKakaoMap = () => {
   }
 };
 
-const KakaoMap = () => {
+const KakaoMap = ({setLoc}) => {
   const mapRef = useRef(null);
 
   const controlKakaoMap = async () => {
@@ -52,6 +52,7 @@ const KakaoMap = () => {
 
           // 클릭한 위도, 경도 정보를 가져옵니다
           let latlng = mouseEvent.latLng;
+          console.log(latlng);
 
           // 마커 위치를 클릭한 위치로 옮깁니다
           marker.setPosition(latlng);
@@ -61,13 +62,34 @@ const KakaoMap = () => {
 
           console.log(message);
 
-          geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (v) => {
-            console.log(v[0].road_address); // null 주의
+          // 지도의 현재 영역을 얻어옵니다
+          var bounds = map.getBounds();
+
+          // 영역의 남서쪽 좌표를 얻어옵니다
+          var swLatLng = bounds.getSouthWest();
+
+          // 영역의 북동쪽 좌표를 얻어옵니다
+          var neLatLng = bounds.getNorthEast();
+
+          geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              console.log(result[0].road_address); // null 주의
+              const loc = {
+                latitude: latlng.getLat(),
+                longitude: latlng.getLng(),
+                roadAddress: result[0].road_address
+                  ? result[0].road_address.address_name
+                  : null,
+                level: map.getLevel(),
+                edgeLatitude1: swLatLng.getLat(),
+                edgeLongitude1: swLatLng.getLng(),
+                edgeLatitude2: neLatLng.getLat(),
+                edgeLongitude2: neLatLng.getLng(),
+              };
+              setLoc(loc);
+            }
           });
-
         });
-
-
       } else {
         console.error("Kakao Maps API is not loaded.");
       }

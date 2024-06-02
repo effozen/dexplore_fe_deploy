@@ -17,7 +17,7 @@ const MuseumFormat_hp = {
   museumLoc_ph: '클릭해서 박물관 위치를 등록하세요',
   startTime_ph: '박물관 개장 시간을 입력하세요',
   endTime_ph: '박물관 폐장 시간을 입력하세요',
-  closingDay_ph: '박물관 폐장 시간을 입력하세요',
+  closingDay_ph: '박물관 휴관일을 입력하세요',
   museumEmail_ph: '이메일을 입력하세요',
   phone_ph: '전화번호를 입력하세요',
   entPrice_ph: '관람료를 입력하세요',
