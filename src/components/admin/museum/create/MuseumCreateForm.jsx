@@ -81,11 +81,26 @@ const MuseumCreateForm = () => {
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
       if (key === 'museumImg') {
-        formData.append(key, values[key]);
+        formData.append('imageFile', values[key]);
       } else {
         formData.append(key, loc[key] || values[key]);
       }
     });
+
+    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } = loc;
+    formData.append('museumLoc', roadAddress);
+    formData.append('latitude', latitude);
+    formData.append('longitude', longitude);
+    formData.append('level', level);
+    formData.append('edgeLatitude1', edgeLatitude1);
+    formData.append('edgeLongitude1', edgeLongitude1);
+    formData.append('edgeLatitude2', edgeLatitude2);
+    formData.append('edgeLongitude2', edgeLongitude2);
+
+    // FormData 내용을 콘솔에 출력
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
 
     requestPost('https://dexplore.info/api/v1/admin/save-museum', formData).then(() => {
       navigate('/admin/management');

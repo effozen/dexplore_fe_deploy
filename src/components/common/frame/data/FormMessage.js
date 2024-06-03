@@ -24,4 +24,22 @@ const MuseumFormat_hp = {
   description_ph: '박물관에 관한 정보를 입력하세요',
 }
 
-export {MuseumFormat, MuseumFormat_hp};
+const ArtFormat = {
+  artName: '작품 이름',
+  artImg: '작품 사진 첨부',
+  artLoc: '작품 위치 등록',
+  artYear: '작품 연도',
+  authName: '작가명',
+  artDescription: '작품 설명',
+}
+
+const ArtFormat_hp = {
+  artName_ph: '작품 이름을 입력하세요',
+  artImg_ph: '작품 사진을 첨부하세요',
+  artLoc_ph: '작품 위치를 등록하세요',
+  artYear_ph: '작품 연도을 입력하세요',
+  authName_ph: '작가 이름을 입력하세요',
+  artDescription_ph: '작품 설명을 입력하세요',
+}
+
+export {MuseumFormat, MuseumFormat_hp, ArtFormat, ArtFormat_hp};
