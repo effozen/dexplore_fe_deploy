@@ -74,7 +74,7 @@ const KakaoMap = ({setLoc}) => {
           geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
               console.log(result[0].road_address); // null 주의
-              const loc = {
+              let loc = {
                 latitude: latlng.getLat(),
                 longitude: latlng.getLng(),
                 roadAddress: result[0].road_address
