@@ -58,24 +58,13 @@ const StyledListIcon = styled(AiOutlineMenu)`
 	stroke: white;
 	stroke-width: 20px;
 	fill: currentColor;
-	width: 17px;
-	height: 17px;
+	background-color: rgba(255, 255, 255, 0.40);
+	width: 30px;
+	height: 30px;
 	position: absolute;
-	top: 5px;
-	right: 5px;
-	border-radius: 50%;
-`;
-
-const StyledIcon = styled(AiFillDelete)`
-	stroke: white;
-	stroke-width: 20px;
-	fill: currentColor;
-	width: 17px;
-	height: 17px;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	border-radius: 50%;
+	top: 1px;
+	right: 1px;
+	border-radius: 10%;
 `;
 
 const StyledDropDownMenuTrigger = styled(DropdownMenuTrigger)`
@@ -165,13 +154,15 @@ const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum
   </CarouselItem>
 );
 
-const AddNewItemComponent = ({ isMuseum }) => {
+const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   const navigate = useNavigate();
   const message = isMuseum ? '박물관' : '작품';
 
+  // console.log(chosenMuseum);
+
   const handleClick = () => {
     const path = isMuseum ? '/admin/museum/create' : '/admin/art/create';
-    navigate(path);
+    isMuseum ? navigate(path) : navigate(path, {state: {museumId:chosenMuseum.museumId}});
   };
 
   return (
@@ -191,9 +182,10 @@ const AddNewItemComponent = ({ isMuseum }) => {
 const ContentCarousel = ({
                            name,
                            museumSelector,
-                           itemInfo = [{ id: 1, url: 'test.com', title: '제목', description: '내용입니다.' }],
+                           itemInfo,
                            isAdmin = true,
                            isMuseum,
+                           chosenMuseum,
                          }) => {
   const [jobStates, setJobStates] = useState(false);
 
@@ -223,7 +215,7 @@ const ContentCarousel = ({
             />
           );
         })}
-        {isAdmin && <AddNewItemComponent isMuseum={isMuseum} />}
+        {isAdmin && <AddNewItemComponent isMuseum={isMuseum} chosenMuseum={chosenMuseum} />}
       </CarouselContent>
     </Carousel>
   </StyledFrame>
