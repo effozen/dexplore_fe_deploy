@@ -26,8 +26,8 @@ import { Textarea } from '@components/common/shadcn/textarea';
 import { MuseumFormat, MuseumFormat_hp } from '@components/common/frame/data/FormMessage';
 import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import { requestPost, requestGet } from '@lib/network/network';
-import { useNavigate } from 'react-router-dom';
-import { loadKakaoMap, KakaoMap } from '@components/common/KakaoMap/KakaoMap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
 
 const formSchema = z.object({
   museumName: z.string().min(1, { message: '값을 채워주세요' }),
@@ -62,44 +62,64 @@ const initialFormValues = {
   level: '',
 };
 
-const MuseumUpdateForm = ({ id }) => {
+const MuseumUpdateForm = () => {
   const navigate = useNavigate();
-  const [loc, setLoc] = useState({});
+  const location = useLocation();
+  const [loc, setLoc] = useState(initialFormValues);
   const [imageName, setImageName] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [museumInfo, setMuseumInfo] = useState(null);
-
-  useEffect(() => {
-    loadKakaoMap();
-    loadData(id);
-  }, [id]);
-
-  const loadData = (id) => {
-    requestGet('https://dexplore.info/api/v1/admin/get-museum', { museumId: id }).then((response) => {
-      setMuseumInfo(response.data.museum);
-    });
-  };
+  const [id, setId] = useState('');
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: museumInfo || initialFormValues,
+    defaultValues: initialFormValues,
   });
 
   useEffect(() => {
-    if (museumInfo) {
-      form.reset(museumInfo);
+    loadKakaoMap();
+    setId(location.state.id);
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      loadData(id);
     }
-  }, [museumInfo]);
+  }, [id]);
+
+  const loadData = async (id) => {
+    const response = await requestGet('https://dexplore.info/api/v1/admin/get-museum', { museumId: id });
+    const museum = response.museum;
+
+    if (museum) {
+      const updatedValues = {
+        ...initialFormValues,
+        ...museum,
+      };
+      form.reset(updatedValues);
+    }
+
+  };
 
   const handleSubmit = (values) => {
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
       if (key === 'museumImg') {
-        formData.append(key, values[key]);
+        formData.append('imageFile', values[key]);
       } else {
         formData.append(key, loc[key] || values[key]);
       }
     });
+
+    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } = loc;
+    formData.append('museumLoc', roadAddress);
+    formData.append('latitude', latitude);
+    formData.append('longitude', longitude);
+    formData.append('level', level);
+    formData.append('edgeLatitude1', edgeLatitude1);
+    formData.append('edgeLongitude1', edgeLongitude1);
+    formData.append('edgeLatitude2', edgeLatitude2);
+    formData.append('edgeLongitude2', edgeLongitude2);
+    formData.append('museumId', id);
 
     requestPost('https://dexplore.info/api/v1/admin/update-museum', formData).then(() => {
       navigate('/admin/management');
@@ -137,7 +157,8 @@ const MuseumUpdateForm = ({ id }) => {
   };
 
   const handleConfirm = () => {
-    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } = loc;
+    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } =
+      loc;
     form.setValue('museumLoc', roadAddress);
     form.setValue('latitude', latitude);
     form.setValue('longitude', longitude);
@@ -149,14 +170,10 @@ const MuseumUpdateForm = ({ id }) => {
     setDrawerOpen(false);
   };
 
-  if (!museumInfo) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <ShadcnForm {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
-        {['museumName'].map(renderField)}
+        {['museumName'].map((field) => renderField(field))}
 
         <Controller
           key="museumImg"
@@ -168,7 +185,7 @@ const MuseumUpdateForm = ({ id }) => {
               <FormControl>
                 <label htmlFor="image-file">
                   <div className="border-[1px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                    <div>{imageName || '클릭해서 이미지를 첨부하세요'}</div>
+                    <div>{imageName || '기존 이미지에서 변경을 원할 경우 클릭해주세요.'}</div>
                     <div>
                       <AiOutlinePaperClip />
                     </div>
@@ -192,7 +209,7 @@ const MuseumUpdateForm = ({ id }) => {
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <FormControl>
                   <DrawerTrigger className="border-[1px] w-[350px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                    <div>{loc.roadAddress || '클릭해서 박물관 위치를 등록하세요'}</div>
+                    <div>{loc.roadAddress || '기존 위치에서 변경을 원할 경우 클릭해주세요'}</div>
                     <div>
                       <AiFillEnvironment />
                     </div>
@@ -224,16 +241,16 @@ const MuseumUpdateForm = ({ id }) => {
 
         {Object.keys(MuseumFormat)
           .filter((v) => !['museumName', 'museumImg', 'museumLoc', 'description'].includes(v))
-          .map(renderField)}
+          .map((field) => renderField(field))}
 
         {renderField('description', true)}
 
         <div className="flex justify-around pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
-          <Button type="button" className="w-[84px] h-[40px] rounded-none bg-gray-500" onClick={() => navigate('/admin/management')}>
+          <Button type="button" className="w-[84px] h-[40px] rounded-none bg-gray-500">
             취소
           </Button>
           <Button type="submit" className="w-[84px] h-[40px] rounded-none">
-            수정
+            저장
           </Button>
         </div>
       </form>
