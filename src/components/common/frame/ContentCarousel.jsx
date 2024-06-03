@@ -102,21 +102,7 @@ const StyledAddWrapper = styled.div`
 	text-align: center;
 `;
 
-const DeleteIcon = ({ isMuseum = true, id }) => {
-  const urlList = {
-    museum: 'https://dexplore.info/api/v1/admin/delete-museum',
-    art: 'https://dexplore.info/api/v1/admin/delete-art',
-  };
-
-  const handleClick = () => {
-    const url = isMuseum ? urlList.museum : urlList.art;
-    requestPost(url, { id });
-  };
-
-  return <StyledIcon onClick={handleClick} />;
-};
-
-const ListIcon = ({ isMuseum = true, id }) => {
+const ListIcon = ({ isMuseum = true, id}) => {
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
 
@@ -126,7 +112,10 @@ const ListIcon = ({ isMuseum = true, id }) => {
 
     if (userAnswer) {
       const url = isMuseum ? 'https://dexplore.info/api/v1/admin/delete-museum' : 'https://dexplore.info/api/v1/admin/delete-art';
-      requestPost(url, { id });
+      const bodyData = isMuseum ? {museumId: id} : {artId: id};
+      requestPost(url, bodyData).then(v => {
+        setIsDelete(!userAnswer);
+      });
     }
   };
 
@@ -159,13 +148,13 @@ const ListIcon = ({ isMuseum = true, id }) => {
   );
 };
 
-const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id }) => (
+const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, setJobStates }) => (
   <CarouselItem className="basis-[35%] pl-[3px]">
     <div className="p-1">
       <Card className="h-full w-full">
         <CardContent className="flex aspect-square items-center justify-center p-0 relative">
           <StyledImageWrapper>
-            {isAdmin && <ListIcon isMuseum={isMuseum} id={id} />}
+            {isAdmin && <ListIcon setJobStates={setJobStates} isMuseum={isMuseum} id={id} />}
             <img src={imageSrc} alt={title} className="h-full w-full object-cover rounded-lg" />
           </StyledImageWrapper>
         </CardContent>
@@ -205,7 +194,10 @@ const ContentCarousel = ({
                            itemInfo = [{ id: 1, url: 'test.com', title: '제목', description: '내용입니다.' }],
                            isAdmin = true,
                            isMuseum,
-                         }) => (
+                         }) => {
+  const [jobStates, setJobStates] = useState(false);
+
+  return (
   <StyledFrame>
     <StyledHeaderFrame>
       <StyledHeader>{name}</StyledHeader>
@@ -227,6 +219,7 @@ const ContentCarousel = ({
               description={info.description}
               isMuseum={isMuseum}
               id={info.id}
+              setJobStates={setJobStates}
             />
           );
         })}
@@ -234,6 +227,6 @@ const ContentCarousel = ({
       </CarouselContent>
     </Carousel>
   </StyledFrame>
-);
+)};
 
 export default ContentCarousel;
