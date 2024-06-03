@@ -151,6 +151,10 @@ const MuseumCreateForm = () => {
     setDrawerOpen(false);
   };
 
+  const handleCancleClick = () => {
+    navigate(-1);
+  }
+
   return (
     <ShadcnForm {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
@@ -227,7 +231,7 @@ const MuseumCreateForm = () => {
         {renderField('description', true)}
 
         <div className="flex justify-around pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
-          <Button type="button" className="w-[84px] h-[40px] rounded-none bg-gray-500">
+          <Button type="button" className="w-[84px] h-[40px] rounded-none bg-gray-500" onClick={handleCancleClick}>
             취소
           </Button>
           <Button type="submit" className="w-[84px] h-[40px] rounded-none">
