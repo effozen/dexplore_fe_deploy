@@ -33,7 +33,7 @@ const SelectList = ({selectItems, setChosenMuseum}) => {
   return (
     <Select onValueChange={handleChange}>
       <StyledSelectTrigger>
-        <SelectValue placeholder={selectItems.length > 0 ? selectItems[0].museumName : "museumInfo"} />
+        <SelectValue placeholder={selectItems.length > 0 ? selectItems[0].museumName : "박물관 목록"} />
       </StyledSelectTrigger>
       <SelectContent>
         {selectItems.map(item => (

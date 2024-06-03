@@ -19,15 +19,15 @@ const AdminManagement = () => {
   const name = '홍길동님, 환영합니다.'; // 나중에 지울 것
 
   useEffect(() => {
-    requestGet(dataList.museumList).then(v => {
-      console.log(v);
-      setMuseumList(v.museumList);
-      setChosenMuseum(v.museumList[0]);
+    requestGet(dataList.museumList).then(response => {
+      console.log(response);
+      setMuseumList(response.museumList);
+      setChosenMuseum(response.museumList[0]);
     });
   }, []);
 
   useEffect(() => {
-    if (Object.keys(chosenMuseum).length !== 0) {
+    if ((chosenMuseum !== null) && (chosenMuseum !== undefined) && Object.keys(chosenMuseum).length !== 0) {
       requestGet(dataList.artList, {museumId: chosenMuseum.museumId}).then(response => {
         setArtList(response.arts);
       });

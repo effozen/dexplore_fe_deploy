@@ -9,6 +9,7 @@ import ToggleButton from "@components/common/gunwoo/ToggleButton";
 import MuseumCreate from "@components/admin/museum/create/MuseumCreate";
 import MuseumUpdate from "@components/admin/museum/update/MuseumUpdate";
 import ArtCreate from "@components/admin/art/create/ArtCreate";
+import ArtUpdate from "@components/admin/art/update/ArtUpdate";
 
 // import Main from "../main/Main";
 // import MuseumInfo from "../user/museumInfo/MuseumInfo";
@@ -72,6 +73,7 @@ function ContentsRouter() {
             </Route>
             <Route path="art">
               <Route path='create' element={<ArtCreate />}></Route>
+              <Route path='update' element={<ArtUpdate />}></Route>
             </Route>
           </Route>
 

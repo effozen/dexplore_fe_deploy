@@ -91,7 +91,7 @@ const StyledAddWrapper = styled.div`
 	text-align: center;
 `;
 
-const ListIcon = ({ isMuseum = true, id}) => {
+const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
 
@@ -110,7 +110,7 @@ const ListIcon = ({ isMuseum = true, id}) => {
 
   const handleUpdateClick = () => {
     const path = isMuseum ? '/admin/museum/update' : '/admin/art/update';
-    navigate(path, { state: { id } });
+    isMuseum ? navigate(path, { state: { id } }) : navigate(path, {state: {id, museumId:chosenMuseum.museumId}});
   };
 
   return (
@@ -137,13 +137,13 @@ const ListIcon = ({ isMuseum = true, id}) => {
   );
 };
 
-const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, setJobStates }) => (
+const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, setJobStates, chosenMuseum }) => (
   <CarouselItem className="basis-[35%] pl-[3px]">
     <div className="p-1">
       <Card className="h-full w-full">
         <CardContent className="flex aspect-square items-center justify-center p-0 relative">
           <StyledImageWrapper>
-            {isAdmin && <ListIcon setJobStates={setJobStates} isMuseum={isMuseum} id={id} />}
+            {isAdmin && <ListIcon setJobStates={setJobStates} isMuseum={isMuseum} id={id} chosenMuseum={chosenMuseum}/>}
             <img src={imageSrc} alt={title} className="h-full w-full object-cover rounded-lg" />
           </StyledImageWrapper>
         </CardContent>
@@ -212,6 +212,7 @@ const ContentCarousel = ({
               isMuseum={isMuseum}
               id={info.id}
               setJobStates={setJobStates}
+              chosenMuseum={chosenMuseum}
             />
           );
         })}
