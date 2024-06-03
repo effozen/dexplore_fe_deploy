@@ -144,6 +144,10 @@ const ArtCreateForm = () => {
     setDrawerOpen(false);
   };
 
+  const handleCancleClick = () => {
+    navigate(-1);
+  }
+
   return (
     <ShadcnForm {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
@@ -223,7 +227,7 @@ const ArtCreateForm = () => {
           <Button type="submit" className="w-[300px] h-[40px] rounded-none">
             저장하고 QR코드 발급 받기
           </Button>
-          <Button type="button" className="w-[300px] h-[40px] rounded-none bg-gray-500">
+          <Button type="button" className="w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleCancleClick}>
             취소
           </Button>
         </div>
