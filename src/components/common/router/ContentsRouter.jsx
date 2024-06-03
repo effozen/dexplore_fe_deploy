@@ -7,7 +7,7 @@ import SignInPage from "@components/minseok/Pages/SignInPage/SignInPage";
 import OAuth from "@components/minseok/Pages/OAuth/OAuth";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 import MuseumCreate from "@components/admin/museum/create/MuseumCreate";
-import MuseumUpdate from "@components/admin/museum/create/MuseumUpdate";
+import MuseumUpdate from "@components/admin/museum/update/MuseumUpdate";
 
 // import Main from "../main/Main";
 // import MuseumInfo from "../user/museumInfo/MuseumInfo";
@@ -63,6 +63,7 @@ function ContentsRouter() {
           {/*   <Route path="kakomap" element={<KakaoMap />}></Route> */}
           {/* </Route> */}
           <Route path='admin'>
+            <Route path="" element={<AdminManagement/>}/>
             <Route path="management" element={<AdminManagement/>}/>
             <Route path="museum">
               <Route path='create' element={<MuseumCreate />} />
