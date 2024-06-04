@@ -41,11 +41,12 @@ const AdminManagement = () => {
         // 토큰이 만료된 경우
         removeCookie('accessToken', { path: '/' }); // 만료된 토큰 삭제
         navigate("/auth/sign-in");
-      } else {
+      }
+      else {
         // 토큰이 유효한 경우
         const userRole = decodedToken.role;
         if(userRole && userRole === "ROLE_ADMIN" ) {
-          navigate("/admin/management");
+          if(location.pathname !== "/admin/management" || location.pathname !== "/admin") navigate("/admin/management");
         } else if (userRole && userRole === "ROLE_USER") {
           navigate("/user/main");
         } else {
@@ -53,7 +54,8 @@ const AdminManagement = () => {
           navigate('/auth/sign-in');
         }
       }
-    } else {
+    }
+    else {
       navigate('/auth/sign-in');
     }
   }, [cookie]);
