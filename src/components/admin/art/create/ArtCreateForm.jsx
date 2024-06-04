@@ -28,7 +28,29 @@ import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import { requestPost } from '@lib/network/network';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
-import {artFormSchema as formSchema, artInitialFormValues as initialFormValues} from "@components/common/frame/data/FormSchema";
+
+const formSchema = z.object({
+  artName: z.string().min(1, { message: '값을 채워주세요' }),
+  artImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
+  artYear: z.string().min(1, { message: '값을 채워주세요' }),
+  authName: z.string().min(1, { message: '값을 채워주세요' }),
+  artDescription: z.string().min(1, { message: '값을 채워주세요' }),
+});
+
+const initialFormValues = {
+  artName: '',
+  artImg: null,
+  artYear: '',
+  authName: '',
+  artDescription: '',
+  latitude: '',
+  longitude: '',
+  edgeLatitude1: '',
+  edgeLongitude1: '',
+  edgeLatitude2: '',
+  edgeLongitude2: '',
+  level: '',
+};
 
 const ArtCreateForm = () => {
   const navigate = useNavigate();
@@ -38,15 +60,15 @@ const ArtCreateForm = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [museumId, setMuseumId] = useState();
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialFormValues,
-  });
-
   useEffect(() => {
     loadKakaoMap();
     setMuseumId(location.state.museumId);
   }, []);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialFormValues,
+  });
 
   const handleSubmit = (values) => {
     const formData = new FormData();
@@ -68,6 +90,11 @@ const ArtCreateForm = () => {
     formData.append('edgeLatitude2', edgeLatitude2);
     formData.append('edgeLongitude2', edgeLongitude2);
     formData.append('museumId', museumId);
+
+    // FormData 내용을 콘솔에 출력
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
 
     requestPost('https://dexplore.info/api/v1/admin/save-art', formData).then(() => {
       navigate('/admin/management');
@@ -105,6 +132,15 @@ const ArtCreateForm = () => {
   };
 
   const handleConfirm = () => {
+    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } =
+      loc;
+    form.setValue('latitude', latitude);
+    form.setValue('longitude', longitude);
+    form.setValue('level', level);
+    form.setValue('edgeLatitude1', edgeLatitude1);
+    form.setValue('edgeLongitude1', edgeLongitude1);
+    form.setValue('edgeLatitude2', edgeLatitude2);
+    form.setValue('edgeLongitude2', edgeLongitude2);
     setDrawerOpen(false);
   };
 
