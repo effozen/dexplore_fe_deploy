@@ -131,7 +131,11 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
         <DropdownMenuItem onClick={handleUpdateClick}>
           {isMuseum ? '박물관' : '작품'} 수정
         </DropdownMenuItem>
-        {!isMuseum && (
+        {!isMuseum ? (
+          <DropdownMenuItem onClick={handleUpdateClick}>
+            QR 전체 다운로드
+          </DropdownMenuItem>
+        ) : (
           <DropdownMenuItem onClick={handleUpdateClick}>
             QR 다운로드
           </DropdownMenuItem>
