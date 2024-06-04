@@ -24,7 +24,7 @@ const ArtUpdate = () => {
         // 토큰이 유효한 경우
         const userRole = decodedToken.role;
         if(userRole && userRole === "ROLE_ADMIN" ) {
-          navigate("/admin/management");
+          if(location.pathname !== "/admin/art/update") navigate("/admin/art/update");
         } else if (userRole && userRole === "ROLE_USER") {
           navigate("/user/main");
         } else {
