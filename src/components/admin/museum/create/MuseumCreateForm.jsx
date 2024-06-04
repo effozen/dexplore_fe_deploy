@@ -158,7 +158,7 @@ const MuseumCreateForm = () => {
 
   return (
     <ShadcnForm {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] min-w-[350px] ml-[15px] mr-[15px]">
         {['museumName'].map((field) => renderField(field))}
 
         <Controller
@@ -194,7 +194,7 @@ const MuseumCreateForm = () => {
               <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">박물관 위치 등록</FormLabel>
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <FormControl>
-                  <DrawerTrigger className="border-[1px] w-[350px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
+                  <DrawerTrigger className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
                     <div>{loc.roadAddress || '클릭해서 박물관 위치를 등록하세요'}</div>
                     <div>
                       <AiFillEnvironment />
