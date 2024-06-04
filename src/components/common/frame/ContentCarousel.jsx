@@ -107,6 +107,7 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
       const bodyData = isMuseum ? {museumId: id} : {artId: id};
       requestPost(url, bodyData).then(v => {
         setIsDelete(!userAnswer);
+        window.location.reload();
       });
     }
   };

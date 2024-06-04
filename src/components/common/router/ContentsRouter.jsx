@@ -10,6 +10,7 @@ import MuseumCreate from "@components/admin/museum/create/MuseumCreate";
 import MuseumUpdate from "@components/admin/museum/update/MuseumUpdate";
 import ArtCreate from "@components/admin/art/create/ArtCreate";
 import ArtUpdate from "@components/admin/art/update/ArtUpdate";
+import UserMain from "@components/user/main/UserMain";
 
 // import Main from "../main/Main";
 // import MuseumInfo from "../user/museumInfo/MuseumInfo";
@@ -75,6 +76,9 @@ function ContentsRouter() {
               <Route path='create' element={<ArtCreate />}></Route>
               <Route path='update' element={<ArtUpdate />}></Route>
             </Route>
+          </Route>
+          <Route path='user'>
+            <Route path='' element={<UserMain/>}></Route>
           </Route>
 
           <Route path="test">
