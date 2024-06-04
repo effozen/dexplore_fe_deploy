@@ -28,7 +28,39 @@ import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import { requestPost, requestGet } from '@lib/network/network';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
-import {museumFormSchema as formSchema, museumInitialFormValues as initialFormValues} from "@components/common/frame/data/FormSchema";
+
+const formSchema = z.object({
+  museumName: z.string().min(1, { message: '값을 채워주세요' }),
+  museumImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
+  museumLoc: z.string().min(1, { message: '위치를 지정해주세요' }),
+  startTime: z.string().min(1, { message: '값을 채워주세요' }),
+  endTime: z.string().min(1, { message: '값을 채워주세요' }),
+  closingDay: z.string().min(1, { message: '값을 채워주세요' }),
+  museumEmail: z.string().min(1, { message: '값을 채워주세요' }),
+  phone: z.string().min(1, { message: '값을 채워주세요' }),
+  entPrice: z.string().min(1, { message: '값을 채워주세요' }),
+  description: z.string().min(1, { message: '값을 채워주세요' }),
+});
+
+const initialFormValues = {
+  museumName: '',
+  museumImg: null,
+  museumLoc: '',
+  startTime: '',
+  endTime: '',
+  closingDay: '',
+  museumEmail: '',
+  phone: '',
+  entPrice: '',
+  description: '',
+  latitude: '',
+  longitude: '',
+  edgeLatitude1: '',
+  edgeLongitude1: '',
+  edgeLatitude2: '',
+  edgeLongitude2: '',
+  level: '',
+};
 
 const MuseumUpdateForm = () => {
   const navigate = useNavigate();
@@ -124,6 +156,16 @@ const MuseumUpdateForm = () => {
   };
 
   const handleConfirm = () => {
+    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } =
+      loc;
+    form.setValue('museumLoc', roadAddress);
+    form.setValue('latitude', latitude);
+    form.setValue('longitude', longitude);
+    form.setValue('level', level);
+    form.setValue('edgeLatitude1', edgeLatitude1);
+    form.setValue('edgeLongitude1', edgeLongitude1);
+    form.setValue('edgeLatitude2', edgeLatitude2);
+    form.setValue('edgeLongitude2', edgeLongitude2);
     setDrawerOpen(false);
   };
 

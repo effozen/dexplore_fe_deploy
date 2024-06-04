@@ -28,7 +28,29 @@ import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import {requestGet, requestPost} from '@lib/network/network';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
-import {artFormSchema as formSchema, artInitialFormValues as initialFormValues} from "@components/common/frame/data/FormSchema";
+
+const formSchema = z.object({
+  artName: z.string().min(1, { message: '값을 채워주세요' }),
+  artImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
+  artYear: z.string().min(1, { message: '값을 채워주세요' }),
+  authName: z.string().min(1, { message: '값을 채워주세요' }),
+  artDescription: z.string().min(1, { message: '값을 채워주세요' }),
+});
+
+const initialFormValues = {
+  artName: '',
+  artImg: null,
+  artYear: '',
+  authName: '',
+  artDescription: '',
+  latitude: '',
+  longitude: '',
+  edgeLatitude1: '',
+  edgeLongitude1: '',
+  edgeLatitude2: '',
+  edgeLongitude2: '',
+  level: '',
+};
 
 const ArtUpdateForm = () => {
   const navigate = useNavigate();
@@ -38,11 +60,6 @@ const ArtUpdateForm = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [museumId, setMuseumId] = useState();
   const [id, setId] = useState('');
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialFormValues,
-  });
 
   useEffect(() => {
     loadKakaoMap();
@@ -70,6 +87,11 @@ const ArtUpdateForm = () => {
       console.log(updatedValues);
     }
   };
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialFormValues,
+  });
 
   const handleSubmit = (values) => {
     const formData = new FormData();
