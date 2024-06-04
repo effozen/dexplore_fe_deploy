@@ -145,19 +145,19 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
   );
 };
 
-const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, setJobStates, chosenMuseum }) => (
+const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, chosenMuseum }) => (
   <CarouselItem className="basis-[35%] pl-[3px]">
     <div className="p-1">
       <Card className="h-full w-full">
         <CardContent className="flex aspect-square items-center justify-center p-0 relative">
           <StyledImageWrapper>
-            {isAdmin && <ListIcon setJobStates={setJobStates} isMuseum={isMuseum} id={id} chosenMuseum={chosenMuseum}/>}
+            {isAdmin && <ListIcon isMuseum={isMuseum} id={id} chosenMuseum={chosenMuseum}/>}
             <img src={imageSrc} alt={title} className="h-full w-full object-cover rounded-lg" />
           </StyledImageWrapper>
         </CardContent>
       </Card>
       <StyledTitle>{title}</StyledTitle>
-      <StyledDescription>{description}</StyledDescription>
+      <StyledDescription>{description && (description.length > 50 ? description.substring(0, 50) + '...' : description)}</StyledDescription>
     </div>
   </CarouselItem>
 );
@@ -195,7 +195,6 @@ const ContentCarousel = ({
                            isMuseum,
                            chosenMuseum,
                          }) => {
-  const [jobStates, setJobStates] = useState(false);
 
   return (
   <StyledFrame>
@@ -203,7 +202,7 @@ const ContentCarousel = ({
       <StyledHeader>{name}</StyledHeader>
       {museumSelector}
     </StyledHeaderFrame>
-    <Carousel opts={{ align: "start" }} className="w-[365px]">
+    <Carousel opts={{ align: "start" }} className="min-w-[365px] max-w-[600px]">
       <CarouselContent className="ml-0">
         {itemInfo.map((item) => {
           const info = isMuseum
@@ -219,7 +218,6 @@ const ContentCarousel = ({
               description={info.description}
               isMuseum={isMuseum}
               id={info.id}
-              setJobStates={setJobStates}
               chosenMuseum={chosenMuseum}
             />
           );
