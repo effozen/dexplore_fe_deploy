@@ -28,29 +28,7 @@ import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import {requestGet, requestPost} from '@lib/network/network';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
-
-const formSchema = z.object({
-  artName: z.string().min(1, { message: '값을 채워주세요' }),
-  artImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
-  artYear: z.string().min(1, { message: '값을 채워주세요' }),
-  authName: z.string().min(1, { message: '값을 채워주세요' }),
-  artDescription: z.string().min(1, { message: '값을 채워주세요' }),
-});
-
-const initialFormValues = {
-  artName: '',
-  artImg: null,
-  artYear: '',
-  authName: '',
-  artDescription: '',
-  latitude: '',
-  longitude: '',
-  edgeLatitude1: '',
-  edgeLongitude1: '',
-  edgeLatitude2: '',
-  edgeLongitude2: '',
-  level: '',
-};
+import {artFormSchema as formSchema, artInitialFormValues as initialFormValues} from "@components/common/frame/data/FormSchema";
 
 const ArtUpdateForm = () => {
   const navigate = useNavigate();
@@ -60,6 +38,11 @@ const ArtUpdateForm = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [museumId, setMuseumId] = useState();
   const [id, setId] = useState('');
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialFormValues,
+  });
 
   useEffect(() => {
     loadKakaoMap();
@@ -87,11 +70,6 @@ const ArtUpdateForm = () => {
       console.log(updatedValues);
     }
   };
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialFormValues,
-  });
 
   const handleSubmit = (values) => {
     const formData = new FormData();
@@ -174,7 +152,7 @@ const ArtUpdateForm = () => {
 
   return (
     <ShadcnForm {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] min-w-[350px] ml-[15px] mr-[15px]">
         {['artName'].map((field) => renderField(field))}
 
         <Controller
@@ -210,7 +188,7 @@ const ArtUpdateForm = () => {
               <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">작품 위치 등록</FormLabel>
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <FormControl>
-                  <DrawerTrigger className="border-[1px] w-[350px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
+                  <DrawerTrigger className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
                     <div>{loc.roadAddress || '클릭해서 작품 위치를 등록하세요'}</div>
                     <div>
                       <AiFillEnvironment />
@@ -248,10 +226,10 @@ const ArtUpdateForm = () => {
         {renderField('artDescription', true)}
 
         <div className="flex flex-col align-middle space-y-3 pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
-          <Button type="submit" className="w-[300px] h-[40px] rounded-none">
+          <Button type="submit" className="min-w-[300px] h-[40px] rounded-none">
             저장하고 QR코드 발급 받기
           </Button>
-          <Button type="button" className="w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleCancleClick}>
+          <Button type="button" className="min-w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleCancleClick}>
             취소
           </Button>
         </div>

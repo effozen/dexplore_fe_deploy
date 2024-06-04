@@ -14,7 +14,7 @@ const StyledSelectTrigger = styled(SelectTrigger)`
 	height: 21px;
 	display: flex;
 	align-items: center;
-	margin-right: 30px;
+	//margin-right: px;
 	font-size: 12px;
 	border-color: black;
 `;

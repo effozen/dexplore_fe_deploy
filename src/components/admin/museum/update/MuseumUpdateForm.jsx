@@ -28,39 +28,7 @@ import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
 import { requestPost, requestGet } from '@lib/network/network';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
-
-const formSchema = z.object({
-  museumName: z.string().min(1, { message: '값을 채워주세요' }),
-  museumImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
-  museumLoc: z.string().min(1, { message: '위치를 지정해주세요' }),
-  startTime: z.string().min(1, { message: '값을 채워주세요' }),
-  endTime: z.string().min(1, { message: '값을 채워주세요' }),
-  closingDay: z.string().min(1, { message: '값을 채워주세요' }),
-  museumEmail: z.string().min(1, { message: '값을 채워주세요' }),
-  phone: z.string().min(1, { message: '값을 채워주세요' }),
-  entPrice: z.string().min(1, { message: '값을 채워주세요' }),
-  description: z.string().min(1, { message: '값을 채워주세요' }),
-});
-
-const initialFormValues = {
-  museumName: '',
-  museumImg: null,
-  museumLoc: '',
-  startTime: '',
-  endTime: '',
-  closingDay: '',
-  museumEmail: '',
-  phone: '',
-  entPrice: '',
-  description: '',
-  latitude: '',
-  longitude: '',
-  edgeLatitude1: '',
-  edgeLongitude1: '',
-  edgeLatitude2: '',
-  edgeLongitude2: '',
-  level: '',
-};
+import {museumFormSchema as formSchema, museumInitialFormValues as initialFormValues} from "@components/common/frame/data/FormSchema";
 
 const MuseumUpdateForm = () => {
   const navigate = useNavigate();
@@ -156,16 +124,6 @@ const MuseumUpdateForm = () => {
   };
 
   const handleConfirm = () => {
-    const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } =
-      loc;
-    form.setValue('museumLoc', roadAddress);
-    form.setValue('latitude', latitude);
-    form.setValue('longitude', longitude);
-    form.setValue('level', level);
-    form.setValue('edgeLatitude1', edgeLatitude1);
-    form.setValue('edgeLongitude1', edgeLongitude1);
-    form.setValue('edgeLatitude2', edgeLatitude2);
-    form.setValue('edgeLongitude2', edgeLongitude2);
     setDrawerOpen(false);
   };
 
@@ -175,7 +133,7 @@ const MuseumUpdateForm = () => {
 
   return (
     <ShadcnForm {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] w-[350px] ml-[15px]">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-[10px] min-w-[350px] ml-[15px] mr-[15px]">
         {['museumName'].map((field) => renderField(field))}
 
         <Controller
@@ -211,7 +169,7 @@ const MuseumUpdateForm = () => {
               <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">박물관 위치 등록</FormLabel>
               <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <FormControl>
-                  <DrawerTrigger className="border-[1px] w-[350px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
+                  <DrawerTrigger className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
                     <div>{loc.roadAddress || '기존 위치에서 변경을 원할 경우 클릭해주세요'}</div>
                     <div>
                       <AiFillEnvironment />

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import backgroundMuseumImage from "../../../assets/images/museum_BW2.jpg";
 
 const StyledHeader = styled.header`
-	width: 375px;
+	min-width: 375px;
 	height: ${(props) => props.height || '130px'};
 	background-image: url(${backgroundMuseumImage});
 	background-size: 100%;
