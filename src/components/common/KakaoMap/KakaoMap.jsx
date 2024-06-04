@@ -86,7 +86,7 @@ const KakaoMap = ({setLoc}) => {
                 edgeLatitude2: neLatLng.getLat(),
                 edgeLongitude2: neLatLng.getLng(),
               };
-              setLoc(loc);
+              setLoc && setLoc(loc);
             }
           });
         });
