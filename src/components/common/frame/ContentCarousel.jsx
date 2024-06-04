@@ -25,15 +25,18 @@ import { useState } from "react";
 // Styled Components
 const StyledFrame = styled.div`
 	margin-left: 16px;
+  margin-right: 16px;
 	margin-bottom: 10px;
 	margin-top: 10px;
 `;
 
 const StyledHeaderFrame = styled.div`
-	width: 375px;
+	min-width: 375px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+  padding-right:20px;
+  margin-right:-20px;
 `;
 
 const StyledHeader = styled.div`
