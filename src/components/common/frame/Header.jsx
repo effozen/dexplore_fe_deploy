@@ -1,6 +1,9 @@
 import styled from "styled-components";
 // @ts-ignore
-import backgroundMuseumImage from "../../../assets/images/museum_BW2.jpg";
+import backgroundMuseumImage from "@assets/images/museum_BW2.jpg";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import {useNavigate} from "react-router-dom";
+
 
 const StyledHeader = styled.header`
 	min-width: 375px;
@@ -30,6 +33,19 @@ const StyledDate = styled.div`
   margin-bottom: 6px;
 `;
 
+const StyledFrame = styled.div`
+  display: flex;
+`;
+
+const StyledBackButton = styled(AiOutlineArrowLeft)`
+  color: white;
+  font-size: 35px;
+	font-weight:900;
+  position:absolute;
+  left:14px;
+  cursor:pointer;
+`
+
 const formatDate = (date) => {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
   const formattedDate = date.toLocaleDateString('ko-KR', options).slice(0, -1).replace(/\./g, '-').replace(/- /g, '-');
@@ -40,15 +56,23 @@ const formatDate = (date) => {
 };
 
 const Header = ({ height, name, isDate=true }) => {
+  const navigate = useNavigate();
 
   const date = new Date();
   const formattedDate = formatDate(date);
 
+  const handleBackClick = (e) => {
+    navigate(-1);
+  };
+
   return (
     <StyledHeader height={height}>
-      <StyledWelcomeMessage>
-        {name}
-      </StyledWelcomeMessage>
+      <StyledFrame>
+        {!isDate && <StyledBackButton onClick={handleBackClick}><AiOutlineArrowLeft/></StyledBackButton>}
+        <StyledWelcomeMessage>
+          {name}
+        </StyledWelcomeMessage>
+      </StyledFrame>
       {isDate && <StyledDate>
         {formattedDate}
       </StyledDate>}
