@@ -126,7 +126,7 @@ const ToggleButton = ({ museumId }) => {
                             <img src={ideaIcon} alt="idea" />
                         </Button>
                         <Button onClick={handleLogout}>
-                            <img src={logoutIcon} alt="logout" />
+                            <img src={logoutIcon} alt="logout"/>
                         </Button>
                         <Button onClick={handleOpenModal}>
                             <img src={QRCodebtn} alt="qr code scan" />
