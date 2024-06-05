@@ -38,9 +38,9 @@ const Container = styled.div`
     position: fixed;
     bottom: 20px; 
     right: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    //display: flex;
+    //flex-direction: column;
+    //align-items: center;
 `;
 
 const Button = styled.button`
@@ -54,7 +54,7 @@ const ExpandedMenu = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: absolute;
+    //position: absolute;
     bottom: 70px;
     animation: ${fadeInUp} 0.3s ease-out forwards;
 `;
@@ -118,7 +118,7 @@ const ToggleButton = ({ museumId }) => {
 
     return (
         <>
-            <GlobalStyle />
+            {/*<GlobalStyle />*/}
             <Container>
                 {isExpanded && (
                     <ExpandedMenu>
