@@ -2,6 +2,7 @@ import ContentCarousel from "@components/common/frame/ContentCarousel";
 import styled from "styled-components";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
+import {useNavigate} from "react-router-dom";
 
 const StyledFrame = styled.div`
 	min-height: 385px;
@@ -42,6 +43,7 @@ const StyledButton = styled.button`
 
 const MuseumMain = ({museumInfo = false}) => {
   const [artList, setArtList] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(museumInfo);
@@ -56,11 +58,15 @@ const MuseumMain = ({museumInfo = false}) => {
     console.log(artList);
   }, [artList]);
 
+  const handleClick = () => {
+    navigate('/user/art', {state:{museumInfo}});
+  }
+
   return (
     <div>
       <StyledFrame>
         <img src={museumInfo.imgUrl} alt="" className="w-full min-h-[330px] max-h-[500px] max-w-[800px]"/>
-        <StyledButton>관람 시작하기</StyledButton>
+        <StyledButton onClick={handleClick}>관람 시작하기</StyledButton>
         <StyledDescription
           className="w-full max-w-[800px] mt-[20px] pl-[40px] pr-[40px]">
           {museumInfo.description && (museumInfo.description.length > 500) ? museumInfo.description.substring(0,500) : museumInfo.description}
