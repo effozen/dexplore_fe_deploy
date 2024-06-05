@@ -4,6 +4,9 @@ import SelectList from "@components/common/frame/SelectList";
 import {requestGet} from "@lib/network/network";
 import {useEffect, useState} from "react";
 import {getLocation} from "@lib/gps/gps";
+import {useNavigate} from "react-router-dom";
+import {useCookies} from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 import ArtMatrix from "@components/common/frame/ArtMatrix";
 import adBannerImage from '@assets/images/adBanner1.png';
 
@@ -22,6 +25,8 @@ const UserMain = () => {
   const [museumList, setMuseumList] = useState([]);
   const [recommendMuseumList, setRecommendMuseumList] = useState([]);
   const [gps, setGps] = useState({});
+  const navigate = useNavigate();
+  const [cookie, setCookie, removeCookie] = useCookies();
 
   const name = '홍길동님, 환영합니다.'; // 나중에 지울 것
 
@@ -34,6 +39,35 @@ const UserMain = () => {
       });
     }
   }, []);
+
+  useEffect (() => {
+    const token = cookie.accessToken;
+    if (token) {
+      const decodedToken = jwtDecode (token) ;
+      console.log (decodedToken);
+      const now = Date.now / 1000;
+      if (decodedToken.exp < now) {
+        // 토큰이 만료된 경우
+        removeCookie('accessToken', { path: '/' }); // 만료된 토큰 삭제
+        navigate("/auth/sign-in");
+      }
+      else {
+        // 토큰이 유효한 경우
+        const userRole = decodedToken.role;
+        if(userRole && userRole === "ROLE_ADMIN" ) {
+          if(location.pathname !== "/user/main" || location.pathname !== "/user") navigate("/user");
+        } else if ((userRole && userRole === "ROLE_USER") || (userRole && userRole === "ROLE_ADMIN")) {
+          navigate("/user/main");
+        } else {
+          alert("잘못된 접근입니다.");
+          navigate('/auth/sign-in');
+        }
+      }
+    }
+    else {
+      navigate('/auth/sign-in');
+    }
+  }, [cookie]);
 
   useEffect(() => {
     if (Object.keys(gps).length > 0 && gps.err === 0) {
