@@ -36,7 +36,7 @@ const fadeInUp = keyframes`
 
 const Container = styled.div`
     position: fixed;
-    bottom: 20px;
+    bottom: 20px; 
     right: 20px;
     display: flex;
     flex-direction: column;
