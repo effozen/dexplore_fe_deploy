@@ -64,7 +64,7 @@ Modal.setAppElement('#root'); // Ensure this is your root element
 const ToggleButton = ({ museumId }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [cookies] = useCookies(['accessToken']);
+    const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
     const navigate = useNavigate();
 
     const handleToggle = () => {
@@ -78,6 +78,12 @@ const ToggleButton = ({ museumId }) => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    const handleLogout = () => {
+        removeCookie('accessToken');
+        alert('로그아웃 완료');
+        navigate('/');
+    }
 
     const handleScan = (result) => {
         if (result) {
@@ -119,7 +125,7 @@ const ToggleButton = ({ museumId }) => {
                         <Button onClick={handleToggle}>
                             <img src={ideaIcon} alt="idea" />
                         </Button>
-                        <Button onClick={handleToggle}>
+                        <Button onClick={handleLogout}>
                             <img src={logoutIcon} alt="logout" />
                         </Button>
                         <Button onClick={handleOpenModal}>
