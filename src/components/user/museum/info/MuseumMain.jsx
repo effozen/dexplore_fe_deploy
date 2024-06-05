@@ -18,6 +18,11 @@ const StyledDescription = styled.div`
 	line-height: 18px;
 `;
 
+const StyledFrame2 = styled.div`
+	min-width: 375px;
+	margin-left:auto;
+`;
+
 const MuseumMain = ({museumInfo = false}) => {
   const [artList, setArtList] = useState();
 
@@ -32,7 +37,7 @@ const MuseumMain = ({museumInfo = false}) => {
 
   useEffect(() => {
     console.log(artList);
-  }, [artList])
+  }, [artList]);
 
   return (
     <div>
@@ -41,8 +46,10 @@ const MuseumMain = ({museumInfo = false}) => {
         <StyledDescription
           className="w-full max-w-[800px] mt-[18px] pl-[30px] pr-[30px]">{museumInfo.description}</StyledDescription>
       </StyledFrame>
-      {artList && <ContentCarousel isAdmin={false} name={`${museumInfo.museumName}의 대표 작품`} isMuseum={false}
-                                   chosenMuseum={museumInfo} itemInfo={artList}></ContentCarousel>}
+      <StyledFrame2>
+        {artList && <ContentCarousel isAdmin={false} name={`${museumInfo.museumName}의 대표 작품`} isMuseum={false}
+                                     chosenMuseum={museumInfo} itemInfo={artList}></ContentCarousel>}
+      </StyledFrame2>
     </div>
   );
 };
