@@ -128,36 +128,49 @@ const KakaoMap = ({setLoc}) => {
 };
 
 const Map = () => {
-  const mapRef = useRef(null);
+  // const mapRef = useRef(null);
   const [loc, setLoc] = useState({});
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (Object.keys(loc).length === 0) {
-        clearInterval(intervalId);
-      } else {
         getLocation().then(v => {
           setLoc(v);
           console.log(v);
+          if(Object.keys(loc).length === 0) clearInterval(intervalId);
         });
+      } else {
+          clearInterval(intervalId);
       }
-    }, 100)
+    }, 1000)
 
   }, []);
 
   useEffect(() => {
-    console.log(loc);
-    if(loc && window.kakao && window.kakao.maps) {
+    const container = document.getElementById('map');
+
+    if(Object.keys(loc).length !==0 && window.kakao && window.kakao.maps) {
       const mapOption = {
-        center: new window.kakao.maps.LatLng(loc.latitude, loc.longitude), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
+        center: new window.kakao.maps.LatLng(loc.latitude, loc.longitude),
+        level: 3
       };
-      const map = new window.kakao.maps.Map(mapRef, mapOption);
-    };
-  }, [loc])
+      const map = new window.kakao.maps.Map(container, mapOption);
+
+      // 마커가 표시될 위치입니다
+      var markerPosition  = new window.kakao.maps.LatLng(loc.latitude, loc.longitude);
+
+      // 마커를 생성합니다
+      var marker = new window.kakao.maps.Marker({
+        position: markerPosition
+      });
+
+      // 마커가 지도 위에 표시되도록 설정합니다
+      marker.setMap(map);
+    }
+  }, [loc]);
 
   return (
-      <div id="map" ref={mapRef} style={{width: '100%', height: '400px'}}/>
+      <div id="map" style={{width: '100%', height: '300px'}}/>
   );
 }
 

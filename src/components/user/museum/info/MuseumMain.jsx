@@ -12,15 +12,32 @@ const StyledFrame = styled.div`
 `;
 
 const StyledDescription = styled.div`
-	font-size: 14px;
+	font-size: 16px;
 	font-weight: 400;
-	color: black;
+	color: #909090;
 	line-height: 18px;
 `;
 
 const StyledFrame2 = styled.div`
 	min-width: 375px;
 	margin-left:auto;
+  margin-top: 20px;
+`;
+
+const StyledButton = styled.button`
+  z-index: 3;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -70px;
+  margin-bottom: 20px;
+  color: white;
+  font-weight: 400;
+  font-size: 20px;
+  background-color: black;
+  width: 160px;
+  height: 45px;
+  border-radius: 40px;
+  border: white solid 1px;
 `;
 
 const MuseumMain = ({museumInfo = false}) => {
@@ -42,9 +59,12 @@ const MuseumMain = ({museumInfo = false}) => {
   return (
     <div>
       <StyledFrame>
-        <img src={museumInfo.imgUrl} alt="" className="w-full min-h-[385px] max-h-[600px] max-w-[800px]"/>
+        <img src={museumInfo.imgUrl} alt="" className="w-full min-h-[330px] max-h-[500px] max-w-[800px]"/>
+        <StyledButton>관람 시작하기</StyledButton>
         <StyledDescription
-          className="w-full max-w-[800px] mt-[18px] pl-[30px] pr-[30px]">{museumInfo.description}</StyledDescription>
+          className="w-full max-w-[800px] mt-[20px] pl-[40px] pr-[40px]">
+          {museumInfo.description && (museumInfo.description.length > 500) ? museumInfo.description.substring(0,500) : museumInfo.description}
+        </StyledDescription>
       </StyledFrame>
       <StyledFrame2>
         {artList && <ContentCarousel isAdmin={false} name={`${museumInfo.museumName}의 대표 작품`} isMuseum={false}

@@ -48,7 +48,6 @@ function ContentsRouter() {
               <Route path='info' element={<MuseumInfo/>}></Route>
             </Route>
           </Route>
-
           <Route path="test">
             <Route path="" element={<AdminManagement/>}></Route>
             <Route path="toggle" element={<ToggleButton/>}/>
