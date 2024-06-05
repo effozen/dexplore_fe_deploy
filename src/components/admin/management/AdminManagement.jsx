@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/admin/get-museums',
@@ -77,6 +78,7 @@ const AdminManagement = () => {
       <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true}/>
       <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false}
                        museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}  chosenMuseum={chosenMuseum}/>
+      <ToggleButton/>
     </div>
   );
 };

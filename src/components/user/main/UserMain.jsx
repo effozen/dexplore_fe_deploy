@@ -9,6 +9,7 @@ import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 import ArtMatrix from "@components/common/frame/ArtMatrix";
 import adBannerImage from '@assets/images/adBanner1.png';
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/user/get-nearest-n-museums',
@@ -105,6 +106,7 @@ const UserMain = () => {
       </div>
       <ContentCarousel name={'홍길동' + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
       <ArtMatrix title={'홍길동' + dataList.title3} itemInfo={artList}></ArtMatrix>
+      <ToggleButton/>
     </div>
   );
 };

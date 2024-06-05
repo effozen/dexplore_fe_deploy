@@ -4,6 +4,7 @@ import MuseumCreateForm from "@components/admin/museum/create/MuseumCreateForm";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const MuseumCreate = () => {
   const location = useLocation();
@@ -42,6 +43,7 @@ const MuseumCreate = () => {
     <>
       <Header name='새로운 박물관을 등록하세요' height='100px' isDate={false}></Header>
       <MuseumCreateForm></MuseumCreateForm>
+      <ToggleButton/>
     </>
   );
 };

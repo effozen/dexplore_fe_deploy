@@ -20,8 +20,6 @@ const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
     }
 `;
 
@@ -37,10 +35,12 @@ const fadeInUp = keyframes`
 `;
 
 const Container = styled.div`
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
 `;
 
 const Button = styled.button`

@@ -4,6 +4,7 @@ import ArtUpdateForm from "@components/admin/art/update/ArtUpdateForm";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const ArtUpdate = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const ArtUpdate = () => {
     <>
       <Header name='새로운 작품을 등록하세요' height='100px' isDate={false}></Header>
       <ArtUpdateForm></ArtUpdateForm>
+      <ToggleButton/>
     </>
   );
 }
