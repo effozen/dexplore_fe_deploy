@@ -174,7 +174,7 @@ const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   };
 
   return (
-    <CarouselItem className="basis-[34%] pl-[3px]" onClick={handleClick}>
+    <CarouselItem className="basis-[35%] pl-[3px]" onClick={handleClick}>
       <div className="p-1">
         <Card className="h-full w-full border-2 border-dashed border-gray-500">
           <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">

@@ -79,6 +79,7 @@ function ContentsRouter() {
           </Route>
           <Route path='user'>
             <Route path='' element={<UserMain/>}></Route>
+            <Route path='main' element={<UserMain/>}></Route>
           </Route>
 
           <Route path="test">
