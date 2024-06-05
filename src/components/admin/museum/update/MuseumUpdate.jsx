@@ -4,6 +4,7 @@ import MuseumUpdateForm from "@components/admin/museum/update/MuseumUpdateForm";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 
 const MuseumUpdate = () => {
@@ -42,6 +43,7 @@ const MuseumUpdate = () => {
     <>
       <Header name='박물관 정보 업데이트' height='100px' isDate={false}></Header>
       <MuseumUpdateForm id={location.state.id}></MuseumUpdateForm>
+      <ToggleButton />
     </>
   );
 };
