@@ -1,5 +1,5 @@
 import {getLocation} from "@lib/gps/gps";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 
 const loadKakaoMap = () => {
   const appKey = 'ac57d560967002f1a1f07dc63f9c0242'; // Kakao Developers에서 발급받은 App Key
@@ -127,4 +127,38 @@ const KakaoMap = ({setLoc}) => {
   </div>);
 };
 
-export {loadKakaoMap, KakaoMap};
+const Map = () => {
+  const mapRef = useRef(null);
+  const [loc, setLoc] = useState({});
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (Object.keys(loc).length === 0) {
+        clearInterval(intervalId);
+      } else {
+        getLocation().then(v => {
+          setLoc(v);
+          console.log(v);
+        });
+      }
+    }, 100)
+
+  }, []);
+
+  useEffect(() => {
+    console.log(loc);
+    if(loc && window.kakao && window.kakao.maps) {
+      const mapOption = {
+        center: new window.kakao.maps.LatLng(loc.latitude, loc.longitude), // 지도의 중심좌표
+        level: 3 // 지도의 확대 레벨
+      };
+      const map = new window.kakao.maps.Map(mapRef, mapOption);
+    };
+  }, [loc])
+
+  return (
+      <div id="map" ref={mapRef} style={{width: '100%', height: '400px'}}/>
+  );
+}
+
+export {loadKakaoMap, KakaoMap, Map};

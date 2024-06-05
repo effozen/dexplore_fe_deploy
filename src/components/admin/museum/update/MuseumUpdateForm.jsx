@@ -87,7 +87,7 @@ const MuseumUpdateForm = () => {
   }, [id]);
 
   const loadData = async (id) => {
-    const response = await requestGet('https://dexplore.info/api/v1/admin/get-museum', { museumId: id });
+    const response = await requestGet('https://dexplore.info/api/v1/user/get-museum', { museumId: id });
     const museum = response.museum;
 
     if (museum) {

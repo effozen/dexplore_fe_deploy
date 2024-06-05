@@ -8,7 +8,7 @@ const StyledFrame = styled.div`
 `;
 
 const StyledHeaderFrame = styled.div`
-	min-width: 375px;
+	width:100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -27,9 +27,9 @@ const ArtMatrix = ({title, itemInfo}) => {
   return (
       <StyledFrame>
         <StyledHeaderFrame><StyledHeader>{title}</StyledHeader></StyledHeaderFrame>
-        <div className='grid grid-cols-3 gap-x-[1vw] gap-y-[1vw]'>
+        <div className='grid grid-cols-3 w-[100%] gap-x-[1vw] gap-y-[1vw]'>
           {itemInfo.map(v => {
-            return (<div className='h-[33vw]'>
+            return (<div className='h-[32vw]'>
               <img src={v.imgUrl} alt="" className='w-full h-full overflow-hidden' />
             </div>);
           })}
