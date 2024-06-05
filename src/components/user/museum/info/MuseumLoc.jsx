@@ -3,11 +3,11 @@ import {loadKakaoMap, Map} from "@components/common/KakaoMap/KakaoMap";
 import {useEffect} from "react";
 
 const StyledFrame = styled.div`
-	min-width: 375px;
+	min-width: 300px;
 	display: flex;
 	flex-direction: column;
-  margin-left: 20px;
-  margin-right:20px;
+  margin-left: 10px;
+  margin-right:10px;
 `;
 
 const StyledHeaderFrame = styled.div`
@@ -18,6 +18,7 @@ const StyledHeaderFrame = styled.div`
 `;
 
 const StyledHeader = styled.div`
+  margin-left: 7px;
 	margin-top: 20px;
 	font-weight: 600;
 	color: #000000;
@@ -34,7 +35,9 @@ const MuseumLoc = () => {
       <StyledHeaderFrame>
         <StyledHeader>박물관 위치 보기</StyledHeader>
       </StyledHeaderFrame>
+      <div className='flex justify-center '>
         <Map></Map>
+      </div>
     </StyledFrame>
   );
 }
