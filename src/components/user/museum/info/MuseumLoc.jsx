@@ -6,7 +6,8 @@ const StyledFrame = styled.div`
 	min-width: 375px;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+  margin-left: 20px;
+  margin-right:20px;
 `;
 
 const StyledHeaderFrame = styled.div`
@@ -17,7 +18,7 @@ const StyledHeaderFrame = styled.div`
 `;
 
 const StyledHeader = styled.div`
-	margin-top: 10px;
+	margin-top: 20px;
 	font-weight: 600;
 	color: #000000;
 `;
