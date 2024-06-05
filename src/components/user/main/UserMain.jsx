@@ -103,9 +103,7 @@ const UserMain = () => {
       <div className='mr-auto ml-auto pr-[15px] pl-[15px] max-w-[1000px] mb-[30px] mt-[10px]'>
         <img src={adBannerImage} alt="광고 이미지" className='max-h-[400px] rounded-[10px]'/>
       </div>
-      <ContentCarousel name={'홍길동' + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true}
-                       museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}
-                       chosenMuseum={chosenMuseum}/>
+      <ContentCarousel name={'홍길동' + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
       <ArtMatrix title={'홍길동' + dataList.title3} itemInfo={artList}></ArtMatrix>
     </div>
   );

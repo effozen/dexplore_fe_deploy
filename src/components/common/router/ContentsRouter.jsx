@@ -11,20 +11,7 @@ import MuseumUpdate from "@components/admin/museum/update/MuseumUpdate";
 import ArtCreate from "@components/admin/art/create/ArtCreate";
 import ArtUpdate from "@components/admin/art/update/ArtUpdate";
 import UserMain from "@components/user/main/UserMain";
-
-// import Main from "../main/Main";
-// import MuseumInfo from "../user/museumInfo/MuseumInfo";
-// import Art from "../user/art/Art";
-// import ArtInfo from "../user/art/ArtInfo";
-// import QRCode from "../user/qrCode/QRCode";
-// import AdminMuseum from "../admin/museum/AdminMuseum";
-// import MuseumInfoCreate from "../admin/museum/MuseumInfoCreate";
-// import MuseumInfoUpdate from "../admin/museum/MuseumInfoUpdate";
-// import AdminArt from "../admin/art/AdminArt";
-// import AdminArtCreate from "../admin/art/AdminArtCreate";
-// import AdminArtUpdate from "../admin/art/AdminArtUpdate";
-// import KakaoMap from "../admin/location/KakaoMap";
-// import AdminMap from "../admin/location/AdminMap";
+import MuseumInfo from "@components/user/museum/info/MuseumInfo";
 
 function ContentsRouter() {
   const [cookies] = useCookies(['accessToken']); // 'myCookie' 쿠키에 접근
@@ -41,30 +28,6 @@ function ContentsRouter() {
             <Route path="sign-in" element={<SignInPage/>}/>
             <Route path="oauth-response/:token/:expirationTime" element={<OAuth/>}/>
           </Route>
-          {/* <Route path='user'> */}
-          {/*   <Route path='' element={<MuseumInfo />}></Route> */}
-          {/*   <Route path='art'> */}
-          {/*     <Route path='' element={<Art />}></Route> */}
-          {/*     <Route path='info' element={<ArtInfo />}></Route> */}
-          {/*   </Route> */}
-          {/*   <Route path='qr'> */}
-          {/*     <Route path='' element={<QRCode />}></Route> */}
-          {/*   </Route> */}
-          {/* </Route> */}
-          {/* <Route path='admin'> */}
-          {/*   <Route path='' element={<AdminMuseum />}></Route> */}
-          {/*   <Route path="museum"> */}
-          {/*     <Route path="create" element={<MuseumInfoCreate />}></Route> */}
-          {/*     <Route path='update' element={<MuseumInfoUpdate />}></Route> */}
-          {/*   </Route> */}
-          {/*   <Route path="art"> */}
-          {/*     <Route path='' element={<AdminArt />}></Route> */}
-          {/*     <Route path='create' element={<AdminArtCreate />}></Route> */}
-          {/*     <Route path='update' element={<AdminArtUpdate />}></Route> */}
-          {/*   </Route> */}
-          {/*   <Route path="map" element={<AdminMap />}></Route> */}
-          {/*   <Route path="kakomap" element={<KakaoMap />}></Route> */}
-          {/* </Route> */}
           <Route path='admin'>
             <Route path="" element={<AdminManagement/>}/>
             <Route path="management" element={<AdminManagement/>}/>
@@ -80,6 +43,10 @@ function ContentsRouter() {
           <Route path='user'>
             <Route path='' element={<UserMain/>}></Route>
             <Route path='main' element={<UserMain/>}></Route>
+            <Route path='museum'>
+              <Route path='' element={<MuseumInfo/>}></Route>
+              <Route path='info' element={<MuseumInfo/>}></Route>
+            </Route>
           </Route>
 
           <Route path="test">

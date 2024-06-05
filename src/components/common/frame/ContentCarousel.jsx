@@ -25,7 +25,7 @@ import { useState } from "react";
 // Styled Components
 const StyledFrame = styled.div`
 	margin-left: 16px;
-  margin-right: 16px;
+	margin-right: 16px;
 	margin-bottom: 10px;
 	margin-top: 10px;
 `;
@@ -35,8 +35,8 @@ const StyledHeaderFrame = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  padding-right:20px;
-  margin-right:-20px;
+	padding-right: 20px;
+	margin-right: -20px;
 `;
 
 const StyledHeader = styled.div`
@@ -61,7 +61,7 @@ const StyledListIcon = styled(AiOutlineMenu)`
 	stroke: white;
 	stroke-width: 20px;
 	fill: currentColor;
-	background-color: rgba(255, 255, 255, 0.40);
+	background-color: rgba(255, 255, 255, 0.4);
 	width: 30px;
 	height: 30px;
 	position: absolute;
@@ -94,18 +94,20 @@ const StyledAddWrapper = styled.div`
 	text-align: center;
 `;
 
-const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
+const ListIcon = ({ isMuseum = true, id, chosenMuseum }) => {
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
 
   const handleDeleteClick = () => {
-    const userAnswer = window.confirm('삭제하시겠습니까?');
+    const userAnswer = window.confirm("삭제하시겠습니까?");
     setIsDelete(userAnswer);
 
     if (userAnswer) {
-      const url = isMuseum ? 'https://dexplore.info/api/v1/admin/delete-museum' : 'https://dexplore.info/api/v1/admin/delete-art';
-      const bodyData = isMuseum ? {museumId: id} : {artId: id};
-      requestPost(url, bodyData).then(v => {
+      const url = isMuseum
+        ? "https://dexplore.info/api/v1/admin/delete-museum"
+        : "https://dexplore.info/api/v1/admin/delete-art";
+      const bodyData = isMuseum ? { museumId: id } : { artId: id };
+      requestPost(url, bodyData).then((v) => {
         setIsDelete(!userAnswer);
         window.location.reload();
       });
@@ -113,8 +115,10 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
   };
 
   const handleUpdateClick = () => {
-    const path = isMuseum ? '/admin/museum/update' : '/admin/art/update';
-    isMuseum ? navigate(path, { state: { id } }) : navigate(path, {state: {id, museumId:chosenMuseum.museumId}});
+    const path = isMuseum ? "/admin/museum/update" : "/admin/art/update";
+    isMuseum
+      ? navigate(path, { state: { id } })
+      : navigate(path, { state: { id, museumId: chosenMuseum.museumId } });
   };
 
   return (
@@ -126,18 +130,18 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
         <DropdownMenuLabel>작업 목록</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleDeleteClick}>
-          {isMuseum ? '박물관' : '작품'} 삭제
+          {isMuseum ? "박물관" : "작품"} 삭제
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleUpdateClick}>
-          {isMuseum ? '박물관' : '작품'} 수정
+          {isMuseum ? "박물관" : "작품"} 수정
         </DropdownMenuItem>
         {!isMuseum ? (
           <DropdownMenuItem onClick={handleUpdateClick}>
-            QR 전체 다운로드
+            QR 다운로드
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem onClick={handleUpdateClick}>
-            QR 다운로드
+            QR 전체 다운로드
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
@@ -145,32 +149,67 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum}) => {
   );
 };
 
-const CarouselItemComponent = ({ isAdmin, imageSrc, title, description, isMuseum, id, chosenMuseum }) => (
-  <CarouselItem className="basis-[35%] pl-[3px]">
-    <div className="p-1">
-      <Card className="h-full w-full">
-        <CardContent className="flex aspect-square items-center justify-center p-0 relative">
-          <StyledImageWrapper>
-            {isAdmin && <ListIcon isMuseum={isMuseum} id={id} chosenMuseum={chosenMuseum}/>}
-            <img src={imageSrc} alt={title} className="h-full w-full object-cover rounded-lg" />
-          </StyledImageWrapper>
-        </CardContent>
-      </Card>
-      <StyledTitle>{title}</StyledTitle>
-      <StyledDescription>{description && (description.length > 50 ? description.substring(0, 50) + '...' : description)}</StyledDescription>
-    </div>
-  </CarouselItem>
-);
+const CarouselItemComponent = ({
+                                 isAdmin,
+                                 imageSrc,
+                                 title,
+                                 description,
+                                 isMuseum,
+                                 id,
+                                 chosenMuseum,
+                                 isRecommend=false,
+                               }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/user/museum", { state: { museumId: id } });
+  };
+
+  return (
+    <CarouselItem
+      className="basis-[35%] pl-[3px]"
+      onClick={(!isAdmin && isMuseum && !isRecommend) ? handleClick : null}
+    >
+      <div className="p-1">
+        <Card className="h-full w-full">
+          <CardContent className="flex aspect-square items-center justify-center p-0 relative">
+            <StyledImageWrapper>
+              {isAdmin && (
+                <ListIcon
+                  isMuseum={isMuseum}
+                  id={id}
+                  chosenMuseum={chosenMuseum}
+                />
+              )}
+              <img
+                src={imageSrc}
+                alt={title}
+                className="h-full w-full object-cover rounded-lg"
+              />
+            </StyledImageWrapper>
+          </CardContent>
+        </Card>
+        <StyledTitle>{title}</StyledTitle>
+        <StyledDescription>
+          {description &&
+            (description.length > 50
+              ? description.substring(0, 50) + "..."
+              : description)}
+        </StyledDescription>
+      </div>
+    </CarouselItem>
+  );
+};
 
 const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   const navigate = useNavigate();
-  const message = isMuseum ? '박물관' : '작품';
-
-  // console.log(chosenMuseum);
+  const message = isMuseum ? "박물관" : "작품";
 
   const handleClick = () => {
-    const path = isMuseum ? '/admin/museum/create' : '/admin/art/create';
-    isMuseum ? navigate(path) : navigate(path, {state: {museumId:chosenMuseum.museumId}});
+    const path = isMuseum ? "/admin/museum/create" : "/admin/art/create";
+    isMuseum
+      ? navigate(path)
+      : navigate(path, { state: { museumId: chosenMuseum.museumId } });
   };
 
   return (
@@ -194,38 +233,55 @@ const ContentCarousel = ({
                            isAdmin = true,
                            isMuseum,
                            chosenMuseum,
+                          isRecommend,
                          }) => {
-
   return (
-  <StyledFrame>
-    <StyledHeaderFrame>
-      <StyledHeader>{name}</StyledHeader>
-      {museumSelector}
-    </StyledHeaderFrame>
-    <Carousel opts={{ align: "start" }} className="min-w-[365px] max-w-[600px]">
-      <CarouselContent className="ml-0">
-        {itemInfo.map((item) => {
-          const info = isMuseum
-            ? { id: item.museumId, name: item.museumName, imgUrl: item.imgUrl, description: item.description }
-            : { id: item.artId, name: item.artName, imgUrl: item.imgUrl, description: item.description };
+    <StyledFrame>
+      <StyledHeaderFrame>
+        <StyledHeader>{name}</StyledHeader>
+        {museumSelector}
+      </StyledHeaderFrame>
+      <Carousel opts={{ align: "start" }} className="min-w-[365px] max-w-[600px]">
+        <CarouselContent className="ml-0">
+          {itemInfo.map((item) => {
+            const info = isMuseum
+              ? {
+                id: item.museumId,
+                name: item.museumName,
+                imgUrl: item.imgUrl,
+                description: item.description,
+              }
+              : {
+                id: item.artId,
+                name: item.artName,
+                imgUrl: item.imgUrl,
+                description: item.description,
+              };
 
-          return (
-            <CarouselItemComponent
-              key={info.id}
-              isAdmin={isAdmin}
-              imageSrc={info.imgUrl}
-              title={info.name}
-              description={info.description}
+            return (
+              <CarouselItemComponent
+                key={info.id}
+                isAdmin={isAdmin}
+                imageSrc={info.imgUrl}
+                title={info.name}
+                description={info.description}
+                isMuseum={isMuseum}
+                id={info.id}
+                chosenMuseum={chosenMuseum}
+                isRecommend={isRecommend}
+              />
+            );
+          })}
+          {isAdmin && (
+            <AddNewItemComponent
               isMuseum={isMuseum}
-              id={info.id}
               chosenMuseum={chosenMuseum}
             />
-          );
-        })}
-        {isAdmin && <AddNewItemComponent isMuseum={isMuseum} chosenMuseum={chosenMuseum} />}
-      </CarouselContent>
-    </Carousel>
-  </StyledFrame>
-)};
+          )}
+        </CarouselContent>
+      </Carousel>
+    </StyledFrame>
+  );
+};
 
 export default ContentCarousel;
