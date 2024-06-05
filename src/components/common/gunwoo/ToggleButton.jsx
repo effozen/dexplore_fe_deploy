@@ -82,7 +82,7 @@ const ToggleButton = ({ museumId }) => {
     const handleLogout = () => {
         removeCookie('accessToken');
         alert('로그아웃 완료');
-        navigate('/');
+        navigate('/auth/sign-in');
     }
 
     const handleScan = (result) => {
