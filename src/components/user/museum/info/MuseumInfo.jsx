@@ -1,5 +1,6 @@
 import InfoHeader from "@components/common/frame/InfoHeader";
 import MuseumMain from "@components/user/museum/info/MuseumMain";
+import MuseumLoc from "@components/user/museum/info/MuseumLoc";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
@@ -15,7 +16,7 @@ const MuseumInfo = () => {
 
   useEffect(() => {
     if(museumId) {
-      requestGet('https://dexplore.info/api/v1/admin/get-museum', {museumId}).then((v) => {
+      requestGet('https://dexplore.info/api/v1/user/get-museum', {museumId}).then((v) => {
         setMuseumInfo(v.museum);
       });
     }
@@ -23,8 +24,9 @@ const MuseumInfo = () => {
 
   return (
     <div>
-      <InfoHeader name={museumInfo}></InfoHeader>
+      <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중'}></InfoHeader>
       <MuseumMain museumInfo={museumInfo}></MuseumMain>
+      <MuseumLoc></MuseumLoc>
     </div>
   );
 }

@@ -24,14 +24,19 @@ import { useState } from "react";
 
 // Styled Components
 const StyledFrame = styled.div`
-	margin-left: 16px;
-	margin-right: 16px;
+	//margin-left: 16px;
+	//margin-right: 16px;
 	margin-bottom: 10px;
 	margin-top: 10px;
+  
+  padding-left: 16px;
+  padding-right: 16px;
+  
+  width:365px;
 `;
 
 const StyledHeaderFrame = styled.div`
-	min-width: 375px;
+	min-width: 345px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -150,6 +155,7 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum }) => {
 };
 
 const CarouselItemComponent = ({
+                                key,
                                  isAdmin,
                                  imageSrc,
                                  title,
@@ -241,7 +247,7 @@ const ContentCarousel = ({
         <StyledHeader>{name}</StyledHeader>
         {museumSelector}
       </StyledHeaderFrame>
-      <Carousel opts={{ align: "start" }} className="min-w-[365px] max-w-[600px]">
+      <Carousel opts={{ align: "start" }} className="min-w-[345px] max-w-[600px]">
         <CarouselContent className="ml-0">
           {itemInfo.map((item) => {
             const info = isMuseum
@@ -255,7 +261,7 @@ const ContentCarousel = ({
                 id: item.artId,
                 name: item.artName,
                 imgUrl: item.imgUrl,
-                description: item.description,
+                description: item.artDescription,
               };
 
             return (
