@@ -170,7 +170,7 @@ const Map = () => {
   }, [loc]);
 
   return (
-      <div id="map" style={{width: '100%', height: '300px'}}/>
+      <div id="map" style={{width: '100%', height: '300px', borderRadius:'15px', padding:0, margin:0}}/>
   );
 }
 
