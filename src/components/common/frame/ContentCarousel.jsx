@@ -32,7 +32,7 @@ const StyledFrame = styled.div`
   padding-left: 16px;
   padding-right: 16px;
   
-  width:365px;
+  min-width:365px;
 `;
 
 const StyledHeaderFrame = styled.div`
