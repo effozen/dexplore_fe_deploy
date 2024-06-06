@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
 import {useNavigate} from "react-router-dom";
+import {getLocation} from "@lib/gps/gps";
 
 const StyledFrame = styled.div`
 	min-height: 385px;
@@ -44,19 +45,29 @@ const StyledButton = styled.button`
 const ArtMain = ({museumInfo = false}) => {
   const [artList, setArtList] = useState();
   const navigate = useNavigate();
+  const [gps, setGps] = useState({latitude: 127.1, longitude:31.5});
+  const [gpsArtList, setGPSArtList] = useState();
 
   useEffect(() => {
-    console.log(museumInfo);
+    if (Object.keys(gps).length === 0) {
+      getLocation().then(v => {
+        const tmp = {...v};
+        setGps(tmp);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (museumInfo) {
       requestGet('https://dexplore.info/api/v1/user/get-arts', {museumId: museumInfo.museumId}).then((v) => {
         setArtList(v.artList);
       });
+      requestGet('https://dexplore.info/api/v1/user/get-arts', {museumId: museumInfo.museumId, latitude:gps.latitude, longitude:gps.longitude, amount:10}).then((v) => {
+        // console.log(v);
+        setGPSArtList(v.artList);
+      });
     }
   }, [museumInfo]);
-
-  useEffect(() => {
-    console.log(artList);
-  }, [artList]);
 
   const handleClick = () => {
     navigate('/user/art', {state:{museumInfo}});
