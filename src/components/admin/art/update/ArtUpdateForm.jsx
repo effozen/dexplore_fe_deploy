@@ -25,7 +25,7 @@ import { Input } from '@components/common/shadcn/input';
 import { Textarea } from '@components/common/shadcn/textarea';
 import { ArtFormat, ArtFormat_hp } from '@components/common/frame/data/FormMessage';
 import { AiOutlinePaperClip, AiFillEnvironment } from 'react-icons/ai';
-import {requestGet, requestPost} from '@lib/network/network';
+import { requestGet, requestPost } from '@lib/network/network';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
 
@@ -104,7 +104,6 @@ const ArtUpdateForm = () => {
     });
 
     const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } = loc;
-    // formData.append('artLoc', roadAddress);
     formData.append('latitude', latitude);
     formData.append('longitude', longitude);
     formData.append('level', level);
@@ -114,11 +113,6 @@ const ArtUpdateForm = () => {
     formData.append('edgeLongitude2', edgeLongitude2);
     formData.append('museumId', museumId);
     formData.append('artId', id);
-
-    //FormData 내용을 콘솔에 출력
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
 
     requestPost('https://dexplore.info/api/v1/admin/update-art', formData).then(() => {
       navigate('/admin/management');
@@ -142,6 +136,9 @@ const ArtUpdateForm = () => {
           </FormControl>
           <FormDescription />
           <FormMessage />
+          {form.formState.errors[keyName] && (
+            <p className="text-red-500 text-sm">{form.formState.errors[keyName].message}</p>
+          )}
         </FormItem>
       )}
     />
@@ -170,7 +167,7 @@ const ArtUpdateForm = () => {
 
   const handleCancleClick = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <ShadcnForm {...form}>
@@ -197,6 +194,9 @@ const ArtUpdateForm = () => {
               </FormControl>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.artImg && (
+                <p className="text-red-500 text-sm">{form.formState.errors.artImg.message}</p>
+              )}
             </FormItem>
           )}
         />
@@ -237,6 +237,9 @@ const ArtUpdateForm = () => {
               </Drawer>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.artLoc && (
+                <p className="text-red-500 text-sm">{form.formState.errors.artLoc.message}</p>
+              )}
             </FormItem>
           )}
         />
