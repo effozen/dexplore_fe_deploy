@@ -12,14 +12,10 @@ const ArtList = () => {
     setMuseumInfo(location.state.museumInfo);
   }, []);
 
-  useEffect(() => {
-    console.log(museumInfo);
-  }, [museumInfo]);
-
   return (
     <div>
       <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중...'}></InfoHeader>
-      <ProgressBar museumInfo={museumInfo}/>
+      <ProgressBar />
       <ArtInfo></ArtInfo>
     </div>
   );

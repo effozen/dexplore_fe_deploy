@@ -3,7 +3,6 @@ import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
 import ArtMain from "@components/user/art/list/new/ArtMain";
-import ArtLoc from "@components/user/art/list/new/ArtLoc";
 import styled from "styled-components";
 
 const StyledHeaderFrame = styled.div`
@@ -24,20 +23,11 @@ const StyledHeader = styled.div`
 
 const ArtInfo = () => {
   const location = useLocation();
-  const [museumId, setMuseumId] = useState(false);
-  const [museumInfo, setMuseumInfo] = useState(false);
+  const [museumInfo, setMuseumInfo] = useState();
 
   useEffect(() => {
-    setMuseumId(location.state.museumId);
+    setMuseumInfo(location.state.museumInfo);
   }, []);
-
-  useEffect(() => {
-    if(museumId) {
-      requestGet('https://dexplore.info/api/v1/user/get-museum', {museumId}).then((v) => {
-        setMuseumInfo(v.museum);
-      });
-    }
-  }, [museumId]);
 
   return (
     <div>
@@ -45,7 +35,6 @@ const ArtInfo = () => {
         <StyledHeader>회원님 근처의 작품을 모아봤어요</StyledHeader>
       </StyledHeaderFrame>
       <ArtMain museumInfo={museumInfo}></ArtMain>
-      <ArtLoc></ArtLoc>
     </div>
   );
 }
