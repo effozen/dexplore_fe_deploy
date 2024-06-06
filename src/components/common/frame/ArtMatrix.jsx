@@ -23,7 +23,6 @@ const StyledHeader = styled.div`
 `;
 
 const ArtMatrix = ({title, itemInfo}) => {
-  console.log(itemInfo);
   return (
       <StyledFrame>
         <StyledHeaderFrame><StyledHeader>{title}</StyledHeader></StyledHeaderFrame>
