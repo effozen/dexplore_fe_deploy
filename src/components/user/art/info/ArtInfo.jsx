@@ -1,20 +1,28 @@
 import InfoHeader from "@components/common/frame/InfoHeader";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
-import ProgressBar from "@components/user/art/list/ProgressBar";
-import ArtInfo from "@components/user/art/list/new/ArtInfo";
+import {requestGet} from "@lib/network/network";
 
 const ArtInfo = () => {
   const location = useLocation();
-  const [museumInfo, setMuseumInfo] = useState(false);
+  const [artId, setArtId] = useState(false);
+  const [artInfo, setArtInfo] = useState(false);
 
   useEffect(() => {
-    setMuseumInfo(location.state.museumInfo);
+    setArtId(location.state.artId);
   }, []);
+
+  useEffect(() => {
+    if (artId) {
+      requestGet('https://dexplore.info/api/v1/user/get-art', {artId}).then(v => {
+        setArtInfo(v.art);
+      });
+    }
+  }, [artId]);
 
   return (
     <div>
-      <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중...'}></InfoHeader>
+      <InfoHeader name={artInfo ? artInfo.artName : '로딩중...'}></InfoHeader>
     </div>
   );
 }
