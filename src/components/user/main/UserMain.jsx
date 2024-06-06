@@ -1,14 +1,14 @@
 import Header from "@components/common/frame/Header";
 import ContentCarousel from "@components/common/frame/ContentCarousel";
 import SelectList from "@components/common/frame/SelectList";
-import {requestGet} from "@lib/network/network";
-import {useEffect, useState} from "react";
-import {getLocation} from "@lib/gps/gps";
-import {useNavigate} from "react-router-dom";
-import {useCookies} from "react-cookie";
+import { requestGet } from "@lib/network/network";
+import { useEffect, useState } from "react";
+import { getLocation } from "@lib/gps/gps";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 import ArtMatrix from "@components/common/frame/ArtMatrix";
-import adBannerImage from '@assets/images/adBanner1.png';
+import adBannerImage from "@assets/images/adBanner1.png";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const dataList = {
@@ -30,82 +30,84 @@ const UserMain = () => {
   const [cookie, setCookie, removeCookie] = useCookies();
   const [userName, setUserName] = useState('홍길동');
 
+  // GPS 정보 가져오기
   useEffect(() => {
     if (Object.keys(gps).length === 0) {
-      getLocation().then(v => {
-        const tmp = {...v};
-        setGps(tmp);
-        console.log(tmp);
-      });
+      getLocation().then(setGps);
     }
-  }, []);
+  }, [gps]);
 
-  useEffect (() => {
+  // 사용자 정보 및 토큰 검사
+  useEffect(() => {
     const token = cookie.accessToken;
     if (token) {
-      const decodedToken = jwtDecode (token) ;
+      const decodedToken = jwtDecode(token);
       setUserName(decodedToken.sub);
-      const now = Date.now / 1000;
+      const now = Date.now() / 1000;
       if (decodedToken.exp < now) {
-        // 토큰이 만료된 경우
-        removeCookie('accessToken', { path: '/' }); // 만료된 토큰 삭제
+        removeCookie('accessToken', { path: '/' });
         navigate("/auth/sign-in");
-      }
-      else {
-        // 토큰이 유효한 경우
+      } else {
         const userRole = decodedToken.role;
-        if(userRole && userRole === "ROLE_ADMIN" ) {
-          if(location.pathname !== "/user/main" || location.pathname !== "/user") navigate("/user");
-        } else if ((userRole && userRole === "ROLE_USER") || (userRole && userRole === "ROLE_ADMIN")) {
+        if (userRole === "ROLE_ADMIN" && !["/user/main", "/user"].includes(location.pathname)) {
+          navigate("/user");
+        } else if (["ROLE_USER", "ROLE_ADMIN"].includes(userRole)) {
           navigate("/user/main");
         } else {
           alert("잘못된 접근입니다.");
           navigate('/auth/sign-in');
         }
       }
-    }
-    else {
+    } else {
       navigate('/auth/sign-in');
     }
-  }, [cookie]);
+  }, [cookie, navigate, removeCookie]);
 
+  // 데이터 불러오기
   useEffect(() => {
-    if (Object.keys(gps).length > 0 && gps.err === 0) {
-      // 박물관 리스트 받아오기
-      requestGet(dataList.museumList, {latitude: gps.latitude, longitude: gps.longitude, amount: 10}).then(response => {
-        setMuseumList(response.museumList);
-        setChosenMuseum(response.museumList[0]);
-      });
+    const fetchData = async () => {
+      if (gps.err === 0) {
+        const [museumResponse, recommendResponse] = await Promise.all([
+          requestGet(dataList.museumList, { latitude: gps.latitude, longitude: gps.longitude, amount: 10 }),
+          requestGet(dataList.recommendMuseumList, { amount: 10 })
+        ]);
 
-      // 추천 박물관 리스트 받아오기
-      requestGet(dataList.recommendMuseumList, {amount: 10}).then(response => {
-        setRecommendMuseumList(response.museumList);
-        setChosenMuseum(response.museumList[0]);
-      });
+        setMuseumList(museumResponse.museumList);
+        setRecommendMuseumList(recommendResponse.museumList);
+
+        if (museumResponse.museumList.length > 0) {
+          setChosenMuseum(museumResponse.museumList[0]);
+        }
+      }
+    };
+
+    if (Object.keys(gps).length > 0) {
+      fetchData();
     }
   }, [gps]);
 
+  // 작품 리스트 받아오기
   useEffect(() => {
-    // 작품 리스트 받아오기
-    if ((chosenMuseum !== null) && (chosenMuseum !== undefined) && Object.keys(chosenMuseum).length !== 0) {
-      console.log(chosenMuseum);
-      requestGet(dataList.artList, {museumId: chosenMuseum.museumId, latitude: gps.latitude, longitude: gps.longitude, amount: 10}).then(response => {
-        console.log(response);
-        setArtList(response.artList);
-      });
-    }
-  }, [chosenMuseum]);
+    const fetchArtList = async () => {
+      if (chosenMuseum && Object.keys(chosenMuseum).length !== 0) {
+        const artResponse = await requestGet(dataList.artList, { museumId: chosenMuseum.museumId, latitude: gps.latitude, longitude: gps.longitude, amount: 10 });
+        setArtList(artResponse.artList);
+      }
+    };
+
+    fetchArtList();
+  }, [chosenMuseum, gps]);
 
   return (
     <div className="flex flex-col">
-      <Header name={`${userName}님, 환영합니다.`} height="130px"/>
-      <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
+      <Header name={`${userName}님, 환영합니다.`} height="130px" />
+      <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true} />
       <div className='mr-auto ml-auto pr-[15px] pl-[15px] max-w-[1000px] mb-[30px] mt-[10px]'>
-        <img src={adBannerImage} alt="광고 이미지" className='max-h-[400px] rounded-[10px]'/>
+        <img src={adBannerImage} alt="광고 이미지" className='max-h-[400px] rounded-[10px]' />
       </div>
       <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
-      <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
-      <ToggleButton/>
+      <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList} />
+      <ToggleButton />
     </div>
   );
 };
