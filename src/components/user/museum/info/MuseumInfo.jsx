@@ -4,6 +4,7 @@ import MuseumLoc from "@components/user/museum/info/MuseumLoc";
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const MuseumInfo = () => {
   const location = useLocation();
@@ -27,6 +28,7 @@ const MuseumInfo = () => {
       <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중'}></InfoHeader>
       <MuseumMain museumInfo={museumInfo}></MuseumMain>
       <MuseumLoc></MuseumLoc>
+      <ToggleButton/>
     </div>
   );
 }

@@ -13,6 +13,10 @@ const StyledFrame = styled.div`
 	align-items: center;
 `;
 
+const ContentWrapper = styled.div`
+  margin-bottom: 30px; // 여백을 추가하는 부분
+`;
+
 const StyledDescription = styled.div`
 	font-size: 16px;
 	font-weight: 400;
@@ -75,8 +79,28 @@ const ArtMain = ({museumInfo = false}) => {
 
   return (
       <StyledFrame2>
-        {artList && <VerticalContentCarousel isAdmin={false} name={`${museumInfo.museumName}의 대표 작품`} isMuseum={false}
-                                     chosenMuseum={museumInfo} itemInfo={artList}></VerticalContentCarousel>}
+        {artList && (
+            <ContentWrapper>
+            <VerticalContentCarousel
+                isAdmin={false}
+                name={`회원님 근처의 작품을 모아봤어요`}
+                isMuseum={false}
+                chosenMuseum={museumInfo}
+                itemInfo={artList}
+            />
+            </ContentWrapper>
+        )}
+        {gpsArtList && (
+            <ContentWrapper>
+            <VerticalContentCarousel
+                isAdmin={false}
+                name={`${museumInfo.museumName}의 작품들을 모아봤어요`}
+                isMuseum={false}
+                chosenMuseum={museumInfo}
+                itemInfo={gpsArtList}
+            />
+          </ContentWrapper>
+        )}
       </StyledFrame2>
   );
 };
