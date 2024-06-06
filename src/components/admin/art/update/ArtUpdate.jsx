@@ -40,7 +40,7 @@ const ArtUpdate = () => {
 
   return (
     <>
-      <Header name='새로운 작품을 등록하세요' height='100px' isDate={false}></Header>
+      <Header name='작품 정보 업데이트' height='100px' isDate={false}></Header>
       <ArtUpdateForm></ArtUpdateForm>
       <ToggleButton/>
     </>
