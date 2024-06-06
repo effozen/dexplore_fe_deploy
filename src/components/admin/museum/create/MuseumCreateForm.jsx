@@ -29,7 +29,6 @@ import { requestPost } from '@lib/network/network';
 import { useNavigate } from 'react-router-dom';
 import { KakaoMap, loadKakaoMap } from '@components/common/KakaoMap/KakaoMap';
 
-
 const formSchema = z.object({
   museumName: z.string().min(1, { message: '값을 채워주세요' }),
   museumImg: z.any().refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
@@ -71,7 +70,7 @@ const MuseumCreateForm = () => {
 
   useEffect(() => {
     loadKakaoMap();
-  }, [])
+  }, []);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -89,7 +88,6 @@ const MuseumCreateForm = () => {
     });
 
     const { roadAddress, latitude, longitude, edgeLatitude1, edgeLongitude1, edgeLatitude2, edgeLongitude2, level } = loc;
-    //formData.append('museumLoc', roadAddress);
     formData.append('latitude', latitude);
     formData.append('longitude', longitude);
     formData.append('level', level);
@@ -97,11 +95,6 @@ const MuseumCreateForm = () => {
     formData.append('edgeLongitude1', edgeLongitude1);
     formData.append('edgeLatitude2', edgeLatitude2);
     formData.append('edgeLongitude2', edgeLongitude2);
-
-    //FormData 내용을 콘솔에 출력
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
 
     requestPost('https://dexplore.info/api/v1/admin/save-museum', formData).then(() => {
       navigate('/admin/management');
@@ -125,6 +118,9 @@ const MuseumCreateForm = () => {
           </FormControl>
           <FormDescription />
           <FormMessage />
+          {form.formState.errors[keyName] && (
+            <p className="text-red-500 text-sm">{form.formState.errors[keyName].message}</p>
+          )}
         </FormItem>
       )}
     />
@@ -154,7 +150,7 @@ const MuseumCreateForm = () => {
 
   const handleCancleClick = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <ShadcnForm {...form}>
@@ -181,6 +177,9 @@ const MuseumCreateForm = () => {
               </FormControl>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.museumImg && (
+                <p className="text-red-500 text-sm">{form.formState.errors.museumImg.message}</p>
+              )}
             </FormItem>
           )}
         />
@@ -221,6 +220,9 @@ const MuseumCreateForm = () => {
               </Drawer>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.museumLoc && (
+                <p className="text-red-500 text-sm">{form.formState.errors.museumLoc.message}</p>
+              )}
             </FormItem>
           )}
         />

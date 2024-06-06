@@ -78,7 +78,7 @@ const MuseumUpdateForm = () => {
   useEffect(() => {
     loadKakaoMap();
     setId(location.state.id);
-  }, []);
+  }, [location.state.id]);
 
   useEffect(() => {
     if (id) {
@@ -142,6 +142,9 @@ const MuseumUpdateForm = () => {
           </FormControl>
           <FormDescription />
           <FormMessage />
+          {form.formState.errors[keyName] && (
+            <p className="text-red-500 text-sm">{form.formState.errors[keyName].message}</p>
+          )}
         </FormItem>
       )}
     />
@@ -171,7 +174,7 @@ const MuseumUpdateForm = () => {
 
   const handleCancleClick = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <ShadcnForm {...form}>
@@ -198,6 +201,9 @@ const MuseumUpdateForm = () => {
               </FormControl>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.museumImg && (
+                <p className="text-red-500 text-sm">{form.formState.errors.museumImg.message}</p>
+              )}
             </FormItem>
           )}
         />
@@ -238,6 +244,9 @@ const MuseumUpdateForm = () => {
               </Drawer>
               <FormDescription />
               <FormMessage />
+              {form.formState.errors.museumLoc && (
+                <p className="text-red-500 text-sm">{form.formState.errors.museumLoc.message}</p>
+              )}
             </FormItem>
           )}
         />
