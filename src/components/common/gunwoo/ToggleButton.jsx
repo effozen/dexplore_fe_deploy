@@ -12,6 +12,7 @@ import ideaIcon from '@assets/images/Togglebtn/Tip.png';
 import logoutIcon from '@assets/images/Togglebtn/Logout.png';
 import cancelIcon from '@assets/images/Togglebtn/Cancel.png';
 import QRCodebtn from '@assets/images/Togglebtn/QRCodeScan.png';
+import {requestGet} from "@lib/network/network";
 
 const GlobalStyle = createGlobalStyle`
     body, html {
@@ -154,13 +155,29 @@ const ToggleButton = ({ museumId }) => {
                     },
                 }}
             >
+                {/* <Scanner */}
+                {/*     onResult={(text, result) => { */}
+                {/*         console.log(text, result); */}
+                {/*         // getArtId(text); */}
+                {/*     }} */}
+                {/*     onError={(error) => console.log(error?.message)} */}
+                {/* /> */}
+
                 <Scanner
-                    onResult={(text, result) => {
-                        console.log(text, result);
-                        getArtId(text);
-                    }}
-                    onError={(error) => console.log(error?.message)}
-                />
+                    onScan={(result => {
+                        // console.log(result);
+                        requestGet('https://dexplore.info/api/v1/user', {qrcodeHashKey:result.rawValue}).then(v => {
+                            if(v.art) {
+                                navigate('/user/art/info', {state:{artId:v.art.artId}});
+                            }
+                        }).catch((e) => {
+                            console.error(e);
+                            window.alert('작품 QR이 아닙니다.');
+                        })
+                    })}
+                >
+
+                </Scanner>
             </Modal>
         </>
     );
