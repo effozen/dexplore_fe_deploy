@@ -18,9 +18,10 @@ import {
 
 import styled from "styled-components";
 import {AiFillDelete, AiOutlinePlus, AiOutlineMenu} from "react-icons/ai";
-import {requestPost} from "@lib/network/network";
+import {requestGet, requestPost} from "@lib/network/network";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import QRCode from 'qrcode';
 
 // Styled Components
 const StyledFrame = styled.div`
@@ -123,26 +124,27 @@ const ListIcon = ({isMuseum = true, id, chosenMuseum}) => {
   };
 
   const handleQrDownload = async () => {
-    const token = cookies.accessToken;
-
-    if (!token) {
-      console.error('Access token is not available.');
-      return;
-    }
-
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
-
     if (!isMuseum) {
       try {
-        const artResponse = await requestGet(`https://dexplore.info/api/v1/get-art?artId=${id}`);
-        const qrcodeId = artResponse.qrcodeId;
-        const qrcodeResponse = await requestGet(`https://dexplore.info/api/v1/get-qrcode?qrcodeId=${qrcodeId}`);
-        const qrHash = qrcodeResponse.qrcodeHashKey;
-        console.log(qrcodeHashKey);
+        const artResponse = await requestGet(`https://dexplore.info/api/v1/user/get-art`, {artId: id});
+        const qrcodeId = artResponse.art.qrcodeId;
+        const qrcodeResponse = await requestGet('https://dexplore.info/api/v1/user/get-qrcode', {qrcodeId});
+        const qrHash = qrcodeResponse.qrcode.qrcodeHashkey;
+        // setQRCodeHash(qrHash);
 
-        setQRCodeHash(qrHash);
+        try {
+          const canvas = document.createElement('canvas');
+          await QRCode.toCanvas(canvas, qrHash, { errorCorrectionLevel: 'H' });
+          const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+          const downloadLink = document.createElement('a');
+          downloadLink.href = pngUrl;
+          downloadLink.download = `${qrHash}.png`;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        } catch (error) {
+          console.error(error);
+        }
 
       } catch (error) {
         console.error('QR code download failed:', error);
@@ -165,7 +167,7 @@ const ListIcon = ({isMuseum = true, id, chosenMuseum}) => {
           {isMuseum ? "박물관" : "작품"} 수정
         </DropdownMenuItem>
         {!isMuseum ? (
-          <DropdownMenuItem onClick={handleUpdateClick}>
+          <DropdownMenuItem onClick={handleQrDownload}>
             QR 다운로드
           </DropdownMenuItem>
         ) : (

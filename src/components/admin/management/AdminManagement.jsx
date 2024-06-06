@@ -21,8 +21,7 @@ const AdminManagement = () => {
   const [museumList, setMuseumList] = useState([]);
   const navigate = useNavigate();
   const [cookie, setCookie, removeCookie] = useCookies();
-
-  const name = '홍길동님, 환영합니다.'; // 나중에 지울 것
+  const [userName, setUserName] = useState('홍길동');
 
   useEffect(() => {
     requestGet(dataList.museumList).then(response => {
@@ -36,7 +35,7 @@ const AdminManagement = () => {
     const token = cookie.accessToken;
     if (token) {
       const decodedToken = jwtDecode (token) ;
-      console.log (decodedToken);
+      setUserName(decodedToken.sub);
       const now = Date.now / 1000;
       if (decodedToken.exp < now) {
         // 토큰이 만료된 경우
@@ -74,7 +73,7 @@ const AdminManagement = () => {
 
   return (
     <div className="flex flex-col">
-      <Header name={name} height="130px"/>
+      <Header name={`${userName}님, 환영합니다.`} height="130px"/>
       <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true}/>
       <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false}
                        museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}  chosenMuseum={chosenMuseum}/>

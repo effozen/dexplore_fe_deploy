@@ -12,6 +12,7 @@ import ideaIcon from '@assets/images/Togglebtn/Tip.png';
 import logoutIcon from '@assets/images/Togglebtn/Logout.png';
 import cancelIcon from '@assets/images/Togglebtn/Cancel.png';
 import QRCodebtn from '@assets/images/Togglebtn/QRCodeScan.png';
+import {requestGet} from "@lib/network/network";
 
 const GlobalStyle = createGlobalStyle`
     body, html {
@@ -36,7 +37,7 @@ const fadeInUp = keyframes`
 
 const Container = styled.div`
     position: fixed;
-    bottom: 20px; 
+    bottom: 20px;
     right: 20px;
     //display: flex;
     //flex-direction: column;
@@ -80,10 +81,10 @@ const ToggleButton = ({ museumId }) => {
     };
 
     const handleLogout = () => {
-        removeCookie('accessToken');
+        removeCookie('accessToken', { path: '/' });
         alert('로그아웃 완료');
         navigate('/auth/sign-in');
-    }
+    };
 
     const handleScan = (result) => {
         if (result) {
@@ -117,52 +118,57 @@ const ToggleButton = ({ museumId }) => {
     };
 
     return (
-        <>
-            {/*<GlobalStyle />*/}
-            <Container>
-                {isExpanded && (
-                    <ExpandedMenu>
-                        <Button onClick={handleToggle}>
-                            <img src={ideaIcon} alt="idea" />
-                        </Button>
-                        <Button onClick={handleLogout}>
-                            <img src={logoutIcon} alt="logout"/>
-                        </Button>
-                        <Button onClick={handleOpenModal}>
-                            <img src={QRCodebtn} alt="qr code scan" />
-                        </Button>
-                    </ExpandedMenu>
-                )}
-                <Button onClick={handleToggle}>
-                    <img src={isExpanded ? cancelIcon : menuIcon} alt="menu" />
-                </Button>
-            </Container>
+      <>
+          {/*<GlobalStyle />*/}
+          <Container>
+              {isExpanded && (
+                <ExpandedMenu>
+                    <Button onClick={handleToggle}>
+                        <img src={ideaIcon} alt="idea" />
+                    </Button>
+                    <Button onClick={handleLogout}>
+                        <img src={logoutIcon} alt="logout"/>
+                    </Button>
+                    <Button onClick={handleOpenModal}>
+                        <img src={QRCodebtn} alt="qr code scan" />
+                    </Button>
+                </ExpandedMenu>
+              )}
+              <Button onClick={handleToggle}>
+                  <img src={isExpanded ? cancelIcon : menuIcon} alt="menu" />
+              </Button>
+          </Container>
 
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={handleCloseModal}
-                style={{
-                    content: {
-                        width: '256px',
-                        height: '256px',
-                        margin: 'auto',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        inset: '50% auto auto 50%',
-                        transform: 'translate(-50%, -50%)',
-                    },
-                }}
-            >
-                <Scanner
-                    onResult={(text, result) => {
-                        console.log(text, result);
-                        getArtId(text);
-                    }}
-                    onError={(error) => console.log(error?.message)}
-                />
-            </Modal>
-        </>
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={handleCloseModal}
+            style={{
+                content: {
+                    width: '256px',
+                    height: '256px',
+                    margin: 'auto',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    inset: '50% auto auto 50%',
+                    transform: 'translate(-50%, -50%)',
+                },
+            }}
+          >
+              <Scanner
+                onScan={(result => {
+                    requestGet('https://dexplore.info/api/v1/user', {qrcodeHashKey:result.rawValue}).then(v => {
+                        if(v.art) {
+                            navigate('/user/art/info', {state:{artId:v.art.artId}});
+                        }
+                    }).catch((e) => {
+                        console.error(e);
+                        window.alert('작품 QR이 아닙니다.');
+                    })
+                })}
+              />
+          </Modal>
+      </>
     );
 };
 
