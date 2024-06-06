@@ -28,8 +28,7 @@ const UserMain = () => {
   const [gps, setGps] = useState({});
   const navigate = useNavigate();
   const [cookie, setCookie, removeCookie] = useCookies();
-
-  const name = '홍길동님, 환영합니다.'; // 나중에 지울 것
+  const [userName, setUserName] = useState('홍길동');
 
   useEffect(() => {
     if (Object.keys(gps).length === 0) {
@@ -45,7 +44,7 @@ const UserMain = () => {
     const token = cookie.accessToken;
     if (token) {
       const decodedToken = jwtDecode (token) ;
-      console.log (decodedToken);
+      setUserName(decodedToken.sub);
       const now = Date.now / 1000;
       if (decodedToken.exp < now) {
         // 토큰이 만료된 경우
@@ -99,13 +98,13 @@ const UserMain = () => {
 
   return (
     <div className="flex flex-col">
-      <Header name={name} height="130px"/>
+      <Header name={`${userName}님, 환영합니다.`} height="130px"/>
       <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
       <div className='mr-auto ml-auto pr-[15px] pl-[15px] max-w-[1000px] mb-[30px] mt-[10px]'>
         <img src={adBannerImage} alt="광고 이미지" className='max-h-[400px] rounded-[10px]'/>
       </div>
-      <ContentCarousel name={'홍길동' + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
-      <ArtMatrix title={'홍길동' + dataList.title3} itemInfo={artList}></ArtMatrix>
+      <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
+      <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
       <ToggleButton/>
     </div>
   );
