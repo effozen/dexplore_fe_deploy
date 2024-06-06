@@ -13,6 +13,7 @@ import ArtUpdate from "@components/admin/art/update/ArtUpdate";
 import UserMain from "@components/user/main/UserMain";
 import MuseumInfo from "@components/user/museum/info/MuseumInfo";
 import ArtList from "@components/user/art/list/ArtList";
+import ArtInfo from "@components/user/art/info/ArtInfo";
 
 function ContentsRouter() {
   const [cookies] = useCookies(['accessToken']); // 'myCookie' 쿠키에 접근
@@ -51,6 +52,7 @@ function ContentsRouter() {
             <Route path='art'>
               <Route path='' element={<ArtList />}></Route>
               <Route path='list' element={<ArtList />}></Route>
+              <Route path='info' element={<ArtInfo />}></Route>
             </Route>
           </Route>
           <Route path="test">
