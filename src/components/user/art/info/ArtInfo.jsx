@@ -53,6 +53,8 @@ const ArtInfo = () => {
   const audioRef = useRef(null);
   const [ttsUrl, setTtsUrl] = useState('');
   const [isBookMarked, setIsBookMarked] = useState(false);
+  const [cookie, setCookie, removeCookie] = useCookies();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setArtId(location.state.artId);
