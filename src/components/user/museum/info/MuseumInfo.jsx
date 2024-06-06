@@ -1,15 +1,19 @@
 import InfoHeader from "@components/common/frame/InfoHeader";
 import MuseumMain from "@components/user/museum/info/MuseumMain";
 import MuseumLoc from "@components/user/museum/info/MuseumLoc";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {requestGet} from "@lib/network/network";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
+import { useCookies } from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 
 const MuseumInfo = () => {
   const location = useLocation();
   const [museumId, setMuseumId] = useState(false);
   const [museumInfo, setMuseumInfo] = useState(false);
+  const [cookie, setCookie, removeCookie] = useCookies();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMuseumId(location.state.museumId);
@@ -22,6 +26,21 @@ const MuseumInfo = () => {
       });
     }
   }, [museumId]);
+
+  // 사용자 정보 및 토큰 검사
+  useEffect(() => {
+    const token = cookie.accessToken;
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const now = Date.now() / 1000;
+      if (decodedToken.exp < now) {
+        removeCookie('accessToken', { path: '/' });
+        navigate("/auth/sign-in");
+      }
+    } else {
+      navigate('/auth/sign-in');
+    }
+  }, [cookie, removeCookie]);
 
   return (
     <div>

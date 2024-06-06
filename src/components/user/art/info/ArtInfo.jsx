@@ -1,10 +1,12 @@
 import InfoHeader from "@components/common/frame/InfoHeader";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
 import {requestGet} from "@lib/network/network";
 import { AiFillSound } from "react-icons/ai";
 import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
+import {jwtDecode} from "jwt-decode";
 
 const StyledName = styled.div`
 	font-weight: 700;
@@ -74,6 +76,21 @@ const ArtInfo = () => {
       });
     }
   }, [artInfo]);
+
+  // 사용자 정보 및 토큰 검사
+  useEffect(() => {
+    const token = cookie.accessToken;
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const now = Date.now() / 1000;
+      if (decodedToken.exp < now) {
+        removeCookie('accessToken', { path: '/' });
+        navigate("/auth/sign-in");
+      }
+    } else {
+      navigate('/auth/sign-in');
+    }
+  }, [cookie, removeCookie]);
 
   const getTtsUrl = async (ttsId) => {
     const token = cookies.accessToken;
