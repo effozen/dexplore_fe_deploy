@@ -154,13 +154,13 @@ const ArtCreateForm = () => {
     navigate(-1);
   }
 
-  const handleqrtest = () => {
-    requestGet('http://dexplore.info/api/v1/user/get-qrcode', qrcodeId).then(qrResponse => {
-      const qrcodeHashKey = qrResponse.qrcode.qrcodeHashKey;
-    })
-    setQrCodeHashKey(qrcodeHashKey);
-    setModalIsOpen(true);
-  }
+  // const handleqrtest = () => {
+  //   requestGet('http://dexplore.info/api/v1/user/get-qrcode', qrcodeId).then(qrResponse => {
+  //     const qrcodeHashKey = qrResponse.qrcode.qrcodeHashKey;
+  //   })
+  //   setQrCodeHashKey(qrcodeHashKey);
+  //   setModalIsOpen(true);
+  // }
 
 
 
@@ -246,9 +246,9 @@ const ArtCreateForm = () => {
             <Button type="button" className="min-w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleCancleClick}>
               취소
             </Button>
-            <Button type="button" className="min-w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleqrtest}>
-              취소
-            </Button>
+            {/*<Button type="button" className="min-w-[300px] h-[40px] rounded-none bg-gray-500" onClick={handleqrtest}>*/}
+            {/*  취소*/}
+            {/*</Button>*/}
           </div>
         </form>
 
