@@ -1,7 +1,7 @@
 import InfoHeader from "@components/common/frame/InfoHeader";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
-import {requestGet} from "@lib/network/network";
+import {requestGet, requestPost} from "@lib/network/network";
 import { AiFillSound } from "react-icons/ai";
 import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import styled from "styled-components";
@@ -128,7 +128,7 @@ const ArtInfo = () => {
   };
 
   const handleBookMark = () => {
-    requestGet('https://dexplore.info/api/v1/user/bookmarking', {artId}).then(v => {
+    requestPost('https://dexplore.info/api/v1/user/bookmarking', {artId}).then(v => {
       window.location.reload();
     });
   }
