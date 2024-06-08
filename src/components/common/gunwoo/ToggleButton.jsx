@@ -157,7 +157,8 @@ const ToggleButton = ({ museumId }) => {
           >
               <Scanner
                 onScan={(result => {
-                    requestGet('https://dexplore.info/api/v1/user', {qrcodeHashKey:result.rawValue}).then(v => {
+                    console.log(result);
+                    requestGet('https://dexplore.info/api/v1/user/get-art-by-hash', {qrcodeHashKey:result[0].rawValue}).then(v => {
                         if(v.art) {
                             navigate('/user/art/info', {state:{artId:v.art.artId}});
                         }
