@@ -46,9 +46,22 @@ const StyledHeader = styled.div`
 	font-weight: 600;
 	color: #000000;
 `;
+const StyledHeader2 = styled.div`
+  font-size: 25px;
+	margin-top: 10px;
+  margin-bottom: 10px;
+	font-weight: 600;
+	color: #000000;
+`;
 
 const StyledTitle = styled.div`
 	font-size: 14px;
+	font-weight: 600;
+`;
+
+const StyledTitle2 = styled.div`
+  margin-top:5px;
+	font-size: 22px;
 	font-weight: 600;
 `;
 
@@ -57,6 +70,12 @@ const StyledDescription = styled.div`
 	font-weight: 300;
 	color: #909090;
 	line-height: 11px;
+`;
+const StyledDescription2 = styled.div`
+	font-size: 15px;
+	font-weight: 300;
+	color: #909090;
+	line-height: 15px;
 `;
 const StyledListIcon = styled(AiOutlineMenu)`
 	stroke: white;
@@ -378,13 +397,13 @@ const VerticalCarouselItemComponent = ({
             </StyledImageWrapper>
           </CardContent>
         </Card>
-        <StyledTitle>{title}</StyledTitle>
-        <StyledDescription>
+        <StyledTitle2>{title}</StyledTitle2>
+        <StyledDescription2>
           {description &&
             (description.length > 50
               ? description.substring(0, 50) + "..."
               : description)}
-        </StyledDescription>
+        </StyledDescription2>
       </div>
     </CarouselItem>
   );
@@ -403,10 +422,10 @@ const VerticalContentCarousel = ({
   return (
     <StyledFrame>
       <StyledHeaderFrame>
-        <StyledHeader>{name}</StyledHeader>
+        <StyledHeader2>{name}</StyledHeader2>
         {museumSelector}
       </StyledHeaderFrame>
-      <Carousel opts={{ axis: "y", align: "start" }} className="min-h-[345px] max-h-[600px] overflow-y-scroll">
+      <Carousel opts={{ axis: "y", align: "start" }} className="min-h-[300px] max-h-[420px] overflow-y-scroll">
         <CarouselContent className="flex flex-col">
           {itemInfo.map((item) => {
             const info = isMuseum

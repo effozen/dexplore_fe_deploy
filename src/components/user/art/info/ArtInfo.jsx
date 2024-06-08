@@ -23,7 +23,7 @@ const StyledSubName = styled.div`
 const StyledAuthName = styled.div`
 	font-weight: 400;
 	font-size: 20px;
-	margin-left: 17px;
+	margin-left: 22px;
 	font-color:black;
 `;
 const StyledDescription = styled.div`
