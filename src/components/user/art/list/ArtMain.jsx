@@ -90,6 +90,8 @@ const ArtMain = ({museumInfo = false}) => {
             />
             </ContentWrapper>
         )}
+        <div className='pt-[20px]'></div>
+        <hr className='pt-[20px]'/>
         {gpsArtList && (
             <ContentWrapper>
             <VerticalContentCarousel
