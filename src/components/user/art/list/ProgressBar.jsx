@@ -34,7 +34,7 @@ const ProgressBar = () => {
         <Progress className="[&>*]:bg-green-500" value={percentage}/>
       </div>
       <StyledTitle>
-        {`${percentage}%`}
+        {`${Math.floor(percentage)}%`}
       </StyledTitle>
     </StyledFrame>
   );
