@@ -14,7 +14,7 @@ import ToggleButton from "@components/common/gunwoo/ToggleButton";
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/user/get-nearest-n-museums',
   recommendMuseumList: 'https://dexplore.info/api/v1/user/get-museum-recommendations',
-  artList: 'https://dexplore.info/api/v1/user/get-nearest-n-arts',
+  artList: 'https://dexplore.info/api/v1/user/get-bookmarked-arts',
   title1: '내 위치에서 가까운 박물관',
   title2: '님을 위한 추천 박물관',
   title3: '님이 북마크한 작품'
@@ -88,7 +88,8 @@ const UserMain = () => {
   useEffect(() => {
     // 작품 리스트 받아오기
     if ((chosenMuseum !== null) && (chosenMuseum !== undefined) && Object.keys(chosenMuseum).length !== 0) {
-      requestGet(dataList.artList, {museumId: chosenMuseum.museumId, latitude: gps.latitude, longitude: gps.longitude, amount: 10}).then(response => {
+      // {museumId: chosenMuseum.museumId, latitude: gps.latitude, longitude: gps.longitude, amount: 10}
+      requestGet(dataList.artList).then(response => {
         setArtList(response.artList);
       });
     }
