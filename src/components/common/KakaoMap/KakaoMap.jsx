@@ -99,30 +99,20 @@ const KakaoMap = ({ setLoc }) => {
   return (<div id="map" ref={mapRef} style={{ width: '100%', height: '400px' }}></div>);
 };
 
-const Map = () => {
-  const [loc, setLoc] = useState({});
+const Map = ({ museumLocation }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    const loadLocation = async () => {
-      const location = await getLocation();
-      setLoc(location);
-    };
-
-    loadLocation();
-  }, []);
-
-  useEffect(() => {
     const loadMap = () => {
-      if (Object.keys(loc).length !== 0 && window.kakao && window.kakao.maps) {
+      if (Object.keys(museumLocation).length !== 0 && window.kakao && window.kakao.maps) {
         const container = mapRef.current;
         const mapOption = {
-          center: new window.kakao.maps.LatLng(loc.latitude, loc.longitude),
+          center: new window.kakao.maps.LatLng(museumLocation.latitude, museumLocation.longitude),
           level: 3,
         };
         const map = new window.kakao.maps.Map(container, mapOption);
 
-        const markerPosition = new window.kakao.maps.LatLng(loc.latitude, loc.longitude);
+        const markerPosition = new window.kakao.maps.LatLng(museumLocation.latitude, museumLocation.longitude);
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
         });
@@ -134,11 +124,10 @@ const Map = () => {
     };
 
     loadMap();
-  }, [loc]);
+  }, [museumLocation]); // Add museumLocation to dependency array
 
   return (
     <div
-      id="map"
       ref={mapRef}
       style={{ width: '100%', height: '300px', borderRadius: '15px', padding: 0, margin: 0 }}
     />
