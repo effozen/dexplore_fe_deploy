@@ -28,8 +28,8 @@ function getLocation() {
       },
       {
         enableHighAccuracy: false,  // Lower accuracy for faster response
-        maximumAge: 5000,           // Use cached position if available within last 5 seconds
-        timeout: 3000               // Shorter timeout for faster failure
+        maximumAge: 10000,          // Use cached position if available within last 10 seconds
+        timeout: 2000               // Shorter timeout for faster failure
       }
     );
   });

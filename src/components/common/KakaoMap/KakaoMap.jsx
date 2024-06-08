@@ -24,9 +24,14 @@ const loadKakaoMap = () => {
 
 const useKakaoMap = (mapRef, setLoc) => {
   useEffect(() => {
+    const location = getLocation();
+  }, []);
+
+  useEffect(() => {
     const controlKakaoMap = async () => {
+      let location = {latitude:37.322699, longitude: 127.127641}
       try {
-        const location = await getLocation();
+        location = await getLocation();
         if (window.kakao && window.kakao.maps) {
           const container = mapRef.current;
           const options = {
