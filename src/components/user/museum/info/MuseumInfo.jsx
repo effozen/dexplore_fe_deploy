@@ -12,6 +12,7 @@ const MuseumInfo = () => {
   const location = useLocation();
   const [museumId, setMuseumId] = useState(false);
   const [museumInfo, setMuseumInfo] = useState(false);
+  const [museumLocation, setMuseumLocation] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ const MuseumInfo = () => {
     if(museumId) {
       requestGet('https://dexplore.info/api/v1/user/get-museum', {museumId}).then((v) => {
         setMuseumInfo(v.museum);
+        setMuseumLocation(v.location);
       });
     }
   }, [museumId]);
@@ -46,7 +48,7 @@ const MuseumInfo = () => {
     <div>
       <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중'}></InfoHeader>
       <MuseumMain museumInfo={museumInfo}></MuseumMain>
-      <MuseumLoc></MuseumLoc>
+      <MuseumLoc museumLocation={museumLocation}></MuseumLoc>
       <ToggleButton/>
     </div>
   );

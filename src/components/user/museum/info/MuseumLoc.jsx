@@ -24,7 +24,7 @@ const StyledHeader = styled.div`
 	color: #000000;
 `;
 
-const MuseumLoc = () => {
+const MuseumLoc = ({museumLocation}) => {
 
   useEffect(() => {
     loadKakaoMap();
@@ -36,7 +36,7 @@ const MuseumLoc = () => {
         <StyledHeader>박물관 위치 보기</StyledHeader>
       </StyledHeaderFrame>
       <div className='flex justify-center '>
-        <Map></Map>
+        <Map museumLocation={museumLocation}></Map>
       </div>
     </StyledFrame>
   );
