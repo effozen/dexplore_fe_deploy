@@ -240,7 +240,9 @@ const ListIcon = ({ isMuseum = true, id, chosenMuseum, museumInfo }) => {
   return (
     <DropdownMenu>
       <StyledDropDownMenuTrigger>
+          <div className={"dropDown"}>
         <StyledListIcon />
+          </div>
       </StyledDropDownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>작업 목록</DropdownMenuLabel>
@@ -333,12 +335,14 @@ const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   return (
     <StyledCarouselItem onClick={handleClick}>
       <div className="p-1">
-        <StyledCard className="h-full w-full border-2 border-dashed border-gray-500">
-          <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">
-            <AiOutlinePlus className="text-5xl text-gray-500"/>
-            <StyledAddWrapper>{message} 추가하기</StyledAddWrapper>
-          </CardContent>
-        </StyledCard>
+            <StyledCard className="h-full w-full border-2 border-dashed border-gray-500">
+                <div className={"addArt"}>
+                      <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">
+                        <AiOutlinePlus className="text-5xl text-gray-500"/>
+                        <StyledAddWrapper>{message} 추가하기</StyledAddWrapper>
+                      </CardContent>
+                </div>
+            </StyledCard>
       </div>
     </StyledCarouselItem>
   );
@@ -360,7 +364,7 @@ const ContentCarousel = ({
     <StyledFrame>
       <StyledHeaderFrame>
         <StyledHeader>{name}</StyledHeader>
-        {museumSelector}
+          {!isMuseum ? <div className={"selector2"}>{museumSelector}</div> : null}
       </StyledHeaderFrame>
       <StyledCarousel opts={{ align: "start" }}>
         <StyledCarouselContent>

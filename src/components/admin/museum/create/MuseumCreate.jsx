@@ -43,7 +43,6 @@ const MuseumCreate = () => {
     <>
       <Header name='새로운 박물관을 등록하세요' height='100px' isDate={false}></Header>
       <MuseumCreateForm></MuseumCreateForm>
-      <ToggleButton/>
     </>
   );
 };
