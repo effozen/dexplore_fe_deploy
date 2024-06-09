@@ -264,13 +264,17 @@ const CarouselItemComponent = ({
                                }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleMuseumClick = () => {
     navigate("/user/museum", { state: { museumId: id } });
   };
 
+    const handleArtClick = () => {
+        navigate("/user/art/info", { state: { artId: id } });
+    };
+
   return (
     <StyledCarouselItem
-      onClick={(!isAdmin && isMuseum) ? handleClick : null}
+        onClick={!isAdmin ? (isMuseum ? handleMuseumClick : handleArtClick) : null}
     >
       <div className="p-1">
         <Card className="h-full w-full">
