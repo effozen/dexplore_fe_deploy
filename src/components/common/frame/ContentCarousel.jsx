@@ -122,6 +122,13 @@ const StyledCarouselContent = styled(CarouselContent)`
 const StyledCarouselItem = styled(CarouselItem)`
   flex-basis: 140px;
   padding: 0px 0px 0px 0px;
+  @media (min-width: 769px) {
+    flex-basis: 180px;
+  }
+
+  @media (min-width: 1024px) {
+    flex-basis: 220px;
+  }
 `
 
 const LoadingContainer = styled.div`
