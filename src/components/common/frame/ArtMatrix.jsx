@@ -61,7 +61,7 @@ const LoadingContainer = styled.div`
   width: 100%;
   text-align: center;
   align-content: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 `
 
@@ -78,7 +78,7 @@ const ArtMatrix = ({ title, itemInfo }) => {
             <StyledHeaderFrame>
                 <StyledHeader>{title}</StyledHeader>
             </StyledHeaderFrame>
-            {itemInfo.length === 0 ? <LoadingContainer>로딩 중...</LoadingContainer>:
+            {itemInfo.length === 0 ? <LoadingContainer>아직 북마크한 작품이 없어요</LoadingContainer>:
                 <GridContainer>
                     {itemInfo.map((v, index) => (
                         <div key={index} onClick={() => handleClick(v.artId)}>
