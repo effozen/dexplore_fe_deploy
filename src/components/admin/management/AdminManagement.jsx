@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
+import Joyride, {ACTIONS, STATUS} from "react-joyride";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/admin/get-museums',
@@ -22,6 +23,46 @@ const AdminManagement = () => {
   const navigate = useNavigate();
   const [cookie, setCookie, removeCookie] = useCookies();
   const [userName, setUserName] = useState('홍길동');
+  const [runTour, setRunTour] = useState(false);
+  const [tourKey, setTourKey] = useState(0);
+
+  const steps = [
+    {
+      target: '.management1',
+      content: '여기에서 박물관을 관리할 수 있어요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.addArt',
+      content: '여기에서 박물관을 추가할 수 있어요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.dropDown',
+      content: '여기를 클릭해서 QR코드를 다운받거나, 작품을 수정/삭제해요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.management2',
+      content: '여기에서 작품을 관리할 수 있어요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.selector2',
+      content: '여기에서 작품을 관리할 박물관을 선택할 수 있어요.',
+      disableBeacon: true,
+    },
+  ];
+
+  const handleJoyrideCallback = (data) => {
+    const { status, action } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
+      setRunTour(false);
+      setTourKey((prevKey) => prevKey + 1); // Reset the Joyride instance
+    }
+  };
 
   useEffect(() => {
     requestGet(dataList.museumList).then(response => {
@@ -73,11 +114,36 @@ const AdminManagement = () => {
 
   return (
     <div className="flex flex-col">
+      <Joyride
+          key={tourKey}
+          steps={steps}
+          run={runTour}
+          continuous
+          showSkipButton
+          showProgress
+          callback={handleJoyrideCallback}
+          spotlightClicks={true}
+          styles={{
+            options: {
+              zIndex: 10000,
+              arrowColor: '#e3ffeb',
+              backgroundColor: '#e3ffeb',
+              primaryColor: '#000000',
+              textColor: '#000000',
+              width: 900,
+              height: 900,
+            },
+          }}
+      />
       <Header name={`${userName}님, 환영합니다.`} height="130px"/>
-      <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true}/>
+      <div className={"management1"}>
+        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true}/>
+      </div>
+      <div className={"management2"}>
       <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false}
                        museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}  chosenMuseum={chosenMuseum}/>
-      <ToggleButton/>
+      </div>
+      <ToggleButton setRunTour={setRunTour} />
     </div>
   );
 };

@@ -43,7 +43,6 @@ const MuseumUpdate = () => {
     <>
       <Header name='박물관 정보 업데이트' height='100px' isDate={false}></Header>
       <MuseumUpdateForm id={location.state.id}></MuseumUpdateForm>
-      <ToggleButton />
     </>
   );
 };
