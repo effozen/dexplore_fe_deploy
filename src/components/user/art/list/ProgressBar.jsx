@@ -8,8 +8,15 @@ const StyledFrame = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 7px;
-	margin-bottom: 7px;
+    margin: auto;
+      width:100%;
+      @media (min-width: 769px) {
+        width: 800px;
+      }
+    
+      @media (min-width: 1024px) {
+        width: 980px;
+      }
 `;
 
 const StyledTitle = styled.div`
