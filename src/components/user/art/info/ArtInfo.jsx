@@ -46,6 +46,18 @@ const StyledBookMark = styled.div`
 	opacity: 0.6;
 `;
 
+const ImageContainer = styled.div`
+  width: 96vw;
+  margin: auto;
+  @media (min-width: 769px) {
+    width: 36vw;
+  }
+
+  @media (min-width: 1024px) {
+    width: 24vw;
+  }
+`
+
 const ArtInfo = () => {
   const location = useLocation();
   const [artId, setArtId] = useState(false);
@@ -137,9 +149,9 @@ const ArtInfo = () => {
     <div>
       <InfoHeader name={artInfo ? artInfo.artName : '로딩중...'}></InfoHeader>
       <div className="flex flex-col">
-        <div className="m-0 p-0 w-full max-h-[380px]">
-          <img src={artInfo.imgUrl} alt="imgUrl" className="w-full max-h-[380px] object-cover"/>
-        </div>
+        <ImageContainer>
+          <img src={artInfo.imgUrl} alt="imgUrl"/>
+        </ImageContainer>
         <StyledBookMark className='flex justify-center items-center' onClick={handleBookMark}>
           <div>
            {isBookMarked ? <BsBookmarkStarFill size='33px' className='text-yellow-400'/> : <BsBookmarkStar size='33px' className='text-yellow-400'/>}
