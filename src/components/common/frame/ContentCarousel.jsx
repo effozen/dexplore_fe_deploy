@@ -139,7 +139,8 @@ const LoadingContainer = styled.div`
   font-size: 20px;
   font-weight: 600;
 `
-
+const StyledCard = styled.div`
+`
 const ListIcon = ({ isMuseum = true, id, chosenMuseum, museumInfo }) => {
   const navigate = useNavigate();
   const [isDelete, setIsDelete] = useState(false);
@@ -289,7 +290,7 @@ const CarouselItemComponent = ({
               />
             </StyledImageWrapper>
           </CardContent>
-        </Card>
+        </Card >
         <StyledTitle>{title}</StyledTitle>
         <StyledDescription>
           {description &&
@@ -314,16 +315,16 @@ const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   };
 
   return (
-    <CarouselItem onClick={handleClick}>
+    <StyledCarouselItem onClick={handleClick}>
       <div className="p-1">
-        <Card>
-          <CardContent>
-            <AiOutlinePlus/>
+        <StyledCard className="h-full w-full border-2 border-dashed border-gray-500">
+          <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">
+            <AiOutlinePlus className="text-5xl text-gray-500"/>
             <StyledAddWrapper>{message} 추가하기</StyledAddWrapper>
           </CardContent>
-        </Card>
+        </StyledCard>
       </div>
-    </CarouselItem>
+    </StyledCarouselItem>
   );
 };
 const ContentCarousel = ({
