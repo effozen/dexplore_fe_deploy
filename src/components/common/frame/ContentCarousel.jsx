@@ -269,7 +269,7 @@ const CarouselItemComponent = ({
 
   return (
     <StyledCarouselItem
-      onClick={(!isAdmin && isMuseum && !isRecommend) ? handleClick : null}
+      onClick={(!isAdmin && isMuseum) ? handleClick : null}
     >
       <div className="p-1">
         <Card className="h-full w-full">
