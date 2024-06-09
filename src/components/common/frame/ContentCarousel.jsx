@@ -379,7 +379,7 @@ const VerticalCarouselItemComponent = ({
       onClick={(isLink) ? handleClick : null}
     >
       <div className="p-1">
-        <Card className="h-full w-full">
+        <Card className="h-64 w-full">
           <CardContent className="flex items-center justify-center p-0 relative">
             <StyledImageWrapper className="h-48 w-full"> {/* 이미지 크기 조정 */}
               {isAdmin && (
@@ -392,7 +392,7 @@ const VerticalCarouselItemComponent = ({
               <img
                 src={imageSrc}
                 alt={title}
-                className={imgClassName} // 추가한 imgClassName prop 사용
+                className={`h-64 w-full object-cover rounded-lg ${imgClassName}`}
               />
             </StyledImageWrapper>
           </CardContent>
