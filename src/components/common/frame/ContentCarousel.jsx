@@ -139,7 +139,19 @@ const LoadingContainer = styled.div`
   font-size: 20px;
   font-weight: 600;
 `
+
+const StyledCarouselItem2 = styled(CarouselItem)`
+  flex-basis: 150px;
+  margin: 10px;
+  padding: 0px 0px 0px 0px;
+  @media (min-width: 769px) {
+  }
+
+  @media (min-width: 1024px) {
+  }
+`
 const StyledCard = styled.div`
+  margin: 10px;
 `
 const ListIcon = ({ isMuseum = true, id, chosenMuseum, museumInfo }) => {
   const navigate = useNavigate();
@@ -412,14 +424,13 @@ const VerticalCarouselItemComponent = ({
   };
 
   return (
-    <CarouselItem
-      className="mb-4" // 세로 방향 여백 추가
+    <StyledCarouselItem2
       onClick={(isLink) ? handleClick : null}
     >
-      <div className="p-1">
-        <Card className="h-64 w-full">
-          <CardContent className="flex items-center justify-center p-0 relative">
-            <StyledImageWrapper className="h-48 w-full"> {/* 이미지 크기 조정 */}
+      <div>
+        <StyledCard>
+          <CardContent>
+            <StyledImageWrapper> {/* 이미지 크기 조정 */}
               {isAdmin && (
                 <ListIcon
                   isMuseum={isMuseum}
@@ -430,11 +441,11 @@ const VerticalCarouselItemComponent = ({
               <img
                 src={imageSrc}
                 alt={title}
-                className={`h-64 w-full object-cover rounded-lg ${imgClassName}`}
+                className={`${imgClassName}`}
               />
             </StyledImageWrapper>
           </CardContent>
-        </Card>
+        </StyledCard>
         <StyledTitle2>{title}</StyledTitle2>
         <StyledDescription2>
           {description &&
@@ -443,7 +454,7 @@ const VerticalCarouselItemComponent = ({
               : description)}
         </StyledDescription2>
       </div>
-    </CarouselItem>
+    </StyledCarouselItem2>
   );
 };
 
