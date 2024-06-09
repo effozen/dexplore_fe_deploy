@@ -169,12 +169,12 @@ const ArtMain = ({ museumInfo = false }) => {
   return (
       <StyledFrame>
         <StyledTitle>회원님 근처의 작품을 모아봤어요</StyledTitle>
-        <StyledList ref={listRef} onScroll={handleScroll}>
+        <StyledList ref={listRef} onScroll={handleScroll} className={"list1"}>
           {gpsArtList.map((art, index) => (
               <StyledListItem key={index} onClick={() => handleImageClick(art.artId)} isVisited={visitedState[art.artId]}>
                 <StyledImageContainer>
                   <StyledImage src={art.imgUrl} alt={art.artName} />
-                  <StyledIcon isVisited={visitedState[art.artId]}>
+                  <StyledIcon isVisited={visitedState[art.artId]} className={"icon"}>
                     {visitedState[art.artId] ? <FaCheck /> : <FaTimes />}
                   </StyledIcon>
                 </StyledImageContainer>
@@ -189,7 +189,7 @@ const ArtMain = ({ museumInfo = false }) => {
         </StyledList>
         <hr />
         <StyledTitle>{museumInfo.museumName}의 작품을 모아봤어요</StyledTitle>
-        <StyledList>
+        <StyledList className={"list2"}>
           {artList.map((art, index) => (
               <StyledListItem key={index} onClick={() => handleImageClick(art.artId)} isVisited={visitedState[art.artId]}>
                 <StyledImageContainer>

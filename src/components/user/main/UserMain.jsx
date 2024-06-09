@@ -10,6 +10,7 @@ import ArtMatrix from "@components/common/frame/ArtMatrix";
 import adBannerImage from '@assets/images/adBanner1.png';
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 import styled from "styled-components";
+import Joyride, {ACTIONS, STATUS} from "react-joyride";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/user/get-nearest-n-museums',
@@ -38,8 +39,6 @@ const AdContainer = styled.div`
     width: 800px; /* 더 큰 화면에서는 너비를 800px로 설정 */
   }
 `;
-
-
 const UserMain = () => {
   const [chosenMuseum, setChosenMuseum] = useState({});
   const [artList, setArtList] = useState([]);
@@ -49,6 +48,8 @@ const UserMain = () => {
   const navigate = useNavigate();
   const [cookie, setCookie, removeCookie] = useCookies();
   const [userName, setUserName] = useState('홍길동');
+  const [runTour, setRunTour] = useState(false);
+  const [tourKey, setTourKey] = useState(0);
 
   useEffect(() => {
     if (Object.keys(gps).length === 0) {
@@ -115,14 +116,68 @@ const UserMain = () => {
     }
   }, [chosenMuseum]);
 
+  const steps = [
+    {
+      target: '.nearMuseum',
+      content: '여기에서 회원님과 가까운 박물관 리스트를 확인할 수 있어요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.recommendedMuseum',
+      content: '여기에서 회원님을 위한 맞춤 박물관을 추천해드려요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.artMatrix',
+      content: '여기에서 회원님이 북마크한 작품 리스트를 모아볼 수 있어요.',
+      disableBeacon: true,
+    }
+  ];
+
+  const handleJoyrideCallback = (data) => {
+    const { status, action } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
+      setRunTour(false);
+      setTourKey((prevKey) => prevKey + 1); // Reset the Joyride instance
+    }
+  };
+
   return (
     <div className="flex flex-col">
+        <Joyride
+            key={tourKey}
+            steps={steps}
+            run={runTour}
+            continuous
+            showSkipButton
+            callback={handleJoyrideCallback}
+            spotlightClicks={true}
+            styles={{
+              options: {
+                zIndex: 10000,
+                arrowColor: '#e3ffeb',
+                backgroundColor: '#e3ffeb',
+                primaryColor: '#000000',
+                textColor: '#000000',
+                width: 900,
+                height: 900,
+              },
+            }}
+        />
       <Header name={`${userName}님, 환영합니다.`} height="130px"/>
-      <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
-      <AdContainer/>
-      <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
-      <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
-      <ToggleButton/>
+      <div className={"nearMuseum"}>
+        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
+      </div>
+      <AdContainer className="ad-container"/>
+      <div className={"recommendedMuseum"}>
+        <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
+      </div>
+      <div className="artMatrix">
+        <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
+      </div>
+      <ToggleButton setRunTour={setRunTour} />
     </div>
   );
 };

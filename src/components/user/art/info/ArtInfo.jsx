@@ -7,6 +7,8 @@ import { BsBookmarkStarFill, BsBookmarkStar } from "react-icons/bs";
 import styled from "styled-components";
 import { useCookies } from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import Joyride, {ACTIONS, STATUS} from "react-joyride";
+import ToggleButton from "@components/common/gunwoo/ToggleButton";
 
 const StyledName = styled.div`
 	font-weight: 700;
@@ -44,6 +46,9 @@ const StyledBookMark = styled.div`
 	height:45px;
 	border-radius:8px;
 	opacity: 0.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const ImageContainer = styled.div`
@@ -67,6 +72,31 @@ const ArtInfo = () => {
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
+  const [runTour, setRunTour] = useState(false);
+  const [tourKey, setTourKey] = useState(0);
+
+  const steps = [
+    {
+      target: '.bookmark',
+      content: '여기를 클릭해 마음에 드는 작품을 북마크하세요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.sound',
+      content: '여기를 클릭해 작품 설명을 오디오로 들어보세요.',
+      disableBeacon: true,
+    }
+  ];
+
+  const handleJoyrideCallback = (data) => {
+    const { status, action } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
+      setRunTour(false);
+      setTourKey((prevKey) => prevKey + 1); // Reset the Joyride instance
+    }
+  };
 
   useEffect(() => {
     setArtId(location.state.artId);
@@ -146,13 +176,34 @@ const ArtInfo = () => {
   }
 
   return (
-    <div>
+    <div><Joyride
+        key={tourKey}
+        steps={steps}
+        run={runTour}
+        continuous
+        showSkipButton
+        showProgress
+        callback={handleJoyrideCallback}
+        spotlightClicks={true}
+        styles={{
+          options: {
+            zIndex: 10000,
+            arrowColor: '#e3ffeb',
+            backgroundColor: '#e3ffeb',
+            primaryColor: '#000000',
+            textColor: '#000000',
+            width: 900,
+            height: 900,
+          },
+        }}
+    />
+
       <InfoHeader name={artInfo ? artInfo.artName : '로딩중...'}></InfoHeader>
       <div className="flex flex-col">
         <ImageContainer>
           <img src={artInfo.imgUrl} alt="imgUrl"/>
         </ImageContainer>
-        <StyledBookMark className='flex justify-center items-center' onClick={handleBookMark}>
+        <StyledBookMark className={"bookmark"} onClick={handleBookMark}>
           <div>
            {isBookMarked ? <BsBookmarkStarFill size='33px' className='text-yellow-400'/> : <BsBookmarkStar size='33px' className='text-yellow-400'/>}
           </div>
@@ -173,7 +224,7 @@ const ArtInfo = () => {
             <div className='flex flex-col justify-center items-center'>
               <div className='flex justify-center items-center w-[44px] h-[44px] bg-black rounded-[8px]'
                    onClick={handleTTSClick}>
-                <AiFillSound className='text-white' size='32px'/>
+                <AiFillSound className={"sound"} size='32px' style={{color: '#FFFFFF'}}/>
               </div>
               {/* <div>음성 큐레이션</div> */}
             </div>
@@ -185,6 +236,7 @@ const ArtInfo = () => {
       </div>
 
       <audio ref={audioRef} src={ttsUrl}/>
+      <ToggleButton setRunTour={setRunTour} />
     </div>
   );
 };
