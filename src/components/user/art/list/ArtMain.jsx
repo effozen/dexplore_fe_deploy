@@ -146,21 +146,6 @@ const ArtMain = ({ museumInfo = false }) => {
     }
   }, [museumInfo, gps]);
 
-  const handleScroll = () => {
-    if (listRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listRef.current;
-      if (scrollTop + clientHeight >= scrollHeight) {
-        getLocation().then(v => {
-          setGps(v);
-          fetchArts();
-        });
-      }
-    }
-  };
-
-  const handleClick = () => {
-    navigate('/user/art', { state: { museumInfo } });
-  };
 
   const handleImageClick = (artId) => {
     navigate("/user/art/info", { state: { artId } });
@@ -169,7 +154,7 @@ const ArtMain = ({ museumInfo = false }) => {
   return (
       <StyledFrame>
         <StyledTitle>회원님 근처의 작품을 모아봤어요</StyledTitle>
-        <StyledList ref={listRef} onScroll={handleScroll} className={"list1"}>
+        <StyledList ref={listRef} className={"list1"}>
           {gpsArtList.map((art, index) => (
               <StyledListItem key={index} onClick={() => handleImageClick(art.artId)} isVisited={visitedState[art.artId]}>
                 <StyledImageContainer>
