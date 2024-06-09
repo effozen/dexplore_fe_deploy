@@ -23,15 +23,15 @@ import styled from "styled-components";
 import { AiFillDelete, AiOutlinePlus, AiOutlineMenu } from "react-icons/ai";
 import { requestGet, requestPost } from "@lib/network/network";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 // Styled Components
 const StyledFrame = styled.div`
-	margin-bottom: 10px;
-	margin-top: 10px;
-	padding-left: 16px;
-	padding-right: 16px;
-	min-width: 365px;
+    margin: 10px auto 10px auto;
+	padding-left: 12px;
+	padding-right: 12px;
+    width: 100%;
+	//min-width: 365px;
 `;
 const StyledHeaderFrame = styled.div`
 	min-width: 345px;
@@ -110,6 +110,28 @@ const StyledAddWrapper = styled.div`
 	font-weight: 600;
 	text-align: center;
 `;
+
+const StyledCarousel = styled(Carousel)`
+    
+`
+
+const StyledCarouselContent = styled(CarouselContent)`
+  padding: 0px 10px 0px 20px;
+`
+
+const StyledCarouselItem = styled(CarouselItem)`
+  flex-basis: 140px;
+  padding: 0px 0px 0px 0px;
+`
+
+const LoadingContainer = styled.div`
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  font-size: 20px;
+  font-weight: 600;
+`
 
 const ListIcon = ({ isMuseum = true, id, chosenMuseum, museumInfo }) => {
   const navigate = useNavigate();
@@ -239,8 +261,7 @@ const CarouselItemComponent = ({
   };
 
   return (
-    <CarouselItem
-      className="basis-[35%] pl-[3px]"
+    <StyledCarouselItem
       onClick={(!isAdmin && isMuseum && !isRecommend) ? handleClick : null}
     >
       <div className="p-1">
@@ -270,7 +291,7 @@ const CarouselItemComponent = ({
               : description)}
         </StyledDescription>
       </div>
-    </CarouselItem>
+    </StyledCarouselItem>
   );
 };
 
@@ -286,11 +307,11 @@ const AddNewItemComponent = ({ isMuseum, chosenMuseum }) => {
   };
 
   return (
-    <CarouselItem className="basis-[35%] pl-[3px]" onClick={handleClick}>
+    <CarouselItem onClick={handleClick}>
       <div className="p-1">
-        <Card className="h-full w-full border-2 border-dashed border-gray-500">
-          <CardContent className="flex flex-col aspect-square items-center justify-center p-0 relative bg-gray-200">
-            <AiOutlinePlus className="text-5xl text-gray-500" />
+        <Card>
+          <CardContent>
+            <AiOutlinePlus/>
             <StyledAddWrapper>{message} 추가하기</StyledAddWrapper>
           </CardContent>
         </Card>
@@ -307,14 +328,19 @@ const ContentCarousel = ({
                            chosenMuseum,
                            isRecommend,
                          }) => {
+
+    useEffect(() => {
+        console.log(itemInfo);
+    }, [itemInfo])
   return (
     <StyledFrame>
       <StyledHeaderFrame>
         <StyledHeader>{name}</StyledHeader>
         {museumSelector}
       </StyledHeaderFrame>
-      <Carousel opts={{ align: "start" }} className="min-w-[345px] max-w-[600px]">
-        <CarouselContent className="ml-0">
+      <StyledCarousel opts={{ align: "start" }}>
+        <StyledCarouselContent>
+            <>{itemInfo.length === 0 ? <LoadingContainer>로딩 중...</LoadingContainer> : null}</>
           {itemInfo.map((item) => {
             const info = isMuseum
               ? {
@@ -349,8 +375,8 @@ const ContentCarousel = ({
               chosenMuseum={chosenMuseum}
             />
           )}
-        </CarouselContent>
-      </Carousel>
+        </StyledCarouselContent>
+      </StyledCarousel>
     </StyledFrame>
   );
 };
@@ -425,7 +451,7 @@ const VerticalContentCarousel = ({
         <StyledHeader2>{name}</StyledHeader2>
         {museumSelector}
       </StyledHeaderFrame>
-      <Carousel opts={{ axis: "y", align: "start" }} className="min-h-[300px] max-h-[420px] overflow-y-scroll">
+      <Carousel opts={{ axis: "y", align: "start" }}>
         <CarouselContent className="flex flex-col">
           {itemInfo.map((item) => {
             const info = isMuseum

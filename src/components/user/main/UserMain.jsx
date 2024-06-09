@@ -1,6 +1,5 @@
 import Header from "@components/common/frame/Header";
 import ContentCarousel from "@components/common/frame/ContentCarousel";
-import SelectList from "@components/common/frame/SelectList";
 import {requestGet} from "@lib/network/network";
 import {useEffect, useState} from "react";
 import {getLocation} from "@lib/gps/gps";
@@ -10,6 +9,7 @@ import {jwtDecode} from "jwt-decode";
 import ArtMatrix from "@components/common/frame/ArtMatrix";
 import adBannerImage from '@assets/images/adBanner1.png';
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
+import styled from "styled-components";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/user/get-nearest-n-museums',
@@ -19,6 +19,26 @@ const dataList = {
   title2: '님을 위한 추천 박물관',
   title3: '님이 북마크한 작품'
 };
+
+const AdContainer = styled.div`
+  margin: auto;
+  background-image: url("${adBannerImage}");
+  background-size: cover;
+  height: 60px;
+  width: 350px;
+  border-radius: 10px;
+
+  @media (min-width: 769px) {
+    height: 100px; /* 데스크탑에서는 높이를 100px로 설정 */
+    width: 600px; /* 데스크탑에서는 너비를 600px로 설정 */
+  }
+
+  @media (min-width: 1024px) {
+    height: 150px; /* 더 큰 화면에서는 높이를 120px로 설정 */
+    width: 800px; /* 더 큰 화면에서는 너비를 800px로 설정 */
+  }
+`;
+
 
 const UserMain = () => {
   const [chosenMuseum, setChosenMuseum] = useState({});
@@ -99,9 +119,7 @@ const UserMain = () => {
     <div className="flex flex-col">
       <Header name={`${userName}님, 환영합니다.`} height="130px"/>
       <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
-      <div className='mr-auto ml-auto pr-[15px] pl-[15px] max-w-[1000px] mb-[30px] mt-[10px]'>
-        <img src={adBannerImage} alt="광고 이미지" className='max-h-[400px] rounded-[10px]'/>
-      </div>
+      <AdContainer/>
       <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
       <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
       <ToggleButton/>
