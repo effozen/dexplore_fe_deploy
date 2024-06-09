@@ -31,6 +31,7 @@ const Container = styled.div`
   position: fixed;
   bottom: 20px;
   right: 20px;
+    z-index: 1000;
   //display: flex;
   //flex-direction: column;
   //align-items: center;
@@ -47,6 +48,7 @@ const ExpandedMenu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+    z-index: 1001;
   //position: absolute;
   bottom: 70px;
   animation: ${fadeInUp} 0.3s ease-out forwards;
