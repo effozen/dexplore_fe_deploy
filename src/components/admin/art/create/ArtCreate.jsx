@@ -42,7 +42,6 @@ const ArtCreate = () => {
     <>
       <Header name='새로운 작품을 등록하세요' height='100px' isDate={false}></Header>
       <ArtCreateForm></ArtCreateForm>
-      <ToggleButton/>
     </>
   );
 }

@@ -42,7 +42,6 @@ const ArtUpdate = () => {
     <>
       <Header name='작품 정보 업데이트' height='100px' isDate={false}></Header>
       <ArtUpdateForm></ArtUpdateForm>
-      <ToggleButton/>
     </>
   );
 }

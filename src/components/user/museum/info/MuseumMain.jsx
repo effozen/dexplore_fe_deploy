@@ -64,7 +64,7 @@ const MuseumMain = ({ museumInfo = false }) => {
       <div>
         <StyledFrame>
           <img src={memoizedMuseumInfo.imgUrl} alt="" className="w-full min-h-[330px] max-h-[500px] max-w-[800px]" />
-          <StyledButton onClick={handleClick}>관람 시작하기</StyledButton>
+          <div className={"startButton"}><StyledButton onClick={handleClick}>관람 시작하기</StyledButton></div>
           <StyledDescription className="w-full max-w-[800px] mt-[20px] pl-[40px] pr-[40px]">
             {memoizedMuseumInfo.description && memoizedMuseumInfo.description.length > 500
                 ? memoizedMuseumInfo.description.substring(0, 500)
@@ -73,13 +73,15 @@ const MuseumMain = ({ museumInfo = false }) => {
         </StyledFrame>
         <StyledFrame2>
           {artList && (
-              <ContentCarousel
-                  isAdmin={false}
-                  name={`${memoizedMuseumInfo.museumName}의 대표 작품`}
-                  isMuseum={false}
-                  chosenMuseum={memoizedMuseumInfo}
-                  itemInfo={artList}
-              />
+              <div className={"artList"}>
+                  <ContentCarousel
+                      isAdmin={false}
+                      name={`${memoizedMuseumInfo.museumName}의 대표 작품`}
+                      isMuseum={false}
+                      chosenMuseum={memoizedMuseumInfo}
+                      itemInfo={artList}
+                  />
+              </div>
           )}
         </StyledFrame2>
       </div>

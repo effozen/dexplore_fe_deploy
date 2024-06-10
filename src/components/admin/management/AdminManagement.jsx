@@ -129,8 +129,8 @@ const AdminManagement = () => {
           styles={{
             options: {
               zIndex: 10000,
-              arrowColor: '#e3ffeb',
-              backgroundColor: '#e3ffeb',
+              arrowColor: '#FFFFFF',
+              backgroundColor: '#FFFFFF',
               primaryColor: '#000000',
               textColor: '#000000',
               width: 900,
