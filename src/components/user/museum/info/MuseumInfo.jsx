@@ -71,7 +71,7 @@ const MuseumInfo = () => {
   };
 
   return (
-    <div>\
+    <div>
       <Joyride
           key={tourKey}
           steps={steps}
