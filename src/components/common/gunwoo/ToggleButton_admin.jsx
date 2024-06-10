@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import Modal from 'react-modal';
-import { Scanner } from '@yudiel/react-qr-scanner';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -55,21 +54,15 @@ const ExpandedMenu = styled.div`
   animation: ${fadeInUp} 0.3s ease-out forwards;
 `;
 
-
 Modal.setAppElement('#root'); // Ensure this is your root element
 
 const ToggleButton = ({ museumId, setRunTour }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [cookies, setCookie, removeCookie] = useCookies(['accessToken']);
     const navigate = useNavigate();
 
     const handleToggle = () => {
         setIsExpanded(!isExpanded);
-    };
-
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
@@ -82,40 +75,10 @@ const ToggleButton = ({ museumId, setRunTour }) => {
         navigate('/auth/sign-in');
     };
 
-    const handleScan = (result) => {
-        if (result) {
-            console.log('QR Code Data:', result);
-            getArtId(result);
-            handleCloseModal();
-        }
-    };
-
     const handleRefresh = () => {
         window.location.reload();
     };
 
-    const getArtId = async (qrcodeHashkey) => {
-        const token = cookies.accessToken;
-
-        if (!token) {
-            console.error('Access token is not available.');
-            return;
-        }
-
-        const headers = {
-            Authorization: `Bearer ${token}`
-        };
-
-        const params = { qrcodeHashKey: qrcodeHashkey };
-
-        try {
-            const result = await axios.get('https://dexplore.info/api/v1/user/get-art-by-hash', { headers, params });
-            const artId = result.data.art.artId;
-            navigate('/user/art/info', { state: { museumId, artId } });
-        } catch (error) {
-            console.error('Error fetching art ID:', error);
-        }
-    };
 
     return (
         <>
@@ -131,46 +94,12 @@ const ToggleButton = ({ museumId, setRunTour }) => {
                         <Button onClick={handleLogout}>
                             <img src={logoutIcon} alt="logout"/>
                         </Button>
-                        <Button onClick={handleOpenModal}>
-                            <img src={QRCodebtn} alt="qr code scan" />
-                        </Button>
                     </ExpandedMenu>
                 )}
                 <Button onClick={handleToggle}>
                     <img src={isExpanded ? cancelIcon : menuIcon} alt="menu" />
                 </Button>
             </Container>
-
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={handleCloseModal}
-                style={{
-                    content: {
-                        width: '256px',
-                        height: '256px',
-                        margin: 'auto',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        inset: '50% auto auto 50%',
-                        transform: 'translate(-50%, -50%)',
-                    },
-                }}
-            >
-                <Scanner
-                    onScan={(result => {
-                        console.log(result);
-                        requestGet('https://dexplore.info/api/v1/user/get-art-by-hash', {qrcodeHashKey:result[0].rawValue}).then(v => {
-                            if(v.art) {
-                                navigate('/user/art/info', {state:{artId:v.art.artId}});
-                            }
-                        }).catch((e) => {
-                            console.error(e);
-                            window.alert('작품 QR이 아닙니다.');
-                        })
-                    })}
-                />
-            </Modal>
         </>
     );
 };
