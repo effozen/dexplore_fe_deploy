@@ -61,11 +61,11 @@ const LoadingContainer = styled.div`
   width: 100%;
   text-align: center;
   align-content: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 `
 
-const ArtMatrix = ({ title, itemInfo }) => {
+const ArtMatrix = ({ title, itemInfo, loaded = false }) => {
 
     const navigate = useNavigate();
 
@@ -78,7 +78,7 @@ const ArtMatrix = ({ title, itemInfo }) => {
             <StyledHeaderFrame>
                 <StyledHeader>{title}</StyledHeader>
             </StyledHeaderFrame>
-            {itemInfo.length === 0 ? <LoadingContainer>아직 북마크한 작품이 없어요</LoadingContainer>:
+            {itemInfo.length === 0 ? (!loaded ? <LoadingContainer>로딩 중...</LoadingContainer>: <LoadingContainer>아직 등록된 작품이 없습니다.</LoadingContainer>) :
                 <GridContainer>
                     {itemInfo.map((v, index) => (
                         <div key={index} onClick={() => handleClick(v.artId)}>
@@ -87,7 +87,6 @@ const ArtMatrix = ({ title, itemInfo }) => {
                     ))}
                 </GridContainer>
             }
-
         </StyledFrame>
     );
 };

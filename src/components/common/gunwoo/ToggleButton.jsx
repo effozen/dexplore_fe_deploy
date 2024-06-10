@@ -52,6 +52,7 @@ const ExpandedMenu = styled.div`
   animation: ${fadeInUp} 0.3s ease-out forwards;
 `;
 
+
 Modal.setAppElement('#root'); // Ensure this is your root element
 
 const ToggleButton = ({ museumId, setRunTour }) => {

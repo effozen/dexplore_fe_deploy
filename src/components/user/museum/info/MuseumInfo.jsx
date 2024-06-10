@@ -7,6 +7,7 @@ import {requestGet} from "@lib/network/network";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 import { useCookies } from "react-cookie";
 import {jwtDecode} from "jwt-decode";
+import Joyride, {ACTIONS, STATUS} from "react-joyride";
 
 const MuseumInfo = () => {
   const location = useLocation();
@@ -15,6 +16,8 @@ const MuseumInfo = () => {
   const [museumLocation, setMuseumLocation] = useState(false);
   const [cookie, setCookie, removeCookie] = useCookies();
   const navigate = useNavigate();
+  const [runTour, setRunTour] = useState(false);
+  const [tourKey, setTourKey] = useState(0);
 
   useEffect(() => {
     setMuseumId(location.state.museumId);
@@ -44,12 +47,55 @@ const MuseumInfo = () => {
     }
   }, [cookie, removeCookie]);
 
+  const steps = [
+    {
+      target: '.startButton',
+      content: '여기를 눌러 관람을 시작할 수 있어요.',
+      disableBeacon: true,
+    },
+    {
+      target: '.artList',
+      content: '여기에서 해당 박물관의 대표 작품을 볼 수 있어요.',
+      disableBeacon: true,
+    }
+  ];
+
+  const handleJoyrideCallback = (data) => {
+    const { status, action } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+
+    if (finishedStatuses.includes(status) || action === ACTIONS.CLOSE) {
+      setRunTour(false);
+      setTourKey((prevKey) => prevKey + 1); // Reset the Joyride instance
+    }
+  };
+
   return (
-    <div>
+    <div>\
+      <Joyride
+          key={tourKey}
+          steps={steps}
+          run={runTour}
+          continuous
+          showSkipButton
+          callback={handleJoyrideCallback}
+          spotlightClicks={true}
+          styles={{
+            options: {
+              zIndex: 10000,
+              arrowColor: '#FFFFFF',
+              backgroundColor: '#FFFFFF',
+              primaryColor: '#000000',
+              textColor: '#000000',
+              width: 900,
+              height: 900,
+            },
+          }}
+      />
       <InfoHeader name={museumInfo ? museumInfo.museumName : '로딩중'}></InfoHeader>
       <MuseumMain museumInfo={museumInfo}></MuseumMain>
       <MuseumLoc museumLocation={museumLocation}></MuseumLoc>
-      <ToggleButton/>
+      <ToggleButton setRunTour={setRunTour}/>
     </div>
   );
 }

@@ -23,6 +23,7 @@ const AdminManagement = () => {
   const navigate = useNavigate();
   const [cookie, setCookie, removeCookie] = useCookies();
   const [userName, setUserName] = useState('홍길동');
+  const [loaded, setLoaded] = useState(false);
   const [runTour, setRunTour] = useState(false);
   const [tourKey, setTourKey] = useState(0);
 
@@ -65,10 +66,12 @@ const AdminManagement = () => {
   };
 
   useEffect(() => {
+    setLoaded(false);
     requestGet(dataList.museumList).then(response => {
       console.log(response);
       setMuseumList(response.museumList);
       setChosenMuseum(response.museumList[0]);
+      setLoaded(true);
     });
   }, []);
 
@@ -126,8 +129,8 @@ const AdminManagement = () => {
           styles={{
             options: {
               zIndex: 10000,
-              arrowColor: '#e3ffeb',
-              backgroundColor: '#e3ffeb',
+              arrowColor: '#FFFFFF',
+              backgroundColor: '#FFFFFF',
               primaryColor: '#000000',
               textColor: '#000000',
               width: 900,
@@ -137,10 +140,10 @@ const AdminManagement = () => {
       />
       <Header name={`${userName}님, 환영합니다.`} height="130px"/>
       <div className={"management1"}>
-        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true}/>
+        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={true} isMuseum={true} loaded={loaded}/>
       </div>
       <div className={"management2"}>
-      <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false}
+      <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false} loaded={loaded}
                        museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}  chosenMuseum={chosenMuseum}/>
       </div>
       <ToggleButton setRunTour={setRunTour} />
