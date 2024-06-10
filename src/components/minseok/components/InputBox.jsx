@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {forwardRef} from "react";
 
 const InputBoxWrapper = styled.div`
   width: 300px;
@@ -43,18 +44,16 @@ const StyledMessage = styled.div`
  message: 메세지에 들어갈 문자열
  changeHandler: 인풋 변화시 불러오는 핸들러
  */
-const InputBox = ({ title, placeholder, warn, value, type, message, changeHandler }) => {
-
-
+const InputBox = forwardRef(({ title, placeholder, warn, value, type, message, changeHandler, onKeyPress }, ref) => {
     return (
         <InputBoxWrapper>
             <InputTitle>{title}</InputTitle>
             <InputContainer>
-                <StyledInput type={type} placeholder={placeholder} value={value} onChange={changeHandler}/>
+                <StyledInput type={type} placeholder={placeholder} value={value} onChange={changeHandler} onKeyPress={onKeyPress} ref={ref} />
             </InputContainer>
             <StyledMessage $warn={warn}>{message}</StyledMessage>
         </InputBoxWrapper>
     );
-}
+});
 
 export default InputBox;

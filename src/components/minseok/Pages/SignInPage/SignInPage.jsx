@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import background from "@assets/images/museum_BW2.jpg";
 import InputBox from "@components/minseok/components/InputBox";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import kakaoImg from "@assets/images/kakao-sign-in.png";
 import naverImg from "@assets/images/naver-sign-in.png";
 import {useNavigate} from "react-router-dom";
@@ -85,6 +85,7 @@ const SignInPage = () => {
     const [password, setPassword] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
     const navigate = useNavigate();
+    const passwordRef = useRef(null);
 
     useEffect(() => {
         const token = cookie.accessToken;
@@ -167,6 +168,17 @@ const SignInPage = () => {
         window.location.href = `https://dexplore.info/api/v1/auth/oauth2/${snsType}`;
     }
 
+    const idCompleteHandler = (event) => {
+        if (event.key === 'Enter') {
+            passwordRef.current.focus();
+        }
+    }
+    const passwordCompleteHandler = (event) => {
+        if(event.key == 'Enter') {
+            SignInOnClickHandler();
+        }
+    }
+
     return (
         <FullScreenWrapper>
             <DexploreTitle>
@@ -181,6 +193,7 @@ const SignInPage = () => {
                     type={"text"}
                     message={''}
                     changeHandler={idChangeHandler}
+                    onKeyPress={idCompleteHandler}
                 />
                 <InputBox
                     title={"비밀번호"}
@@ -190,6 +203,8 @@ const SignInPage = () => {
                     type={"password"}
                     message={passwordMessage}
                     changeHandler={passwordChangeHandler}
+                    onKeyPress={passwordCompleteHandler}
+                    ref={passwordRef}
                 />
             </InputWrapper>
             <StyledLoginButton onClick={SignInOnClickHandler}>로그인</StyledLoginButton>
