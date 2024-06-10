@@ -5,6 +5,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
+import ToggleButton_admin from "@components/common/gunwoo/ToggleButton_admin";
 
 const ArtUpdate = () => {
   const location = useLocation();
@@ -42,7 +43,6 @@ const ArtUpdate = () => {
     <>
       <Header name='작품 정보 업데이트' height='100px' isDate={false}></Header>
       <ArtUpdateForm></ArtUpdateForm>
-      <ToggleButton/>
     </>
   );
 }

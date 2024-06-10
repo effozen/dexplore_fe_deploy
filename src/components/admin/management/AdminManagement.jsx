@@ -8,6 +8,7 @@ import {useCookies} from "react-cookie";
 import {jwtDecode} from "jwt-decode";
 import ToggleButton from "@components/common/gunwoo/ToggleButton";
 import Joyride, {ACTIONS, STATUS} from "react-joyride";
+import ToggleButton_admin from "@components/common/gunwoo/ToggleButton_admin";
 
 const dataList = {
   museumList: 'https://dexplore.info/api/v1/admin/get-museums',
@@ -143,7 +144,7 @@ const AdminManagement = () => {
       <ContentCarousel name={dataList.title2} itemInfo={artList} isAdmin={true} isMuseum={false}
                        museumSelector={<SelectList selectItems={museumList} setChosenMuseum={setChosenMuseum}/>}  chosenMuseum={chosenMuseum}/>
       </div>
-      <ToggleButton setRunTour={setRunTour} />
+      <ToggleButton_admin setRunTour={setRunTour} />
     </div>
   );
 };
