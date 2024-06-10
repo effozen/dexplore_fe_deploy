@@ -50,6 +50,9 @@ const UserMain = () => {
   const [userName, setUserName] = useState('홍길동');
   const [runTour, setRunTour] = useState(false);
   const [tourKey, setTourKey] = useState(0);
+  const [museumLoaded, setMuseumLoaded] = useState(false);
+  const [artLoaded, setArtLoaded] = useState(false);
+  const [recommendedLoaded, setRecommendedLoaded] = useState(false);
 
   useEffect(() => {
     if (Object.keys(gps).length === 0) {
@@ -91,27 +94,32 @@ const UserMain = () => {
   }, [cookie]);
 
   useEffect(() => {
+    setMuseumLoaded(false);setRecommendedLoaded(false);
     if (Object.keys(gps).length > 0) {
       // 박물관 리스트 받아오기
       requestGet(dataList.museumList, {latitude: gps.latitude, longitude: gps.longitude, amount: 10}).then(response => {
         setMuseumList(response.museumList);
         setChosenMuseum(response.museumList[0]);
+        setMuseumLoaded(true);
       });
 
       // 추천 박물관 리스트 받아오기
       requestGet(dataList.recommendMuseumList, {amount: 10}).then(response => {
         setRecommendMuseumList(response.museumList);
         setChosenMuseum(response.museumList[0]);
+        setRecommendedLoaded(true);
       });
     }
   }, [gps]);
 
   useEffect(() => {
+    setArtLoaded(false);
     // 작품 리스트 받아오기
     if ((chosenMuseum !== null) && (chosenMuseum !== undefined) && Object.keys(chosenMuseum).length !== 0) {
       // {museumId: chosenMuseum.museumId, latitude: gps.latitude, longitude: gps.longitude, amount: 10}
       requestGet(dataList.artList).then(response => {
         setArtList(response.artList);
+        setArtLoaded(true);
       });
     }
   }, [chosenMuseum]);
@@ -168,14 +176,14 @@ const UserMain = () => {
         />
       <Header name={`${userName}님, 환영합니다.`} height="130px"/>
       <div className={"nearMuseum"}>
-        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true}/>
+        <ContentCarousel name={dataList.title1} itemInfo={museumList} isAdmin={false} isMuseum={true} loaded={museumLoaded}/>
       </div>
       <AdContainer className="ad-container"/>
       <div className={"recommendedMuseum"}>
-        <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} />
+        <ContentCarousel name={`${userName}` + dataList.title2} itemInfo={recommendMuseumList} isAdmin={false} isMuseum={true} isRecommend={true} loaded={recommendedLoaded} />
       </div>
       <div className="artMatrix">
-        <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList}></ArtMatrix>
+        <ArtMatrix title={`${userName}` + dataList.title3} itemInfo={artList} loaded={artLoaded}></ArtMatrix>
       </div>
       <ToggleButton setRunTour={setRunTour} />
     </div>

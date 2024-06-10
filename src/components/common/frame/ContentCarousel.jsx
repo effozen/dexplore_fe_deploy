@@ -351,6 +351,7 @@ const ContentCarousel = ({
                            name,
                            museumSelector,
                            itemInfo,
+                           loaded = false,
                            isAdmin = true,
                            isMuseum,
                            chosenMuseum,
@@ -368,7 +369,7 @@ const ContentCarousel = ({
       </StyledHeaderFrame>
       <StyledCarousel opts={{ align: "start" }}>
         <StyledCarouselContent>
-            <>{itemInfo.length === 0 ? <LoadingContainer>로딩 중...</LoadingContainer> : null}</>
+            <>{itemInfo.length === 0 && !loaded ? <LoadingContainer>로딩 중...</LoadingContainer> : null}</>
           {itemInfo.map((item) => {
             const info = isMuseum
               ? {
