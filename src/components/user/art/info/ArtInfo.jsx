@@ -63,6 +63,13 @@ const ImageContainer = styled.div`
   }
 `
 
+
+const EmptyContainaer = styled.div`
+  height: 30vh;
+  width: 100%;
+
+`
+
 const ArtInfo = () => {
   const location = useLocation();
   const [artId, setArtId] = useState(false);
@@ -233,6 +240,7 @@ const ArtInfo = () => {
         <StyledDescription>
           {artInfo.artDescription}
         </StyledDescription>
+        <EmptyContainaer/>
       </div>
 
       <audio ref={audioRef} src={ttsUrl}/>
