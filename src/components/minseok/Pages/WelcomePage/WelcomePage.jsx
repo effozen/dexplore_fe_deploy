@@ -46,7 +46,7 @@ const StyledSlide = styled(SwiperSlide)`
 
 const BottomWrapper = styled.div`
   position: absolute;
-  bottom: 10vh;
+  bottom: 9vh;
   width:100vw;
 `
 
