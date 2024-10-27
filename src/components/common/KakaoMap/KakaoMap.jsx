@@ -1,8 +1,9 @@
 import { getLocation } from "@lib/gps/gps";
 import { useEffect, useRef, useState } from "react";
 
+// App key는 BFF 사용하지 않는 이상 숨기기 어려운 듯 해서, 일단은 하드코딩. 추후 닫을 예정
 const loadKakaoMap = () => {
-  const appKey = 'ac57d560967002f1a1f07dc63f9c0242'; // Kakao Developers에서 발급받은 App Key
+  const appKey = '7877d27ebc28f501ca54ad016074ed70'; // Kakao Developers에서 발급받은 App Key
   const scriptUrl = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false&libraries=services`;
 
   if (!document.querySelector(`script[src="${scriptUrl}"]`)) {
