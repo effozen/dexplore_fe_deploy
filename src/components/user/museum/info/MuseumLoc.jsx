@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import {loadKakaoMap, Map} from "@components/common/KakaoMap/KakaoMap";
+// import {loadKakaoMap, Map} from "@components/common/KakaoMap/KakaoMap";
 import {useEffect} from "react";
+import { Map } from '@components/common/KakaoMap/KakaoMap';
 
 const StyledFrame = styled.div`
 	min-width: 300px;
@@ -27,7 +28,7 @@ const StyledHeader = styled.div`
 const MuseumLoc = ({museumLocation}) => {
 
   useEffect(() => {
-    loadKakaoMap();
+    // loadKakaoMap();
   }, []);
 
   return (
