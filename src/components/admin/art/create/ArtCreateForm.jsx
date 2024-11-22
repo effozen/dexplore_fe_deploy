@@ -41,7 +41,6 @@ const formSchema = z.object({
   authName: z.string().min(1, { message: '값을 채워주세요' }),
   artDescription: z.string().min(1, { message: '값을 채워주세요' }),
   // 위치 관련 필드 추가
-  artLoc: z.string().min(1, { message: '위치를 지정해주세요' }),
   latitude: z.string(),
   longitude: z.string(),
   edgeLatitude1: z.string(),
@@ -57,7 +56,6 @@ const initialFormValues = {
   artYear: '',
   authName: '',
   artDescription: '',
-  artLoc: '',
   latitude: '',
   longitude: '',
   edgeLatitude1: '',
@@ -71,7 +69,6 @@ const ArtCreateForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loc, setLoc] = useState({
-    roadAddress: '',
     latitude: '',
     longitude: '',
     edgeLatitude1: '',
@@ -91,57 +88,47 @@ const ArtCreateForm = () => {
     defaultValues: initialFormValues,
   });
 
-  // 폼 필드 값 모니터링 (디버깅 용도)
-  const currentArtLoc = form.watch('artLoc');
-  const currentLatitude = form.watch('latitude');
-  const currentLongitude = form.watch('longitude');
-
-  useEffect(() => {
-    console.log('artLoc:', currentArtLoc);
-    console.log('latitude:', currentLatitude);
-    console.log('longitude:', currentLongitude);
-  }, [currentArtLoc, currentLatitude, currentLongitude]);
-
   useEffect(() => {
     setMuseumId(location.state?.museumId || '');
   }, [location.state]);
 
+  // 접근성 설정
+  useEffect(() => {
+    Modal.setAppElement('#root'); // '#root'는 실제 앱의 루트 요소 ID로 변경 필요
+  }, []);
+
   const handleSubmit = async (values) => {
     const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (key === 'artImg') {
-        formData.append('imageFile', values[key]);
-      } else {
-        formData.append(key, values[key]);
-      }
-    });
 
-    // 위치 관련 필드 추가
-    const {
-      latitude,
-      longitude,
-      edgeLatitude1,
-      edgeLongitude1,
-      edgeLatitude2,
-      edgeLongitude2,
-      level,
-    } = loc;
-    formData.append('latitude', latitude);
-    formData.append('longitude', longitude);
-    formData.append('level', level);
-    formData.append('edgeLatitude1', edgeLatitude1);
-    formData.append('edgeLongitude1', edgeLongitude1);
-    formData.append('edgeLatitude2', edgeLatitude2);
-    formData.append('edgeLongitude2', edgeLongitude2);
+    // API에 맞게 필드 이름 매핑하여 추가
+    formData.append('imageFile', values.artImg);
     formData.append('museumId', museumId);
+    formData.append('artName', values.artName);
+    formData.append('artDescription', values.artDescription);
+    formData.append('artYear', values.artYear);
+    formData.append('authName', values.authName);
+    formData.append('latitude', values.latitude);
+    formData.append('longitude', values.longitude);
+    formData.append('level', values.level);
+    formData.append('edgeLatitude1', values.edgeLatitude1);
+    formData.append('edgeLongitude1', values.edgeLongitude1);
+    formData.append('edgeLatitude2', values.edgeLatitude2);
+    formData.append('edgeLongitude2', values.edgeLongitude2);
 
     try {
       const response = await requestPost('https://dexplore.info/api/v1/admin/save-art', formData);
-      const qrcodeId = response.qrcodeId;
-      setQrCodeHashKey(qrcodeId);
-      setModalIsOpen(true);
+      console.log('응답 데이터:', response);
+
+      // 서버 응답에서 qrcodeId를 올바르게 추출
+      const qrcodeId = response.data?.qrcodeId || response.qrcodeId;
+      if (qrcodeId) {
+        setQrCodeHashKey(qrcodeId);
+        setModalIsOpen(true);
+      } else {
+        console.error('qrcodeId를 응답에서 찾을 수 없습니다.');
+      }
     } catch (error) {
-      console.error('Failed to save art:', error);
+      console.error('작품 저장 실패:', error);
       // 필요에 따라 사용자에게 에러 메시지 표시
     }
   };
@@ -200,11 +187,7 @@ const ArtCreateForm = () => {
       level,
     } = loc;
 
-    // 위도와 경도를 사용하여 위치 정보를 표시
-    const locationString = `위도: ${latitude.toFixed(6)}, 경도: ${longitude.toFixed(6)}`;
-
     // 폼 필드에 위치 정보 설정
-    form.setValue('artLoc', locationString);
     form.setValue('latitude', latitude.toString());
     form.setValue('longitude', longitude.toString());
     form.setValue('level', level.toString());
@@ -217,6 +200,32 @@ const ArtCreateForm = () => {
 
   const handleCancelClick = () => {
     navigate(-1);
+  };
+
+  // 모달의 인라인 스타일 정의
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      padding: '20px',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      background: '#fff',
+      // maxWidth: '500px',
+      width: '300px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+      zIndex: 1000,
+    },
   };
 
   return (
@@ -264,54 +273,50 @@ const ArtCreateForm = () => {
         />
 
         {/* 작품 위치 등록 필드 */}
-        <Controller
-          key="artLoc"
-          control={form.control}
-          name="artLoc"
-          render={({ field }) => (
-            <FormItem className="space-y-0 mb-[8px]">
-              <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">
-                작품 위치 등록
-              </FormLabel>
-              <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                <FormControl>
-                  <DrawerTrigger asChild>
-                    <div className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                      {/* 위도와 경도를 표시 */}
-                      <div>{field.value || '클릭해서 작품 위치를 등록하세요'}</div>
-                      <div>
-                        <AiFillEnvironment />
-                      </div>
-                    </div>
-                  </DrawerTrigger>
-                </FormControl>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>작품 위치 찾기</DrawerTitle>
-                    <DrawerDescription>지도에서 작품 위치를 클릭해주세요</DrawerDescription>
-                  </DrawerHeader>
-                  <KakaoMap setLoc={setLoc} />
-                  <DrawerFooter>
-                    <Button className="w-full" onClick={handleConfirm}>
-                      확인
-                    </Button>
-                    <DrawerClose asChild>
-                      {/* 취소 시 loc을 초기화하지 않고 Drawer를 닫음 */}
-                      <Button variant="outline" className="w-full">
-                        취소
-                      </Button>
-                    </DrawerClose>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
-              <FormDescription />
-              <FormMessage />
-              {form.formState.errors.artLoc && (
-                <p className="text-red-500 text-sm">{form.formState.errors.artLoc.message}</p>
-              )}
-            </FormItem>
-          )}
-        />
+        <FormItem className="space-y-0 mb-[8px]">
+          <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">
+            작품 위치 등록
+          </FormLabel>
+          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+            <FormControl>
+              <DrawerTrigger asChild>
+                <div className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
+                  {/* 위도와 경도를 표시 */}
+                  <div>
+                    {loc.latitude && loc.longitude
+                      ? `위도: ${parseFloat(loc.latitude).toFixed(6)}, 경도: ${parseFloat(
+                        loc.longitude
+                      ).toFixed(6)}`
+                      : '클릭해서 작품 위치를 등록하세요'}
+                  </div>
+                  <div>
+                    <AiFillEnvironment />
+                  </div>
+                </div>
+              </DrawerTrigger>
+            </FormControl>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>작품 위치 찾기</DrawerTitle>
+                <DrawerDescription>지도에서 작품 위치를 클릭해주세요</DrawerDescription>
+              </DrawerHeader>
+              <KakaoMap setLoc={setLoc} />
+              <DrawerFooter>
+                <Button className="w-full" onClick={handleConfirm}>
+                  확인
+                </Button>
+                <DrawerClose asChild>
+                  {/* 취소 시 loc을 초기화하지 않고 Drawer를 닫음 */}
+                  <Button variant="outline" className="w-full">
+                    취소
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+          <FormDescription />
+          <FormMessage />
+        </FormItem>
 
         {/* 기타 필드 렌더링 */}
         {Object.keys(ArtFormat)
@@ -339,14 +344,24 @@ const ArtCreateForm = () => {
       {/* QR 코드 모달 */}
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
+        onRequestClose={() => {
+          setModalIsOpen(false);
+          navigate(-1); // 모달이 닫히면 이전 페이지로 이동
+        }}
         contentLabel="QR Code Modal"
-        className="Modal"
-        overlayClassName="Overlay"
+        style={customStyles} // 인라인 스타일 적용
       >
-        <h2>QR 코드</h2>
+        <h2 className='text-2xl font-bold mb-3'>QR 코드</h2>
+        {/* QR 코드 생성 컴포넌트 */}
         <QRCreator qrcodeHashkey={qrCodeHashKey} artName={form.getValues('artName')} />
-        <Button onClick={() => setModalIsOpen(false)}>닫기</Button>
+        <Button
+          onClick={() => {
+            setModalIsOpen(false);
+            navigate(-1); // 닫기 버튼 클릭 시 이전 페이지로 이동
+          }}
+        >
+          닫기
+        </Button>
       </Modal>
     </ShadcnForm>
   );

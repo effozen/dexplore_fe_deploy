@@ -28,8 +28,8 @@ function QRCreator({ qrcodeHashkey, artName }) {
           {qrdata && <QRCode value={qrdata}/>}
         </div>
       </button>
-      <div className={classNames('margin-top-7')}>
-        다운로드 하시려면 QR코드를 클릭하세요.
+      <div className={classNames('mt-2 mb-2')}>
+        QR을 클릭하여 다운로드하세요.
       </div>
     </>
   );
