@@ -1,5 +1,5 @@
 // MuseumCreateForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -41,15 +41,14 @@ const formSchema = z.object({
   museumEmail: z.string().min(1, { message: '값을 채워주세요' }),
   phone: z.string().min(1, { message: '값을 채워주세요' }),
   entPrice: z.string().min(1, { message: '값을 채워주세요' }),
-  description: z.string().min(1, { message: '값을 채워주세요' }),
-  // 위치 관련 필드 추가
+  description: z.string().optional(),
   latitude: z.string().min(1, { message: '위치를 선택해주세요' }),
   longitude: z.string().min(1, { message: '위치를 선택해주세요' }),
-  edgeLatitude1: z.string(),
-  edgeLongitude1: z.string(),
-  edgeLatitude2: z.string(),
-  edgeLongitude2: z.string(),
-  level: z.string(),
+  edgeLatitude1: z.string().optional(),
+  edgeLongitude1: z.string().optional(),
+  edgeLatitude2: z.string().optional(),
+  edgeLongitude2: z.string().optional(),
+  level: z.string().min(1, { message: '값을 채워주세요' }),
 });
 
 const initialFormValues = {
@@ -94,7 +93,7 @@ const MuseumCreateForm = () => {
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
-    // API에 맞게 필드 이름 매핑하여 추가
+    // Append required fields
     formData.append('imageFile', values.museumImg);
     formData.append('museumName', values.museumName);
     formData.append('entPrice', values.entPrice);
@@ -102,22 +101,39 @@ const MuseumCreateForm = () => {
     formData.append('startTime', values.startTime);
     formData.append('endTime', values.endTime);
     formData.append('closingDay', values.closingDay);
-    formData.append('description', values.description);
     formData.append('phone', values.phone);
     formData.append('latitude', values.latitude);
     formData.append('longitude', values.longitude);
     formData.append('level', values.level);
-    formData.append('edgeLatitude1', values.edgeLatitude1);
-    formData.append('edgeLongitude1', values.edgeLongitude1);
-    formData.append('edgeLatitude2', values.edgeLatitude2);
-    formData.append('edgeLongitude2', values.edgeLongitude2);
+
+    // Append optional fields only if they have values
+    if (values.description) {
+      formData.append('description', values.description);
+    }
+    if (values.edgeLatitude1) {
+      formData.append('edgeLatitude1', values.edgeLatitude1);
+    }
+    if (values.edgeLongitude1) {
+      formData.append('edgeLongitude1', values.edgeLongitude1);
+    }
+    if (values.edgeLatitude2) {
+      formData.append('edgeLatitude2', values.edgeLatitude2);
+    }
+    if (values.edgeLongitude2) {
+      formData.append('edgeLongitude2', values.edgeLongitude2);
+    }
 
     try {
       await requestPost('https://dexplore.info/api/v1/admin/save-museum', formData);
       navigate('/admin/management');
     } catch (error) {
-      console.error('Failed to save museum:', error);
-      // 필요에 따라 사용자에게 에러 메시지 표시
+      if (error.response && error.response.data) {
+        console.error('Server Error:', error.response.data);
+        alert(`박물관 등록에 실패했습니다: ${error.response.data.message || '알 수 없는 오류'}`);
+      } else {
+        console.error('Network Error:', error);
+        alert('박물관 등록에 실패했습니다. 네트워크 상태를 확인해주세요.');
+      }
     }
   };
 
