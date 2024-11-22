@@ -35,7 +35,6 @@ const formSchema = z.object({
   museumImg: z
     .any()
     .refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
-  // museumLoc 필드 제거
   startTime: z.string().min(1, { message: '값을 채워주세요' }),
   endTime: z.string().min(1, { message: '값을 채워주세요' }),
   closingDay: z.string().min(1, { message: '값을 채워주세요' }),
@@ -44,8 +43,8 @@ const formSchema = z.object({
   entPrice: z.string().min(1, { message: '값을 채워주세요' }),
   description: z.string().min(1, { message: '값을 채워주세요' }),
   // 위치 관련 필드 추가
-  latitude: z.string(),
-  longitude: z.string(),
+  latitude: z.string().min(1, { message: '위치를 선택해주세요' }),
+  longitude: z.string().min(1, { message: '위치를 선택해주세요' }),
   edgeLatitude1: z.string(),
   edgeLongitude1: z.string(),
   edgeLatitude2: z.string(),
@@ -56,7 +55,6 @@ const formSchema = z.object({
 const initialFormValues = {
   museumName: '',
   museumImg: null,
-  // museumLoc 필드 제거
   startTime: '',
   endTime: '',
   closingDay: '',
@@ -75,7 +73,6 @@ const initialFormValues = {
 
 const MuseumCreateForm = () => {
   const navigate = useNavigate();
-  // loc 상태를 위치 관련 필드로 제한
   const [loc, setLoc] = useState({
     roadAddress: '',
     latitude: '',
@@ -88,23 +85,13 @@ const MuseumCreateForm = () => {
   });
   const [imageName, setImageName] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [mapError, setMapError] = useState('');
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormValues,
   });
 
-  // 폼 필드 값 모니터링 (디버깅 용도)
-  const currentLatitude = form.watch('latitude');
-  const currentLongitude = form.watch('longitude');
-
-  useEffect(() => {
-    console.log('latitude:', currentLatitude);
-    console.log('longitude:', currentLongitude);
-  }, [currentLatitude, currentLongitude]);
-
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const formData = new FormData();
 
     // API에 맞게 필드 이름 매핑하여 추가
@@ -125,14 +112,13 @@ const MuseumCreateForm = () => {
     formData.append('edgeLatitude2', values.edgeLatitude2);
     formData.append('edgeLongitude2', values.edgeLongitude2);
 
-    requestPost('https://dexplore.info/api/v1/admin/save-museum', formData)
-      .then(() => {
-        navigate('/admin/management');
-      })
-      .catch((error) => {
-        console.error('Failed to save museum:', error);
-        // 필요에 따라 사용자에게 에러 메시지 표시
-      });
+    try {
+      await requestPost('https://dexplore.info/api/v1/admin/save-museum', formData);
+      navigate('/admin/management');
+    } catch (error) {
+      console.error('Failed to save museum:', error);
+      // 필요에 따라 사용자에게 에러 메시지 표시
+    }
   };
 
   const renderField = (keyName, isTextArea = false) => (
@@ -194,7 +180,6 @@ const MuseumCreateForm = () => {
       return;
     }
     // 폼 필드에 위치 정보 설정
-    // museumLoc 필드 제거
     form.setValue('latitude', latitude.toString());
     form.setValue('longitude', longitude.toString());
     form.setValue('level', level.toString());
@@ -203,7 +188,6 @@ const MuseumCreateForm = () => {
     form.setValue('edgeLatitude2', edgeLatitude2.toString());
     form.setValue('edgeLongitude2', edgeLongitude2.toString());
     setDrawerOpen(false);
-    setMapError('');
   };
 
   const handleCancelClick = () => {
@@ -257,7 +241,6 @@ const MuseumCreateForm = () => {
         />
 
         {/* 박물관 위치 등록 필드 */}
-        {/* museumLoc 필드를 제거하거나, 필요 시 다른 용도로 사용 */}
         <FormItem className="space-y-0 mb-[8px]">
           <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">
             박물관 위치 등록
@@ -279,8 +262,6 @@ const MuseumCreateForm = () => {
                 <DrawerDescription>지도에서 박물관 위치를 클릭해주세요</DrawerDescription>
               </DrawerHeader>
               <KakaoMap setLoc={setLoc} />
-              {/* 지도 관련 에러 메시지 표시 */}
-              {mapError && <p className="text-red-500 text-sm mt-2">{mapError}</p>}
               <DrawerFooter>
                 <Button className="w-full" onClick={handleConfirm}>
                   확인
@@ -296,6 +277,11 @@ const MuseumCreateForm = () => {
           </Drawer>
           <FormDescription />
           <FormMessage />
+          {form.formState.errors.latitude && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.latitude.message}
+            </p>
+          )}
         </FormItem>
 
         {/* 기타 필드 렌더링 */}
@@ -310,16 +296,16 @@ const MuseumCreateForm = () => {
         {renderField('description', true)}
 
         {/* 제출 버튼 */}
-        <div className="flex justify-around pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
+        <div className="flex flex-col align-middle space-y-3 pl-[20px] pr-[20px] mt-[30px] mb-[30px]">
+          <Button type="submit" className="min-w-[300px] h-[40px] rounded-none">
+            저장
+          </Button>
           <Button
             type="button"
-            className="w-[84px] h-[40px] rounded-none bg-gray-500"
+            className="min-w-[300px] h-[40px] rounded-none bg-gray-500"
             onClick={handleCancelClick}
           >
             취소
-          </Button>
-          <Button type="submit" className="w-[84px] h-[40px] rounded-none">
-            저장
           </Button>
         </div>
       </form>

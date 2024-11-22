@@ -34,7 +34,8 @@ const formSchema = z.object({
   artName: z.string().min(1, { message: '값을 채워주세요' }),
   artImg: z
     .any()
-    .refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
+    .optional()
+    .refine((file) => !file || file instanceof File, { message: '이미지 파일을 선택해주세요' }),
   artYear: z.string().min(1, { message: '값을 채워주세요' }),
   authName: z.string().min(1, { message: '값을 채워주세요' }),
   artDescription: z.string().min(1, { message: '값을 채워주세요' }),
@@ -79,6 +80,7 @@ const ArtUpdateForm = () => {
     edgeLongitude2: '',
     level: '',
   });
+  const [existingImageUrl, setExistingImageUrl] = useState(''); // 기존 이미지 URL 관리
   const [imageName, setImageName] = useState('');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [museumId, setMuseumId] = useState('');
@@ -115,36 +117,46 @@ const ArtUpdateForm = () => {
     try {
       const response = await requestGet('https://dexplore.info/api/v1/user/get-art', { artId: id });
       const art = response.art;
+      const spot = response.spot; // spot 데이터 가져오기
 
-      if (art) {
+      if (art && spot) {
         const updatedValues = {
           ...initialFormValues,
           artName: art.artName,
           artYear: art.artYear,
           authName: art.authName,
           artDescription: art.artDescription,
-          artLoc: `위도: ${art.latitude}, 경도: ${art.longitude}`, // 위치 정보 설정
-          latitude: art.latitude,
-          longitude: art.longitude,
-          edgeLatitude1: art.edgeLatitude1,
-          edgeLongitude1: art.edgeLongitude1,
-          edgeLatitude2: art.edgeLatitude2,
-          edgeLongitude2: art.edgeLongitude2,
-          level: art.level,
+          artLoc: `위도: ${spot.latitude}, 경도: ${spot.longitude}`, // 위치 정보 설정
+          latitude: spot.latitude.toString(),
+          longitude: spot.longitude.toString(),
+          edgeLatitude1: spot.edgeLatitude1.toString(),
+          edgeLongitude1: spot.edgeLongitude1.toString(),
+          edgeLatitude2: spot.edgeLatitude2.toString(),
+          edgeLongitude2: spot.edgeLongitude2.toString(),
+          level: spot.level.toString(),
+          // artImg: art.imgUrl, // 기존 이미지 URL 설정 제거
         };
         form.reset(updatedValues);
 
         // loc 상태도 업데이트
         setLoc({
           roadAddress: '', // 도로명 주소는 없으므로 빈 문자열로 설정
-          latitude: art.latitude,
-          longitude: art.longitude,
-          edgeLatitude1: art.edgeLatitude1,
-          edgeLongitude1: art.edgeLongitude1,
-          edgeLatitude2: art.edgeLatitude2,
-          edgeLongitude2: art.edgeLongitude2,
-          level: art.level,
+          latitude: spot.latitude,
+          longitude: spot.longitude,
+          edgeLatitude1: spot.edgeLatitude1,
+          edgeLongitude1: spot.edgeLongitude1,
+          edgeLatitude2: spot.edgeLatitude2,
+          edgeLongitude2: spot.edgeLongitude2,
+          level: spot.level,
         });
+
+        // 기존 이미지 URL 설정
+        setExistingImageUrl(art.imgUrl || '');
+        if (art.imgUrl) {
+          setImageName('기존 이미지가 있습니다.');
+        } else {
+          setImageName('');
+        }
 
         console.log('로드된 데이터:', updatedValues);
       }
@@ -156,33 +168,25 @@ const ArtUpdateForm = () => {
 
   const handleSubmit = (values) => {
     const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (key === 'artImg') {
-        formData.append('imageFile', values[key]);
-      } else {
-        formData.append(key, values[key]);
-      }
-    });
 
-    // 위치 관련 필드 추가
-    const {
-      latitude,
-      longitude,
-      edgeLatitude1,
-      edgeLongitude1,
-      edgeLatitude2,
-      edgeLongitude2,
-      level,
-    } = loc;
-    formData.append('latitude', latitude);
-    formData.append('longitude', longitude);
-    formData.append('level', level);
-    formData.append('edgeLatitude1', edgeLatitude1);
-    formData.append('edgeLongitude1', edgeLongitude1);
-    formData.append('edgeLatitude2', edgeLatitude2);
-    formData.append('edgeLongitude2', edgeLongitude2);
+    // API에 맞게 필드 이름 매핑하여 추가
+    if (values.artImg && values.artImg instanceof File) {
+      formData.append('imageFile', values.artImg);
+    }
     formData.append('museumId', museumId);
     formData.append('artId', id);
+    formData.append('artName', values.artName);
+    formData.append('artYear', values.artYear);
+    formData.append('authName', values.authName);
+    formData.append('artDescription', values.artDescription);
+    formData.append('artLoc', values.artLoc);
+    formData.append('latitude', values.latitude);
+    formData.append('longitude', values.longitude);
+    formData.append('edgeLatitude1', values.edgeLatitude1);
+    formData.append('edgeLongitude1', values.edgeLongitude1);
+    formData.append('edgeLatitude2', values.edgeLatitude2);
+    formData.append('edgeLongitude2', values.edgeLongitude2);
+    formData.append('level', values.level);
 
     requestPost('https://dexplore.info/api/v1/admin/update-art', formData)
       .then(() => {
@@ -248,10 +252,13 @@ const ArtUpdateForm = () => {
       level,
     } = loc;
 
-    // 위도와 경도를 사용하여 위치 정보를 표시
-    const locationString = `위도: ${latitude.toFixed(6)}, 경도: ${longitude.toFixed(6)}`;
+    if (!latitude || !longitude) {
+      alert('유효한 위치를 선택해주세요.');
+      return;
+    }
 
     // 폼 필드에 위치 정보 설정
+    const locationString = `위도: ${parseFloat(latitude).toFixed(6)}, 경도: ${parseFloat(longitude).toFixed(6)}`;
     form.setValue('artLoc', locationString);
     form.setValue('latitude', latitude.toString());
     form.setValue('longitude', longitude.toString());
@@ -289,7 +296,13 @@ const ArtUpdateForm = () => {
               <FormControl>
                 <label htmlFor="image-file">
                   <div className="border-[1px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                    <div>{imageName || '클릭해서 이미지를 첨부하세요'}</div>
+                    <div>
+                      {imageName
+                        ? imageName === '기존 이미지가 있습니다.'
+                          ? '기존 이미지가 있습니다.'
+                          : imageName
+                        : '클릭해서 이미지를 첨부하세요'}
+                    </div>
                     <div>
                       <AiOutlinePaperClip />
                     </div>
@@ -306,6 +319,13 @@ const ArtUpdateForm = () => {
               <FormMessage />
               {form.formState.errors.artImg && (
                 <p className="text-red-500 text-sm">{form.formState.errors.artImg.message}</p>
+              )}
+              {/* 기존 이미지 미리보기 */}
+              {existingImageUrl && !form.getValues('artImg') && (
+                <div>
+                  <div className='mt-2 text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 pl-[7px] text-gray-500 font-normal mb-0 pb-0'>기존 작품 이미지 :</div>
+                  <img src={existingImageUrl} alt="기존 작품 이미지" className="w-32 h-32 object-cover ml-3 mt-3 mb-3" />
+                </div>
               )}
             </FormItem>
           )}
@@ -325,8 +345,12 @@ const ArtUpdateForm = () => {
                 <FormControl>
                   <DrawerTrigger asChild>
                     <div className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                      {/* 위도와 경도를 표시 */}
-                      <div>{field.value || '클릭해서 작품 위치를 등록하세요'}</div>
+                      {/* 위치 정보를 표시 */}
+                      <div>
+                        {field.value
+                          ? field.value
+                          : '클릭해서 작품 위치를 등록하세요'}
+                      </div>
                       <div>
                         <AiFillEnvironment />
                       </div>
