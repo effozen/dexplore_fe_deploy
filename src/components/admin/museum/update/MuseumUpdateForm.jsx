@@ -32,10 +32,8 @@ import { KakaoMap } from '@components/common/KakaoMap/KakaoMap';
 
 const formSchema = z.object({
   museumName: z.string().min(1, { message: '값을 채워주세요' }),
-  museumImg: z
-    .any()
-    .refine((file) => file instanceof File, { message: '이미지 파일을 선택해주세요' }),
-  museumLoc: z.string().min(1, { message: '위치를 지정해주세요' }),
+  museumImg: z.any(),
+  // museumLoc 필드 제거
   startTime: z.string().min(1, { message: '값을 채워주세요' }),
   endTime: z.string().min(1, { message: '값을 채워주세요' }),
   closingDay: z.string().min(1, { message: '값을 채워주세요' }),
@@ -56,7 +54,7 @@ const formSchema = z.object({
 const initialFormValues = {
   museumName: '',
   museumImg: null,
-  museumLoc: '',
+  // museumLoc 필드 제거
   startTime: '',
   endTime: '',
   closingDay: '',
@@ -96,15 +94,13 @@ const MuseumUpdateForm = () => {
   });
 
   // 폼 필드 값 모니터링 (디버깅 용도)
-  const currentMuseumLoc = form.watch('museumLoc');
   const currentLatitude = form.watch('latitude');
   const currentLongitude = form.watch('longitude');
 
   useEffect(() => {
-    console.log('museumLoc:', currentMuseumLoc);
     console.log('latitude:', currentLatitude);
     console.log('longitude:', currentLongitude);
-  }, [currentMuseumLoc, currentLatitude, currentLongitude]);
+  }, [currentLatitude, currentLongitude]);
 
   useEffect(() => {
     setId(location.state?.id || '');
@@ -120,8 +116,9 @@ const MuseumUpdateForm = () => {
     try {
       const response = await requestGet('https://dexplore.info/api/v1/user/get-museum', { museumId: id });
       const museum = response.museum;
+      const locationData = response.location;
 
-      if (museum) {
+      if (museum && locationData) {
         const updatedValues = {
           ...initialFormValues,
           museumName: museum.museumName,
@@ -132,27 +129,27 @@ const MuseumUpdateForm = () => {
           phone: museum.phone,
           entPrice: museum.entPrice,
           description: museum.description,
-          museumLoc: `위도: ${museum.latitude}, 경도: ${museum.longitude}`, // 위치 정보 설정
-          latitude: museum.latitude,
-          longitude: museum.longitude,
-          edgeLatitude1: museum.edgeLatitude1,
-          edgeLongitude1: museum.edgeLongitude1,
-          edgeLatitude2: museum.edgeLatitude2,
-          edgeLongitude2: museum.edgeLongitude2,
-          level: museum.level,
+          // 위치 정보 설정
+          latitude: locationData.latitude.toString(),
+          longitude: locationData.longitude.toString(),
+          edgeLatitude1: locationData.edgeLatitude1.toString(),
+          edgeLongitude1: locationData.edgeLongitude1.toString(),
+          edgeLatitude2: locationData.edgeLatitude2.toString(),
+          edgeLongitude2: locationData.edgeLongitude2.toString(),
+          level: locationData.level.toString(),
         };
         form.reset(updatedValues);
 
         // loc 상태도 업데이트
         setLoc({
-          roadAddress: museum.museumLoc || '', // 도로명 주소가 있으면 사용
-          latitude: museum.latitude,
-          longitude: museum.longitude,
-          edgeLatitude1: museum.edgeLatitude1,
-          edgeLongitude1: museum.edgeLongitude1,
-          edgeLatitude2: museum.edgeLatitude2,
-          edgeLongitude2: museum.edgeLongitude2,
-          level: museum.level,
+          roadAddress: '', // 필요 시 도로명 주소를 설정
+          latitude: locationData.latitude.toString(),
+          longitude: locationData.longitude.toString(),
+          edgeLatitude1: locationData.edgeLatitude1.toString(),
+          edgeLongitude1: locationData.edgeLongitude1.toString(),
+          edgeLatitude2: locationData.edgeLatitude2.toString(),
+          edgeLongitude2: locationData.edgeLongitude2.toString(),
+          level: locationData.level.toString(),
         });
 
         console.log('로드된 데이터:', updatedValues);
@@ -165,32 +162,27 @@ const MuseumUpdateForm = () => {
 
   const handleSubmit = (values) => {
     const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (key === 'museumImg') {
-        formData.append('imageFile', values[key]);
-      } else {
-        formData.append(key, values[key]);
-      }
-    });
 
-    // 위치 관련 필드 추가
-    const {
-      latitude,
-      longitude,
-      edgeLatitude1,
-      edgeLongitude1,
-      edgeLatitude2,
-      edgeLongitude2,
-      level,
-    } = loc;
-    formData.append('latitude', latitude);
-    formData.append('longitude', longitude);
-    formData.append('level', level);
-    formData.append('edgeLatitude1', edgeLatitude1);
-    formData.append('edgeLongitude1', edgeLongitude1);
-    formData.append('edgeLatitude2', edgeLatitude2);
-    formData.append('edgeLongitude2', edgeLongitude2);
+    // API에 맞게 필드 이름 매핑하여 추가
+    if (values.museumImg) {
+      formData.append('imageFile', values.museumImg);
+    }
     formData.append('museumId', id);
+    formData.append('museumName', values.museumName);
+    formData.append('entPrice', values.entPrice);
+    formData.append('museumEmail', values.museumEmail);
+    formData.append('startTime', values.startTime);
+    formData.append('endTime', values.endTime);
+    formData.append('closingDay', values.closingDay);
+    formData.append('description', values.description);
+    formData.append('phone', values.phone);
+    formData.append('latitude', values.latitude);
+    formData.append('longitude', values.longitude);
+    formData.append('level', values.level);
+    formData.append('edgeLatitude1', values.edgeLatitude1);
+    formData.append('edgeLongitude1', values.edgeLongitude1);
+    formData.append('edgeLatitude2', values.edgeLatitude2);
+    formData.append('edgeLongitude2', values.edgeLongitude2);
 
     requestPost('https://dexplore.info/api/v1/admin/update-museum', formData)
       .then(() => {
@@ -247,6 +239,7 @@ const MuseumUpdateForm = () => {
 
   const handleConfirm = () => {
     const {
+      roadAddress,
       latitude,
       longitude,
       edgeLatitude1,
@@ -256,11 +249,12 @@ const MuseumUpdateForm = () => {
       level,
     } = loc;
 
-    // 위도와 경도를 사용하여 위치 정보를 표시
-    const locationString = `위도: ${parseFloat(latitude).toFixed(6)}, 경도: ${parseFloat(longitude).toFixed(6)}`;
+    if (!latitude || !longitude) {
+      alert('유효한 위치를 선택해주세요.');
+      return;
+    }
 
     // 폼 필드에 위치 정보 설정
-    form.setValue('museumLoc', locationString);
     form.setValue('latitude', latitude.toString());
     form.setValue('longitude', longitude.toString());
     form.setValue('level', level.toString());
@@ -312,66 +306,62 @@ const MuseumUpdateForm = () => {
               </FormControl>
               <FormDescription />
               <FormMessage />
-              {form.formState.errors[museumImg] && (
-                <p className="text-red-500 text-sm">{form.formState.errors[museumImg].message}</p>
+              {form.formState.errors['museumImg'] && (
+                <p className="text-red-500 text-sm">{form.formState.errors['museumImg'].message}</p>
               )}
             </FormItem>
           )}
         />
 
         {/* 박물관 위치 등록 필드 */}
-        <Controller
-          key="museumLoc"
-          control={form.control}
-          name="museumLoc"
-          render={({ field }) => (
-            <FormItem className="space-y-0 mb-[8px]">
-              <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">
-                박물관 위치 등록
-              </FormLabel>
-              <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                <FormControl>
-                  <DrawerTrigger asChild>
-                    <div className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
-                      {/* 위치 정보를 표시 */}
-                      <div>{field.value || '클릭해서 박물관 위치를 등록하세요'}</div>
-                      <div>
-                        <AiFillEnvironment />
-                      </div>
-                    </div>
-                  </DrawerTrigger>
-                </FormControl>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>박물관 위치 찾기</DrawerTitle>
-                    <DrawerDescription>지도에서 박물관 위치를 클릭해주세요</DrawerDescription>
-                  </DrawerHeader>
-                  <KakaoMap setLoc={setLoc} />
-                  <DrawerFooter>
-                    <Button className="w-full" onClick={handleConfirm}>
-                      확인
-                    </Button>
-                    <DrawerClose asChild>
-                      {/* 취소 시 loc을 초기화하지 않고 Drawer를 닫음 */}
-                      <Button variant="outline" className="w-full">
-                        취소
-                      </Button>
-                    </DrawerClose>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
-              <FormDescription />
-              <FormMessage />
-              {form.formState.errors[museumLoc] && (
-                <p className="text-red-500 text-sm">{form.formState.errors[museumLoc].message}</p>
-              )}
-            </FormItem>
-          )}
-        />
+        <FormItem className="space-y-0 mb-[8px]">
+          <FormLabel className="pl-[7px] text-gray-500 font-normal mb-0 pb-0">
+            박물관 위치 등록
+          </FormLabel>
+          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+            <FormControl>
+              <DrawerTrigger asChild>
+                <div className="border-[1px] min-w-[350px] w-full mr-[15px] h-[40px] text-gray-500 font-normal text-sm flex justify-between items-center pl-[10px] pr-[10px] cursor-pointer hover:border-2 hover:border-black">
+                  {/* 위치 정보를 표시 */}
+                  <div>
+                    {loc.latitude && loc.longitude
+                      ? `위도: ${parseFloat(loc.latitude).toFixed(6)}, 경도: ${parseFloat(loc.longitude).toFixed(6)}`
+                      : '클릭해서 박물관 위치를 등록하세요'}
+                  </div>
+                  <div>
+                    <AiFillEnvironment />
+                  </div>
+                </div>
+              </DrawerTrigger>
+            </FormControl>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>박물관 위치 찾기</DrawerTitle>
+                <DrawerDescription>지도에서 박물관 위치를 클릭해주세요</DrawerDescription>
+              </DrawerHeader>
+              <KakaoMap setLoc={setLoc} />
+              <DrawerFooter>
+                <Button className="w-full" onClick={handleConfirm}>
+                  확인
+                </Button>
+                <DrawerClose asChild>
+                  {/* 취소 시 loc을 초기화하지 않고 Drawer를 닫음 */}
+                  <Button variant="outline" className="w-full">
+                    취소
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+          <FormDescription />
+          <FormMessage />
+        </FormItem>
 
         {/* 기타 필드 렌더링 */}
         {Object.keys(MuseumFormat)
-          .filter((v) => !['museumName', 'museumImg', 'museumLoc', 'description'].includes(v))
+          .filter(
+            (v) => !['museumName', 'museumImg', 'museumLoc', 'description'].includes(v)
+          )
           .map((field) => renderField(field))}
 
         {/* 설명 필드 (Textarea) */}
